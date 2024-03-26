@@ -73,7 +73,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
       height: 60,
       textStyle: textTheme.titleLarge?.copyWith(
         color: theme.colorScheme.secondary,
-        fontSize: 30,
+        fontSize: 20,
       ),
       decoration: BoxDecoration(
         color: fillColor,

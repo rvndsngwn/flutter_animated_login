@@ -16,9 +16,10 @@ class FlutterAnimatedLogin extends StatefulWidget {
 
 class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   final TextEditingController textController = TextEditingController();
-  final ValueNotifier<bool> isPhone = ValueNotifier(false);
+  final ValueNotifier<bool> isPhoneNotifier = ValueNotifier(false);
   bool isStartTyping = false;
-  final ValueNotifier<bool> isFormValid = ValueNotifier(false);
+  final ValueNotifier<bool> isFormValidNotifier = ValueNotifier(false);
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -26,15 +27,15 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
       final text = textController.text;
       if (text.isNotEmpty) {
         /// Check if the text is a international phone number
-        isPhone.value =
+        isPhoneNotifier.value =
             text.contains(RegExp(r'^[+]?[0-9]+$')) && text.length > 5;
       } else if (text.isEmpty || text.contains(RegExp(r'^[a-zA-Z0-9]+$'))) {
-        isPhone.value = false;
+        isPhoneNotifier.value = false;
       }
       if (textController.text.isNotEmpty) {
         isStartTyping = true;
       }
-      isFormValid.value =
+      isFormValidNotifier.value =
           text.contains(RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'));
     });
     super.initState();
@@ -43,8 +44,8 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   @override
   void dispose() {
     textController.dispose();
-    isPhone.dispose();
-    isFormValid.dispose();
+    isPhoneNotifier.dispose();
+    isFormValidNotifier.dispose();
     super.dispose();
   }
 
@@ -58,9 +59,9 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
         children: [
           const TitleWidget(),
           ValueListenableBuilder(
-            valueListenable: isPhone,
-            builder: (context, value, child) {
-              return value
+            valueListenable: isPhoneNotifier,
+            builder: (context, isPhone, child) {
+              return isPhone
                   ? IntlPhoneField(
                       controller: textController,
                       autofocus: true,
@@ -70,15 +71,23 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
                           borderRadius: BorderRadius.all(Radius.circular(16)),
                         ),
                       ),
+                      style: textTheme.titleLarge?.copyWith(
+                        color: theme.colorScheme.secondary,
+                        fontSize: 20,
+                      ),
+                      dropdownTextStyle: textTheme.titleLarge?.copyWith(
+                        fontSize: 20,
+                      ),
                       initialCountryCode: 'IN',
                       onChanged: (phone) {
                         print(phone.completeNumber);
-                        isFormValid.value = phone.isValidNumber();
+                        isFormValidNotifier.value = phone.isValidNumber();
                       },
                       keyboardType: const TextInputType.numberWithOptions(
                         signed: true,
                         decimal: false,
                       ),
+                      textInputAction: TextInputAction.done,
                     )
                   : TextFormField(
                       autofocus: isStartTyping,
@@ -89,6 +98,10 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(16)),
                         ),
+                      ),
+                      style: textTheme.titleLarge?.copyWith(
+                        color: theme.colorScheme.secondary,
+                        fontSize: 20,
                       ),
                       onChanged: (text) {
                         print(text);
@@ -103,21 +116,26 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
                         }
                         return null;
                       },
-                      autofillHints: const [AutofillHints.email],
+                      autofillHints: const [
+                        AutofillHints.email,
+                        AutofillHints.telephoneNumber,
+                      ],
                       keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.done,
                     );
             },
           ),
           const SizedBox(height: 20),
           ValueListenableBuilder(
-            valueListenable: isFormValid,
-            builder: (context, value, child) {
+            valueListenable: isFormValidNotifier,
+            builder: (context, isFormValid, child) {
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 width: constraints.maxWidth >= 600
                     ? 200
                     : constraints.maxWidth * 0.5,
-                child: FilledAutoLoadingButton(
+                child: FilledLoadingButton(
+                  isLoading: isLoading,
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(
                       constraints.maxWidth >= 600
@@ -127,7 +145,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
                     ),
                     textStyle: textTheme.titleLarge,
                   ),
-                  onPressed: value ? widget.onPressed : null,
+                  onPressed: isFormValid ? widget.onPressed : null,
                   child: const Text("Continue"),
                 ),
               );
