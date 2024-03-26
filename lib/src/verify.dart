@@ -84,7 +84,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
 
     return PageWidget(
       builder: (context, constraints) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           TitleWidget(
             title: 'Enter OTP sent to your ${isEmail ? 'email' : 'phone'}',

@@ -3,7 +3,6 @@ import 'package:flutter_animated_login/flutter_animated_login.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:material_loading_buttons/material_loading_buttons.dart';
 
-
 class FlutterAnimatedLogin extends StatefulWidget {
   final Future<void> Function()? onPressed;
   const FlutterAnimatedLogin({
