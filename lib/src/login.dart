@@ -75,6 +75,10 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
                         print(phone.completeNumber);
                         isFormValid.value = phone.isValidNumber();
                       },
+                      keyboardType: const TextInputType.numberWithOptions(
+                        signed: true,
+                        decimal: false,
+                      ),
                     )
                   : TextFormField(
                       autofocus: isStartTyping,
@@ -99,6 +103,8 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
                         }
                         return null;
                       },
+                      autofillHints: const [AutofillHints.email],
+                      keyboardType: TextInputType.emailAddress,
                     );
             },
           ),

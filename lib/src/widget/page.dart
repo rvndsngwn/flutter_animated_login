@@ -33,7 +33,6 @@ class PageWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
                   vertical: 40,
                 ),
                 child: builder?.call(context, constraints),

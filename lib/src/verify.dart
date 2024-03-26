@@ -88,9 +88,9 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
         children: [
           TitleWidget(
             title: 'Enter OTP sent to your ${isEmail ? 'email' : 'phone'}',
-            titleStyle: textTheme.headlineSmall,
+            titleStyle: textTheme.titleLarge,
             subtitle: '#${widget.value}',
-            subtitleStyle: textTheme.titleLarge,
+            subtitleStyle: textTheme.titleMedium,
             titleGap: const SizedBox(height: 6),
             child: Icon(
               isEmail ? Icons.email : Icons.phone_iphone,
@@ -102,7 +102,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
             length: 6,
             pinAnimationType: PinAnimationType.scale,
             controller: textController,
-            androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
+            // androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
             autofillHints: const [AutofillHints.oneTimeCode],
             focusedPinTheme: defaultPinTheme.copyWith(
               height: 68,

@@ -26,7 +26,7 @@ class TitleWidget extends StatelessWidget {
         const SizedBox(height: 20),
         Text(
           title,
-          style: titleStyle ?? textTheme.displaySmall,
+          style: titleStyle ?? textTheme.headlineMedium,
         ),
         titleGap,
         Text(

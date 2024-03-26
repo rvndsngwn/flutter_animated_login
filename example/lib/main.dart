@@ -18,27 +18,18 @@ class MyApp extends StatelessWidget {
       builder: (context, value, child) => MaterialApp.router(
         routerConfig: router,
         title: 'Flutter Animated Login',
-        themeMode: ThemeMode.dark,
-        darkTheme: value ? ThemeData.dark() : ThemeData.light(),
+        themeMode: value ? ThemeMode.dark : ThemeMode.light,
+        theme: value ? ThemeData.dark() : ThemeData.light(),
         debugShowCheckedModeBanner: false,
         builder: (context, child) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('Flutter Animated Login'),
-              centerTitle: true,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              actions: [
-                IconButton(
-                  onPressed: () => isDark.value = !isDark.value,
-                  icon: value
-                      ? const Icon(Icons.dark_mode)
-                      : const Icon(Icons.light_mode),
-                ),
-              ],
-            ),
-            extendBodyBehindAppBar: true,
             body: child,
+            floatingActionButton: IconButton.filled(
+              onPressed: () => isDark.value = !isDark.value,
+              icon: value
+                  ? const Icon(Icons.dark_mode)
+                  : const Icon(Icons.light_mode),
+            ),
           );
         },
       ),
