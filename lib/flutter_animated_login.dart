@@ -7,3 +7,4 @@ export 'src/widget/divider.dart';
 export 'src/widget/oauth.dart';
 export 'src/widget/page.dart';
 export 'src/widget/title.dart';
+export 'src/utils/login_config.dart';

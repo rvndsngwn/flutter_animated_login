@@ -169,7 +169,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                 child: const Text("Resend OTP"),
               ),
             ),
-          OAuthWidget(onPressed: widget.onPressed),
+          const OAuthWidget(),
         ],
       ),
     );

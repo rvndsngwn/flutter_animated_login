@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class TitleWidget extends StatelessWidget {
-  final String title;
+  final String? title;
   final TextStyle? titleStyle;
-  final String subtitle;
+  final String? subtitle;
   final TextStyle? subtitleStyle;
-  final Widget child;
-  final Widget titleGap;
+  final Widget? child;
+  final Widget? titleGap;
   const TitleWidget({
     super.key,
     this.title = 'Mohesu Enterprise',
@@ -22,18 +22,21 @@ class TitleWidget extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
-        child,
+        child ?? const SizedBox.shrink(),
         const SizedBox(height: 20),
-        Text(
-          title,
-          style: titleStyle ?? textTheme.headlineMedium,
-        ),
-        titleGap,
-        Text(
-          subtitle,
-          style: subtitleStyle ?? textTheme.titleLarge,
-        ),
-        const SizedBox(height: 40),
+        if (title != null)
+          Text(
+            title!,
+            style: titleStyle ?? textTheme.headlineMedium,
+          ),
+        if (titleGap != null) titleGap!,
+        if (subtitle != null)
+          Text(
+            subtitle!,
+            style: subtitleStyle ?? textTheme.titleLarge,
+          ),
+        if (title != null && titleGap != null && subtitle != null)
+          const SizedBox(height: 40),
       ],
     );
   }
