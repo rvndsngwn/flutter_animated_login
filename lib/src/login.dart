@@ -1,10 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_login/flutter_animated_login.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:material_loading_buttons/material_loading_buttons.dart';
 
-import 'widget/divider.dart';
-import 'widget/page.dart';
 
 class FlutterAnimatedLogin extends StatefulWidget {
   final Future<void> Function()? onPressed;
@@ -59,18 +57,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
       builder: (context, constraints) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const FlutterLogo(size: 100),
-          const SizedBox(height: 20),
-          Text(
-            'Mohesu Enterprise',
-            style: textTheme.displaySmall,
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Let\'s Sign In',
-            style: textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 40),
+          const TitleWidget(),
           ValueListenableBuilder(
             valueListenable: isPhone,
             builder: (context, value, child) {
@@ -141,51 +128,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
               );
             },
           ),
-          const SizedBox(height: 20),
-          const DividerText(),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconAutoLoadingButton.filled(
-                onPressed: widget.onPressed,
-                icon: const Icon(Icons.apple),
-              ),
-              const SizedBox(width: 20),
-              IconAutoLoadingButton.filled(
-                onPressed: widget.onPressed,
-                icon: const Icon(Icons.facebook),
-              ),
-              const SizedBox(width: 20),
-              IconAutoLoadingButton.filled(
-                onPressed: widget.onPressed,
-                icon: const Icon(Icons.flutter_dash),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Text.rich(
-            TextSpan(
-              text: 'By signing in, you agree to the ',
-              children: [
-                TextSpan(
-                  text: 'Terms and policy',
-                  style: TextStyle(
-                    color: theme.colorScheme.secondary,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () => print('Terms and policy'),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          TextButton(
-            onPressed: () => print('Powered by MOHESU'),
-            child: const Text('Powered by MOHESU'),
-          ),
+          OAuthWidget(onPressed: widget.onPressed),
         ],
       ),
     );

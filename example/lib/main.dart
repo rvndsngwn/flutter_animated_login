@@ -47,29 +47,32 @@ class MyApp extends StatelessWidget {
 }
 
 final GoRouter router = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/signin',
   routes: [
     GoRoute(
-      path: '/login',
+      path: '/signin',
       pageBuilder: (context, state) {
         return CustomSlideTransition(
           key: state.pageKey,
           child: FlutterAnimatedLogin(
             onPressed: () => Future.delayed(
               const Duration(seconds: 2),
-              () => context.go('/signup'),
+              () => context.go('/verify-otp'),
             ),
           ),
         );
       },
     ),
     GoRoute(
-      path: '/signup',
+      path: '/verify-otp',
       pageBuilder: (context, state) {
         return CustomSlideTransition(
           key: state.pageKey,
-          child: FlutterAnimatedSignup(
-            onPressed: () => context.go('/login'),
+          child: FlutterAnimatedVerify(
+            onPressed: () => Future.delayed(
+              const Duration(seconds: 2),
+              () => context.go('/signin'),
+            ),
           ),
         );
       },
