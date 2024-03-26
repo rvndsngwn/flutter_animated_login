@@ -11,7 +11,7 @@ class FlutterAnimatedVerify extends StatefulWidget {
   const FlutterAnimatedVerify({
     super.key,
     this.onPressed,
-    this.value = '1234567890',
+    this.value = 'arvind@mohesu.com',
   });
 
   @override
