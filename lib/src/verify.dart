@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_login/flutter_animated_login.dart';
 import 'package:material_loading_buttons/material_loading_buttons.dart';
 import 'package:pinput/pinput.dart';
+
+import 'utils/extension.dart';
+import 'widget/oauth.dart';
+import 'widget/page.dart';
+import 'widget/title.dart';
 
 class FlutterAnimatedVerify extends StatefulWidget {
   final Future<void> Function()? onPressed;

@@ -5,7 +5,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 class PhoneField extends StatelessWidget {
   final TextEditingController controller;
   final ValueNotifier<bool> isFormValidNotifier;
-  final PhoneTextFiled phoneConfig;
+  final PhoneFiledConfig phoneConfig;
   const PhoneField({
     super.key,
     required this.controller,
@@ -37,6 +37,8 @@ class PhoneField extends StatelessWidget {
             fontSize: 20,
           ),
       initialCountryCode: phoneConfig.initialCountryCode ?? 'IN',
+      initialValue: controller.text,
+      disableLengthCheck: true,
       onChanged: (phone) {
         print(phone.completeNumber);
         isFormValidNotifier.value = phone.isValidNumber();

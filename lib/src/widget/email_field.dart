@@ -4,7 +4,7 @@ import 'package:flutter_animated_login/flutter_animated_login.dart';
 class EmailField extends StatelessWidget {
   final TextEditingController controller;
   final ValueNotifier<bool> isFormValidNotifier;
-  final EmailTextFiled emailConfig;
+  final EmailFiledConfig emailConfig;
   final bool autofocus;
   const EmailField({
     super.key,
@@ -25,6 +25,11 @@ class EmailField extends StatelessWidget {
       decoration: emailConfig.decoration ??
           const InputDecoration(
             hintText: 'Enter your email or phone',
+            // prefixIcon: controller.text.isEmpty
+            //     ? null
+            //     : controller.text.contains(RegExp(r'^[+]?[0-9]+$'))
+            //         ? const Icon(Icons.phone_iphone)
+            //         : const Icon(Icons.email),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(16)),
             ),

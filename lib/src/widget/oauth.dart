@@ -18,30 +18,39 @@ class OAuthWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return Column(
       children: [
-        const SizedBox(height: 20),
-        const DividerText(),
-        const SizedBox(height: 20),
+        if (providers != null) ...[
+          const SizedBox(height: 20),
+          const DividerText(),
+          const SizedBox(height: 20),
+        ],
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: providers?.map((provider) {
-                return Column(
-                  children: [
-                    IconAutoLoadingButton.filled(
-                      onPressed: () async {
-                        final result = await provider.callback.call();
-                        if (result != null && context.mounted) {
-                          toastification.show(
-                            context: context,
-                            title: Text(result),
-                            type: ToastificationType.error,
-                          );
-                        }
-                      },
-                      tooltip: 'Sign in with ${provider.label}',
-                      icon: Icon(provider.icon),
-                    ),
-                    if (provider.label != null) Text(provider.label ?? ""),
-                  ],
+                final index = providers?.indexOf(provider);
+                return Padding(
+                  padding: EdgeInsets.only(
+                      right: (index == (providers?.length ?? 0) - 1) ? 0 : 10),
+                  child: Column(
+                    children: [
+                      IconAutoLoadingButton.filled(
+                        onPressed: () async {
+                          final result = await provider.callback.call();
+                          if (result != null && context.mounted) {
+                            toastification.show(
+                              context: context,
+                              title: Text(result),
+                              type: ToastificationType.error,
+                            );
+                          }
+                        },
+                        key: Key(provider.label ??
+                            providers!.indexOf(provider).toString()),
+                        tooltip: 'Sign in with ${provider.label}',
+                        icon: Icon(provider.icon),
+                      ),
+                      if (provider.label != null) Text(provider.label ?? ""),
+                    ],
+                  ),
                 );
               }).toList() ??
               [],

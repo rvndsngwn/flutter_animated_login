@@ -1,10 +1,9 @@
 library flutter_animated_login;
 
 export 'src/login.dart';
-export 'src/utils/extension.dart';
-export 'src/verify.dart';
-export 'src/widget/divider.dart';
-export 'src/widget/oauth.dart';
-export 'src/widget/page.dart';
-export 'src/widget/title.dart';
 export 'src/utils/login_config.dart';
+export 'src/utils/login_data.dart';
+export 'src/utils/login_provider.dart';
+export 'src/utils/signup_data.dart';
+export 'src/verify.dart';
+export 'src/widget/page.dart';

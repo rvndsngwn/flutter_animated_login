@@ -20,14 +20,41 @@ class MyApp extends StatelessWidget {
         theme: value ? ThemeData.dark() : ThemeData.light(),
         debugShowCheckedModeBanner: false,
         home: FlutterAnimatedLogin(
-          onLogin: () => Future.delayed(
-            const Duration(seconds: 2),
-            () => 'Login Successful',
-          ),
+          onLogin: (loginData) async {
+            final result = await Future.delayed(
+              const Duration(seconds: 2),
+              () => 'Method not implemented',
+            );
+            print('Login result: $result');
+            return result;
+          },
           config: const LoginConfig(
             title: 'Mohesu Enterprise',
             subtitle: 'Let\'s Sign In',
           ),
+          providers: [
+            LoginProvider(
+              icon: Icons.reddit,
+              label: 'Reddit',
+              callback: () async {
+                return "";
+              },
+            ),
+            LoginProvider(
+              icon: Icons.apple,
+              label: 'Apple',
+              callback: () async {
+                return "";
+              },
+            ),
+            LoginProvider(
+              icon: Icons.facebook,
+              label: 'Facebook',
+              callback: () async {
+                return "";
+              },
+            ),
+          ],
         ),
         builder: (context, child) {
           return Scaffold(

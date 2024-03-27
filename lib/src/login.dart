@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_login/flutter_animated_login.dart';
-import 'package:toastification/toastification.dart';
 
+import 'utils/extension.dart';
+import 'utils/login_config.dart';
 import 'utils/login_data.dart';
 import 'utils/login_provider.dart';
 import 'utils/signup_data.dart';
 import 'widget/button.dart';
 import 'widget/email_field.dart';
+import 'widget/oauth.dart';
+import 'widget/page.dart';
 import 'widget/phone_field.dart';
+import 'widget/title.dart';
 
 /// The callback triggered after login
 /// The result is an error message, callback successes if message is null
@@ -54,6 +57,11 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   @override
   void initState() {
     _textController = widget.controller ?? TextEditingController();
+    _isPhoneNotifier.value =
+        _textController.text.contains(RegExp(r'^[+]?[0-9]+$'));
+    _isFormValidNotifier.value = _textController.text
+            .contains(RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')) ||
+        _isPhoneNotifier.value;
     _textController.addListener(() {
       final text = _textController.text;
       if (text.isNotEmpty) {
@@ -83,11 +91,10 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
 
   @override
   Widget build(BuildContext context) {
-    final phoneConfig = widget.config.phoneTextFiled;
-    final emailConfig = widget.config.emailTextFiled;
+    final phoneConfig = widget.config.phoneFiledConfig;
+    final emailConfig = widget.config.emailFiledConfig;
     return PageWidget(
       builder: (context, constraints) => Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           widget.headerWidget ??
               TitleWidget(
@@ -111,21 +118,18 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
                     );
             },
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 40),
           SignInButton(
             formNotifier: _isFormValidNotifier,
             onPressed: () async {
-              if (widget.onLogin == null) {
-                final result = await widget.onLogin!(LoginData(
+              if (widget.onLogin != null) {
+                final result = await widget.onLogin?.call(LoginData(
                   name: _textController.text,
                   password: null,
                 ));
+                debugPrint('Login result: $result');
                 if (result != null && context.mounted) {
-                  toastification.show(
-                    context: context,
-                    title: Text(result),
-                    type: ToastificationType.error,
-                  );
+                  context.error("Error", description: result);
                 }
               }
               return null;

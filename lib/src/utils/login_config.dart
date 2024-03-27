@@ -9,8 +9,8 @@ class LoginConfig {
   final String? termsAndConditions;
   final String? privacyPolicy;
   final String? footerText;
-  final PhoneTextFiled phoneTextFiled;
-  final EmailTextFiled emailTextFiled;
+  final PhoneFiledConfig phoneFiledConfig;
+  final EmailFiledConfig emailFiledConfig;
 
   const LoginConfig({
     this.logo,
@@ -21,12 +21,12 @@ class LoginConfig {
     this.termsAndConditions,
     this.privacyPolicy,
     this.footerText,
-    this.phoneTextFiled = const PhoneTextFiled(),
-    this.emailTextFiled = const EmailTextFiled(),
+    this.phoneFiledConfig = const PhoneFiledConfig(),
+    this.emailFiledConfig = const EmailFiledConfig(),
   });
 }
 
-class PhoneTextFiled {
+class PhoneFiledConfig {
   final bool autofocus;
   final InputDecoration? decoration;
   final TextStyle? style;
@@ -34,7 +34,7 @@ class PhoneTextFiled {
   final String? initialCountryCode;
   final TextInputType keyboardType;
   final TextInputAction? textInputAction;
-  const PhoneTextFiled({
+  const PhoneFiledConfig({
     this.autofocus = true,
     this.decoration,
     this.style,
@@ -48,14 +48,14 @@ class PhoneTextFiled {
   });
 }
 
-class EmailTextFiled {
+class EmailFiledConfig {
   final InputDecoration? decoration;
   final TextStyle? style;
   final TextInputType keyboardType;
   final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
   final Iterable<String>? autofillHints;
-  const EmailTextFiled({
+  const EmailFiledConfig({
     this.decoration,
     this.style,
     this.keyboardType = TextInputType.emailAddress,
