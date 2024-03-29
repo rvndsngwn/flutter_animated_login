@@ -14,6 +14,7 @@ dependencies:
   material_loading_buttons: ^1.2.1
   pinput: ^4.0.0
   toastification: ^1.2.1
+  universal_io: ^2.2.2
 
 dev_dependencies:
   flutter_lints: ^3.0.0

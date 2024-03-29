@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_login/flutter_animated_login.dart';
+import 'package:flutter_animated_login/src/utils/extension.dart';
+import 'package:universal_io/io.dart';
 
 class EmailField extends StatelessWidget {
   final TextEditingController controller;
@@ -44,10 +46,10 @@ class EmailField extends StatelessWidget {
       },
       validator: emailConfig.validator ??
           (value) {
-            if (value!.isEmpty) {
+            if (value.isEmptyOrNull) {
               return 'Please enter your email or phone';
             }
-            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+            if (!value.isEmail) {
               return 'Please enter a valid email';
             }
             return null;
@@ -56,8 +58,12 @@ class EmailField extends StatelessWidget {
           const [
             AutofillHints.email,
             AutofillHints.telephoneNumber,
+            AutofillHints.telephoneNumberNational,
           ],
-      keyboardType: emailConfig.keyboardType,
+      keyboardType: emailConfig.keyboardType ??
+          (Platform.isAndroid
+              ? TextInputType.visiblePassword
+              : const TextInputType.numberWithOptions()),
       textInputAction: emailConfig.textInputAction ?? TextInputAction.done,
     );
   }

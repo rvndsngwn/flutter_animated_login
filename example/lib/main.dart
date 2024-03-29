@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         ),
         builder: (context, child) {
           return Scaffold(
-            body: SingleChildScrollView(child: child),
+            body: child,
             floatingActionButton: IconButton.filled(
               onPressed: () => isDark.value = !isDark.value,
               icon: value

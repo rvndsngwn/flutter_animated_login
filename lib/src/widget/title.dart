@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_login/src/utils/extension.dart';
 
 class TitleWidget extends StatelessWidget {
   final String? title;
@@ -9,8 +10,8 @@ class TitleWidget extends StatelessWidget {
   final Widget? titleGap;
   const TitleWidget({
     super.key,
-    this.title = 'Mohesu Enterprise',
-    this.subtitle = 'Let\'s Sign In',
+    this.title,
+    this.subtitle,
     this.titleStyle,
     this.subtitleStyle,
     this.child = const FlutterLogo(size: 100),
@@ -22,20 +23,22 @@ class TitleWidget extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
-        child ?? const SizedBox.shrink(),
+        child.orShrink,
         const SizedBox(height: 20),
-        if (title != null)
+        if (title.isNotEmptyOrNull)
           Text(
-            title!,
+            title ?? "",
             style: titleStyle ?? textTheme.headlineMedium,
           ),
-        if (titleGap != null) titleGap!,
-        if (subtitle != null)
+        titleGap.orShrink,
+        if (subtitle.isNotEmptyOrNull)
           Text(
-            subtitle!,
+            subtitle ?? "",
             style: subtitleStyle ?? textTheme.titleLarge,
           ),
-        if (title != null && titleGap != null && subtitle != null)
+        if (title.isNotEmptyOrNull &&
+            titleGap.isNotNull &&
+            subtitle.isNotEmptyOrNull)
           const SizedBox(height: 40),
       ],
     );

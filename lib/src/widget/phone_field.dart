@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_login/flutter_animated_login.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:universal_io/io.dart';
 
 class PhoneField extends StatelessWidget {
   final TextEditingController controller;
@@ -38,12 +39,15 @@ class PhoneField extends StatelessWidget {
           ),
       initialCountryCode: phoneConfig.initialCountryCode ?? 'IN',
       initialValue: controller.text,
-      disableLengthCheck: true,
+      disableLengthCheck: phoneConfig.disableLengthCheck,
       onChanged: (phone) {
         print(phone.completeNumber);
         isFormValidNotifier.value = phone.isValidNumber();
       },
-      keyboardType: phoneConfig.keyboardType,
+      keyboardType: phoneConfig.keyboardType ??
+          (Platform.isAndroid
+              ? TextInputType.visiblePassword
+              : const TextInputType.numberWithOptions()),
       textInputAction: phoneConfig.textInputAction ?? TextInputAction.done,
     );
   }

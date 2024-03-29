@@ -57,25 +57,22 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   @override
   void initState() {
     _textController = widget.controller ?? TextEditingController();
-    _isPhoneNotifier.value =
-        _textController.text.contains(RegExp(r'^[+]?[0-9]+$'));
-    _isFormValidNotifier.value = _textController.text
-            .contains(RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')) ||
-        _isPhoneNotifier.value;
+    final text = _textController.text;
+    _isPhoneNotifier.value = text.isPhoneNumber || text.isIntlPhoneNumber;
+    _isFormValidNotifier.value = text.isEmail || _isPhoneNotifier.value;
     _textController.addListener(() {
       final text = _textController.text;
       if (text.isNotEmpty) {
         /// Check if the text is a international phone number
-        _isPhoneNotifier.value =
-            text.contains(RegExp(r'^[+]?[0-9]+$')) && text.length > 5;
-      } else if (text.isEmpty || text.contains(RegExp(r'^[a-zA-Z0-9]+$'))) {
+        _isPhoneNotifier.value = text.isIntlPhoneNumber;
+      } else if (text.isEmptyOrNull ||
+          text.contains(RegExp(r'^[a-zA-Z0-9]+$'))) {
         _isPhoneNotifier.value = false;
       }
-      if (_textController.text.isNotEmpty) {
+      if (_textController.text.isNotEmptyOrNull) {
         _isStartTyping = true;
       }
-      _isFormValidNotifier.value =
-          text.contains(RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'));
+      _isFormValidNotifier.value = text.isEmail || _isPhoneNotifier.value;
     });
     super.initState();
   }
@@ -95,6 +92,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
     final emailConfig = widget.config.emailFiledConfig;
     return PageWidget(
       builder: (context, constraints) => Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           widget.headerWidget ??
               TitleWidget(
@@ -104,18 +102,21 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
           ValueListenableBuilder(
             valueListenable: _isPhoneNotifier,
             builder: (context, isPhone, child) {
-              return isPhone
-                  ? PhoneField(
-                      controller: _textController,
-                      isFormValidNotifier: _isFormValidNotifier,
-                      phoneConfig: phoneConfig,
-                    )
-                  : EmailField(
-                      autofocus: _isStartTyping,
-                      controller: _textController,
-                      isFormValidNotifier: _isFormValidNotifier,
-                      emailConfig: emailConfig,
-                    );
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: isPhone
+                    ? PhoneField(
+                        controller: _textController,
+                        isFormValidNotifier: _isFormValidNotifier,
+                        phoneConfig: phoneConfig,
+                      )
+                    : EmailField(
+                        autofocus: _isStartTyping,
+                        controller: _textController,
+                        isFormValidNotifier: _isFormValidNotifier,
+                        emailConfig: emailConfig,
+                      ),
+              );
             },
           ),
           const SizedBox(height: 40),

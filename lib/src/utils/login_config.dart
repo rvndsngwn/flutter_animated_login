@@ -15,7 +15,7 @@ class LoginConfig {
   const LoginConfig({
     this.logo,
     this.title,
-    this.subtitle = 'Let\'s Sign In',
+    this.subtitle,
     this.buttonText,
     this.buttonTextStyle,
     this.termsAndConditions,
@@ -32,33 +32,32 @@ class PhoneFiledConfig {
   final TextStyle? style;
   final TextStyle? dropdownTextStyle;
   final String? initialCountryCode;
-  final TextInputType keyboardType;
+  final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
+  final bool disableLengthCheck;
   const PhoneFiledConfig({
     this.autofocus = true,
     this.decoration,
     this.style,
     this.dropdownTextStyle,
     this.initialCountryCode = 'IN',
-    this.keyboardType = const TextInputType.numberWithOptions(
-      signed: true,
-      decimal: false,
-    ),
+    this.keyboardType,
     this.textInputAction,
+    this.disableLengthCheck = false,
   });
 }
 
 class EmailFiledConfig {
   final InputDecoration? decoration;
   final TextStyle? style;
-  final TextInputType keyboardType;
+  final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
   final Iterable<String>? autofillHints;
   const EmailFiledConfig({
     this.decoration,
     this.style,
-    this.keyboardType = TextInputType.emailAddress,
+    this.keyboardType,
     this.textInputAction,
     this.validator,
     this.autofillHints,

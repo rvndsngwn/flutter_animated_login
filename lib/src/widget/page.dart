@@ -31,7 +31,8 @@ class PageWidget extends StatelessWidget {
             ),
             child: Material(
               borderRadius: BorderRadius.circular(20),
-              child: Padding(
+              child: AnimatedPadding(
+                duration: const Duration(milliseconds: 300),
                 padding: EdgeInsets.symmetric(
                   vertical: 40,
                   horizontal: isMobile ? 0 : 40,

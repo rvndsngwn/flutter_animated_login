@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_login/src/utils/extension.dart';
 import 'package:material_loading_buttons/material_loading_buttons.dart';
 import 'package:toastification/toastification.dart';
 
@@ -18,7 +19,7 @@ class OAuthWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return Column(
       children: [
-        if (providers != null) ...[
+        if (providers.isNotEmptyOrNull) ...[
           const SizedBox(height: 20),
           const DividerText(),
           const SizedBox(height: 20),
@@ -26,11 +27,13 @@ class OAuthWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: providers?.map((provider) {
-                final index = providers?.indexOf(provider);
+                final index = providers?.indexOf(provider) ?? 0;
+                final length = providers?.length ?? 0;
                 return Padding(
-                  padding: EdgeInsets.only(
-                      right: (index == (providers?.length ?? 0) - 1) ? 0 : 10),
+                  padding:
+                      EdgeInsets.only(right: (index == length - 1) ? 0 : 10),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       IconAutoLoadingButton.filled(
                         onPressed: () async {
@@ -43,12 +46,11 @@ class OAuthWidget extends StatelessWidget {
                             );
                           }
                         },
-                        key: Key(provider.label ??
-                            providers!.indexOf(provider).toString()),
-                        tooltip: 'Sign in with ${provider.label}',
+                        key: Key(provider.label ?? index.toString()),
                         icon: Icon(provider.icon),
                       ),
-                      if (provider.label != null) Text(provider.label ?? ""),
+                      if (provider.label.isNotEmptyOrNull)
+                        Text(provider.label ?? ""),
                     ],
                   ),
                 );
