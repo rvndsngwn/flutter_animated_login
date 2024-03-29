@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl_phone_field: ^3.2.0
+  flutter_intl_phone_field: ^0.0.4
   material_loading_buttons: ^1.2.1
   pinput: ^4.0.0
   toastification: ^1.2.1

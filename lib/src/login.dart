@@ -6,10 +6,9 @@ import 'utils/login_data.dart';
 import 'utils/login_provider.dart';
 import 'utils/signup_data.dart';
 import 'widget/button.dart';
-import 'widget/email_field.dart';
 import 'widget/oauth.dart';
 import 'widget/page.dart';
-import 'widget/phone_field.dart';
+import 'widget/text_field.dart';
 import 'widget/title.dart';
 
 /// The callback triggered after login
@@ -51,7 +50,6 @@ class FlutterAnimatedLogin extends StatefulWidget {
 class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   late TextEditingController _textController;
   final ValueNotifier<bool> _isPhoneNotifier = ValueNotifier(false);
-  bool _isStartTyping = false;
   final ValueNotifier<bool> _isFormValidNotifier = ValueNotifier(false);
 
   @override
@@ -69,9 +67,6 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
           text.contains(RegExp(r'^[a-zA-Z0-9]+$'))) {
         _isPhoneNotifier.value = false;
       }
-      if (_textController.text.isNotEmptyOrNull) {
-        _isStartTyping = true;
-      }
       _isFormValidNotifier.value = text.isEmail || _isPhoneNotifier.value;
     });
     super.initState();
@@ -88,8 +83,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
 
   @override
   Widget build(BuildContext context) {
-    final phoneConfig = widget.config.phoneFiledConfig;
-    final emailConfig = widget.config.emailFiledConfig;
+    final config = widget.config.textFiledConfig;
     return PageWidget(
       builder: (context, constraints) => Column(
         mainAxisSize: MainAxisSize.min,
@@ -99,25 +93,11 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
                 title: widget.config.title,
                 subtitle: widget.config.subtitle,
               ),
-          ValueListenableBuilder(
-            valueListenable: _isPhoneNotifier,
-            builder: (context, isPhone, child) {
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: isPhone
-                    ? PhoneField(
-                        controller: _textController,
-                        isFormValidNotifier: _isFormValidNotifier,
-                        phoneConfig: phoneConfig,
-                      )
-                    : EmailField(
-                        autofocus: _isStartTyping,
-                        controller: _textController,
-                        isFormValidNotifier: _isFormValidNotifier,
-                        emailConfig: emailConfig,
-                      ),
-              );
-            },
+          TextFieldWidget(
+            config: config,
+            controller: _textController,
+            isFormValidNotifier: _isFormValidNotifier,
+            isPhoneNotifier: _isPhoneNotifier,
           ),
           const SizedBox(height: 40),
           SignInButton(

@@ -93,6 +93,14 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  flutter_intl_phone_field:
+    dependency: transitive
+    description:
+      name: flutter_intl_phone_field
+      sha256: "5f708b1540cb36a4b3bf10e1644e6d190b3c4f65f669782e87840887f8e44b51"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -115,10 +123,10 @@ packages:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: "7ecb2f391edbca5473db591b48555a8912dde60edd0fb3013bd6743033b2d3f8"
+      sha256: "5ed2687bc961f33a752017ccaa7edead3e5601b28b6376a5901bf24728556b85"
       url: "https://pub.dev"
     source: hosted
-    version: "13.2.1"
+    version: "13.2.2"
   iconsax_flutter:
     dependency: transitive
     description:
@@ -127,14 +135,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  intl_phone_field:
-    dependency: transitive
-    description:
-      name: intl_phone_field
-      sha256: "73819d3dfcb68d2c85663606f6842597c3ddf6688ac777f051b17814fe767bbf"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.0"
   leak_tracker:
     dependency: transitive
     description:
