@@ -5,6 +5,8 @@ import 'utils/login_config.dart';
 import 'utils/login_data.dart';
 import 'utils/login_provider.dart';
 import 'utils/signup_data.dart';
+import 'utils/verify_config.dart';
+import 'verify.dart';
 import 'widget/button.dart';
 import 'widget/email_phone_field.dart';
 import 'widget/oauth.dart';
@@ -26,6 +28,12 @@ typedef ProviderNeedsSignUpCallback = Future<bool> Function();
 /// The callback triggered after the user has oauth with the provider
 typedef ProviderAuthCallback = Future<String?>? Function();
 
+/// The callback triggered after the user has verified the OTP
+typedef VerifyCallback = Future<String?>? Function(String);
+
+/// The callback triggered after the user has resent the OTP
+typedef ResendOtpCallback = Future<String?>? Function();
+
 class FlutterAnimatedLogin extends StatefulWidget {
   /// The callback triggered after login
   final LoginCallback? onLogin;
@@ -33,11 +41,15 @@ class FlutterAnimatedLogin extends StatefulWidget {
   /// The callback triggered after signup
   final SignupCallback? onSignup;
 
-  /// The text controller for the text field
-  final TextEditingController? textController;
+  /// [VerifyCallback] triggered after the user has verified the OTP
+  /// The result is an error message, callback successes if message is null
+  final VerifyCallback? onVerify;
+
+  /// [ResendOtpCallback] triggered after the user has resent the OTP
+  final ResendOtpCallback? onResendOtp;
 
   /// The configuration for the login text field
-  final LoginConfig config;
+  final LoginConfig loginConfig;
 
   /// The header widget for the login page
   final Widget? headerWidget;
@@ -50,16 +62,22 @@ class FlutterAnimatedLogin extends StatefulWidget {
 
   /// The login type, default is [LoginType.loginWithOTP]
   final LoginType loginType;
+
+  /// The configuration for the verify page
+  final VerifyConfig verifyConfig;
+
   const FlutterAnimatedLogin({
     super.key,
     this.onLogin,
     this.onSignup,
-    this.textController,
-    this.config = const LoginConfig(),
+    this.onVerify,
+    this.onResendOtp,
+    this.loginConfig = const LoginConfig(),
     this.headerWidget,
     this.footerWidget,
     this.providers,
     this.loginType = LoginType.loginWithOTP,
+    this.verifyConfig = const VerifyConfig(),
   });
 
   @override
@@ -76,14 +94,19 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   /// The notifier for the notifying if the form is valid
   final ValueNotifier<bool> _isFormValidNotifier = ValueNotifier(false);
 
+  final ValueNotifier<int> _nextPageNotifier = ValueNotifier(0);
+
   @override
   void initState() {
-    _textController = widget.textController ?? TextEditingController();
+    final controller = widget.loginConfig.textFiledConfig.controller;
+    _textController = controller ?? TextEditingController();
+    debugPrint('Controller: ${_textController.text}');
     final text = _textController.text;
     _isPhoneNotifier.value = text.isPhoneNumber || text.isIntlPhoneNumber;
     _isFormValidNotifier.value = text.isEmail || _isPhoneNotifier.value;
     _textController.addListener(() {
       final text = _textController.text;
+      debugPrint('Text: $text');
       if (text.isNotEmpty) {
         /// Check if the text is a international phone number
         _isPhoneNotifier.value = text.isIntlPhoneNumber;
@@ -93,6 +116,8 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
       }
       _isFormValidNotifier.value = text.isEmail || _isPhoneNotifier.value;
     });
+    debugPrint('Phone: ${_isPhoneNotifier.value}');
+    debugPrint('Listener: ${_textController.hasListeners}');
     super.initState();
   }
 
@@ -101,59 +126,42 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
     _textController.dispose();
     _isPhoneNotifier.dispose();
     _isFormValidNotifier.dispose();
-    widget.textController?.dispose();
+    _nextPageNotifier.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final config = widget.config.textFiledConfig;
-    return PageWidget(
-      builder: (context, constraints) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          widget.headerWidget ??
-              TitleWidget(
-                title: widget.config.title,
-                subtitle: widget.config.subtitle,
-              ),
-          EmailPhoneTextField(
-            config: config,
-            controller: _textController,
-            isFormValidNotifier: _isFormValidNotifier,
-            isPhoneNotifier: _isPhoneNotifier,
-          ),
-          if (widget.loginType == LoginType.loginWithPassword) ...[
-            const SizedBox(height: 20),
-            PasswordTextField(
-              config: config,
+    return ValueListenableBuilder(
+      valueListenable: _nextPageNotifier,
+      builder: (context, nextPage, child) {
+        switch (nextPage) {
+          case 0:
+            return _LoginPage(
+              config: widget.loginConfig,
+              headerWidget: widget.headerWidget,
+              footerWidget: widget.footerWidget,
+              loginType: widget.loginType,
+              onLogin: widget.onLogin,
+              onVerify: widget.onVerify,
+              providers: widget.providers,
+              isPhoneNotifier: _isPhoneNotifier,
               isFormValidNotifier: _isFormValidNotifier,
-            ),
-          ],
-          const SizedBox(height: 40),
-          SignInButton(
-            formNotifier: _isFormValidNotifier,
-            onPressed: () async {
-              if (widget.onLogin != null) {
-                final result = await widget.onLogin?.call(LoginData(
-                  name: _textController.text,
-                  password: null,
-                ));
-                debugPrint('Login result: $result');
-                if (context.mounted) {
-                  if (result.isNotEmptyOrNull) {
-                    context.error("Error", description: result);
-                  }
-                }
-              }
-              return null;
-            },
-            config: widget.config,
-            constraints: constraints,
-          ),
-          widget.footerWidget ?? OAuthWidget(providers: widget.providers),
-        ],
-      ),
+              nextPageNotifier: _nextPageNotifier,
+              textController: _textController,
+            );
+          case 1:
+            return FlutterAnimatedVerify(
+              onVerify: widget.onVerify,
+              name: _textController.text,
+              nextPageNotifier: _nextPageNotifier,
+              config: widget.verifyConfig,
+              onResendOtp: widget.onResendOtp,
+            );
+          default:
+            return const SizedBox.shrink();
+        }
+      },
     );
   }
 }
@@ -161,4 +169,87 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
 enum LoginType {
   loginWithOTP,
   loginWithPassword,
+}
+
+class _LoginPage extends StatelessWidget {
+  final LoginConfig config;
+  final Widget? headerWidget;
+  final Widget? footerWidget;
+  final LoginType loginType;
+  final LoginCallback? onLogin;
+  final VerifyCallback? onVerify;
+  final List<LoginProvider>? providers;
+  final TextEditingController textController;
+
+  final ValueNotifier<bool> isPhoneNotifier;
+  final ValueNotifier<bool> isFormValidNotifier;
+  final ValueNotifier<int> nextPageNotifier;
+
+  const _LoginPage({
+    this.headerWidget,
+    this.footerWidget,
+    this.onLogin,
+    this.onVerify,
+    this.providers,
+    required this.config,
+    required this.loginType,
+    required this.isPhoneNotifier,
+    required this.isFormValidNotifier,
+    required this.nextPageNotifier,
+    required this.textController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textConfig = config.textFiledConfig;
+    return PageWidget(
+      builder: (context, constraints) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          headerWidget ??
+              TitleWidget(
+                title: config.title,
+                subtitle: config.subtitle,
+              ),
+          EmailPhoneTextField(
+            controller: textController,
+            config: textConfig,
+            isFormValidNotifier: isFormValidNotifier,
+            isPhoneNotifier: isPhoneNotifier,
+          ),
+          if (loginType == LoginType.loginWithPassword) ...[
+            const SizedBox(height: 20),
+            PasswordTextField(
+              config: textConfig,
+              isFormValidNotifier: isFormValidNotifier,
+            ),
+          ],
+          const SizedBox(height: 40),
+          SignInButton(
+            formNotifier: isFormValidNotifier,
+            onPressed: () async {
+              if (onLogin != null) {
+                final result = await onLogin?.call(LoginData(
+                  name: textController.text,
+                  password: null,
+                ));
+                debugPrint('Login result: $result');
+                if (context.mounted) {
+                  if (result.isNotEmptyOrNull) {
+                    context.error("Error", description: result);
+                  } else {
+                    nextPageNotifier.value = 1;
+                  }
+                }
+              }
+              return null;
+            },
+            config: config,
+            constraints: constraints,
+          ),
+          footerWidget ?? OAuthWidget(providers: providers),
+        ],
+      ),
+    );
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_login/src/utils/extension.dart';
 
@@ -8,6 +9,7 @@ class TitleWidget extends StatelessWidget {
   final TextStyle? subtitleStyle;
   final Widget? child;
   final Widget? titleGap;
+  final void Function()? onTap;
   const TitleWidget({
     super.key,
     this.title,
@@ -16,11 +18,13 @@ class TitleWidget extends StatelessWidget {
     this.subtitleStyle,
     this.child = const FlutterLogo(size: 100),
     this.titleGap = const SizedBox(height: 20),
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     return Column(
       children: [
         child.orShrink,
@@ -32,9 +36,22 @@ class TitleWidget extends StatelessWidget {
           ),
         titleGap.orShrink,
         if (subtitle.isNotEmptyOrNull)
-          Text(
-            subtitle ?? "",
-            style: subtitleStyle ?? textTheme.titleLarge,
+          Text.rich(
+            TextSpan(
+              text: subtitle ?? "",
+              style: subtitleStyle ?? textTheme.headlineSmall,
+              children: [
+                if (onTap != null)
+                  TextSpan(
+                    text: ' Edit',
+                    style: TextStyle(
+                      color: theme.colorScheme.secondary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    recognizer: TapGestureRecognizer()..onTap = onTap,
+                  ),
+              ],
+            ),
           ),
         if (title.isNotEmptyOrNull &&
             titleGap.isNotNull &&

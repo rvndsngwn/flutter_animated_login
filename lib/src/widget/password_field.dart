@@ -4,7 +4,7 @@ import '../utils/login_config.dart';
 
 class PasswordTextField extends StatelessWidget {
   final ValueNotifier<bool> isFormValidNotifier;
-  final TextFiledConfig config;
+  final EmailPhoneTextFiledConfig config;
   const PasswordTextField({
     super.key,
     required this.isFormValidNotifier,

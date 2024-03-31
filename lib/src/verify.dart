@@ -4,18 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:material_loading_buttons/material_loading_buttons.dart';
 import 'package:pinput/pinput.dart';
 
+import 'login.dart';
 import 'utils/extension.dart';
+import 'utils/verify_config.dart';
 import 'widget/oauth.dart';
 import 'widget/page.dart';
 import 'widget/title.dart';
 
 class FlutterAnimatedVerify extends StatefulWidget {
-  final Future<void> Function()? onPressed;
-  final String value;
+  final VerifyCallback? onVerify;
+  final String name;
+  final ValueNotifier<int> nextPageNotifier;
+  final VerifyConfig config;
+
+  /// [ResendOtpCallback] triggered after the user has resent the OTP
+  final ResendOtpCallback? onResendOtp;
   const FlutterAnimatedVerify({
     super.key,
-    this.onPressed,
-    this.value = 'arvind@mohesu.com',
+    this.onVerify,
+    required this.name,
+    required this.nextPageNotifier,
+    required this.config,
+    this.onResendOtp,
   });
 
   @override
@@ -23,7 +33,7 @@ class FlutterAnimatedVerify extends StatefulWidget {
 }
 
 class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
-  final TextEditingController textController = TextEditingController();
+  late TextEditingController _textController;
 
   /// Timer object for OTP expiration.
   Timer? _otpExpirationTimer;
@@ -43,6 +53,8 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
 
   @override
   void initState() {
+    _textController =
+        widget.config.textFiledConfig.controller ?? TextEditingController();
     _otpExpirationTimer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
@@ -53,14 +65,14 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
       },
     );
     setState(() {
-      isEmail = widget.value.contains('@') && widget.value.contains('.');
+      isEmail = widget.name.isEmail;
     });
     super.initState();
   }
 
   @override
   void dispose() {
-    textController.dispose();
+    _textController.dispose();
     _otpExpirationTimer?.cancel();
     super.dispose();
   }
@@ -85,46 +97,108 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
         border: Border.all(color: Colors.transparent),
       ),
     );
-
+    final textConfig = widget.config.textFiledConfig;
+    final config = widget.config;
     return PageWidget(
       builder: (context, constraints) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TitleWidget(
-            title: 'Enter OTP sent to your ${isEmail ? 'email' : 'phone'}',
-            titleStyle: textTheme.titleLarge,
-            subtitle: '#${widget.value}',
-            subtitleStyle: textTheme.titleMedium,
-            titleGap: const SizedBox(height: 6),
-            child: Icon(
-              isEmail ? Icons.email : Icons.phone_iphone,
-              size: 100,
-              color: theme.colorScheme.secondary,
-            ),
-          ),
+          config.header ??
+              TitleWidget(
+                title: config.title ??
+                    'Enter OTP sent to your ${isEmail ? 'email' : 'phone'}',
+                titleStyle: textTheme.titleLarge,
+                subtitle: config.subtitle ?? '#${widget.name}',
+                subtitleStyle: textTheme.titleMedium,
+                titleGap: const SizedBox(height: 6),
+                onTap: () => widget.nextPageNotifier.value = 0,
+                child: config.logo ??
+                    Icon(
+                      isEmail ? Icons.email : Icons.sms,
+                      size: 100,
+                      color: theme.colorScheme.secondary,
+                    ),
+              ),
           Pinput(
-            length: 6,
-            pinAnimationType: PinAnimationType.scale,
-            controller: textController,
-            // androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
-            autofillHints: const [AutofillHints.oneTimeCode],
-            focusedPinTheme: defaultPinTheme.copyWith(
-              height: 68,
-              width: 64,
-              decoration: defaultPinTheme.decoration!.copyWith(
-                border: Border.all(color: borderColor),
-              ),
-            ),
-            errorPinTheme: defaultPinTheme.copyWith(
-              decoration: BoxDecoration(
-                color: errorColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            defaultPinTheme: defaultPinTheme,
-            onCompleted: (value) async {
-              print(value);
-            },
+            length: textConfig.length ?? 6,
+            pinAnimationType: textConfig.pinAnimationType,
+            controller: _textController,
+            androidSmsAutofillMethod: textConfig.androidSmsAutofillMethod,
+            autofillHints:
+                textConfig.autofillHints ?? const [AutofillHints.oneTimeCode],
+            focusedPinTheme: textConfig.focusedPinTheme ??
+                defaultPinTheme.copyWith(
+                  height: 68,
+                  width: 64,
+                  decoration: defaultPinTheme.decoration!.copyWith(
+                    border: Border.all(color: borderColor),
+                  ),
+                ),
+            errorPinTheme: textConfig.errorPinTheme ??
+                defaultPinTheme.copyWith(
+                  decoration: BoxDecoration(
+                    color: errorColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+            defaultPinTheme: textConfig.defaultPinTheme ?? defaultPinTheme,
+            onCompleted: textConfig.onCompleted,
+            onChanged: textConfig.onChanged,
+            onSubmitted: textConfig.onSubmitted,
+            animationCurve: textConfig.animationCurve,
+            animationDuration: textConfig.animationDuration ??
+                const Duration(milliseconds: 180),
+            autofocus: textConfig.autofocus,
+            closeKeyboardWhenCompleted: textConfig.closeKeyboardWhenCompleted,
+            contextMenuBuilder: textConfig.contextMenuBuilder,
+            crossAxisAlignment: textConfig.crossAxisAlignment,
+            cursor: textConfig.cursor,
+            disabledPinTheme: textConfig.disabledPinTheme,
+            enableIMEPersonalizedLearning:
+                textConfig.enableIMEPersonalizedLearning,
+            enableSuggestions: textConfig.enableSuggestions,
+            enabled: textConfig.enabled,
+            errorBuilder: textConfig.errorBuilder,
+            errorText: textConfig.errorText,
+            errorTextStyle: textConfig.errorTextStyle,
+            keyboardType: textConfig.keyboardType,
+            focusNode: textConfig.focusNode,
+            followingPinTheme: textConfig.followingPinTheme,
+            forceErrorState: textConfig.forceErrorState,
+            hapticFeedbackType: textConfig.hapticFeedbackType,
+            inputFormatters: textConfig.inputFormatters,
+            isCursorAnimationEnabled: textConfig.isCursorAnimationEnabled,
+            keyboardAppearance: textConfig.keyboardAppearance,
+            listenForMultipleSmsOnAndroid:
+                textConfig.listenForMultipleSmsOnAndroid,
+            mainAxisAlignment: textConfig.mainAxisAlignment,
+            mouseCursor: textConfig.mouseCursor,
+            obscureText: textConfig.obscureText,
+            obscuringCharacter: textConfig.obscuringCharacter,
+            obscuringWidget: textConfig.obscuringWidget,
+            onAppPrivateCommand: textConfig.onAppPrivateCommand,
+            onClipboardFound: textConfig.onClipboardFound,
+            onLongPress: textConfig.onLongPress,
+            onTap: textConfig.onTap,
+            onTapOutside: textConfig.onTapOutside,
+            pinContentAlignment: textConfig.pinContentAlignment,
+            pinputAutovalidateMode: textConfig.pinputAutovalidateMode,
+            preFilledWidget: textConfig.preFilledWidget,
+            readOnly: textConfig.readOnly,
+            restorationId: textConfig.restorationId,
+            scrollPadding: textConfig.scrollPadding,
+            selectionControls: textConfig.selectionControls,
+            senderPhoneNumber: textConfig.senderPhoneNumber,
+            separatorBuilder: textConfig.separatorBuilder,
+            showCursor: textConfig.showCursor,
+            slideTransitionBeginOffset: textConfig.slideTransitionBeginOffset,
+            smsCodeMatcher: textConfig.smsCodeMatcher,
+            submittedPinTheme: textConfig.submittedPinTheme,
+            textCapitalization: textConfig.textCapitalization,
+            textInputAction: textConfig.textInputAction,
+            toolbarEnabled: textConfig.toolbarEnabled,
+            useNativeKeyboard: textConfig.useNativeKeyboard,
+            validator: textConfig.validator,
           ),
           const SizedBox(height: 20),
           if (!isOtpExpired)
@@ -148,12 +222,14 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                         : constraints.maxWidth * 0.5,
                     55,
                   ),
-                  textStyle: textTheme.titleLarge,
+                  textStyle: config.buttonTextStyle ?? textTheme.titleLarge,
                 ),
                 onPressed: () async {
-                  await Future.delayed(
-                    const Duration(seconds: 2),
-                    () {
+                  final response = await widget.onResendOtp?.call();
+                  if (context.mounted) {
+                    if (response.isNotEmptyOrNull) {
+                      context.error('Error', description: response);
+                    } else {
                       setState(() {
                         _otpExpirationTimer?.cancel();
                         _otpExpirationTimer = Timer.periodic(
@@ -167,13 +243,13 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                           },
                         );
                       });
-                    },
-                  );
+                    }
+                  }
                 },
-                child: const Text("Resend OTP"),
+                child: config.buttonText ?? const Text("Resend OTP"),
               ),
             ),
-          const OAuthWidget(),
+          config.footer ?? const OAuthWidget(),
         ],
       ),
     );
