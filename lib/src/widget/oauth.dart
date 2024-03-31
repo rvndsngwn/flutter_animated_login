@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_login/src/utils/extension.dart';
 import 'package:material_loading_buttons/material_loading_buttons.dart';
-import 'package:toastification/toastification.dart';
 
 import '../utils/login_provider.dart';
 import 'divider.dart';
@@ -38,12 +37,10 @@ class OAuthWidget extends StatelessWidget {
                       IconAutoLoadingButton.filled(
                         onPressed: () async {
                           final result = await provider.callback.call();
-                          if (result != null && context.mounted) {
-                            toastification.show(
-                              context: context,
-                              title: Text(result),
-                              type: ToastificationType.error,
-                            );
+                          if (context.mounted) {
+                            if (result.isNotEmptyOrNull) {
+                              context.error("Error", description: result);
+                            }
                           }
                         },
                         key: Key(provider.label ?? index.toString()),

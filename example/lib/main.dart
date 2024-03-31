@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animated_login/flutter_animated_login.dart';
 
 void main() {
@@ -19,54 +20,52 @@ class MyApp extends StatelessWidget {
         themeMode: value ? ThemeMode.dark : ThemeMode.light,
         theme: value ? ThemeData.dark() : ThemeData.light(),
         debugShowCheckedModeBanner: false,
-        home: FlutterAnimatedLogin(
-          onLogin: (loginData) async {
-            final result = await Future.delayed(
-              const Duration(seconds: 2),
-              () => 'Method not implemented',
-            );
-            print('Login result: $result');
-            return result;
-          },
-          config: const LoginConfig(
-            title: 'Mohesu Enterprise',
-            subtitle: 'Let\'s Sign In',
+        home: Scaffold(
+          floatingActionButton: IconButton.filled(
+            onPressed: () => isDark.value = !isDark.value,
+            icon: value
+                ? const Icon(Icons.dark_mode)
+                : const Icon(Icons.light_mode),
           ),
-          providers: [
-            LoginProvider(
-              icon: Icons.reddit,
-              label: 'Reddit',
-              callback: () async {
-                return "";
-              },
+          body: FlutterAnimatedLogin(
+            onLogin: (loginData) async {
+              final result = await Future.delayed(
+                const Duration(seconds: 2),
+                () => 'Method not implemented',
+              );
+              print('Login result: $result');
+              TextInput.finishAutofillContext();
+              return result;
+            },
+            config: const LoginConfig(
+              title: 'Mohesu Enterprise',
+              subtitle: 'Let\'s Sign In',
             ),
-            LoginProvider(
-              icon: Icons.apple,
-              label: 'Apple',
-              callback: () async {
-                return "";
-              },
-            ),
-            LoginProvider(
-              icon: Icons.facebook,
-              label: 'Facebook',
-              callback: () async {
-                return "";
-              },
-            ),
-          ],
+            providers: [
+              LoginProvider(
+                icon: Icons.reddit,
+                label: 'Reddit',
+                callback: () async {
+                  return "";
+                },
+              ),
+              LoginProvider(
+                icon: Icons.apple,
+                label: 'Apple',
+                callback: () async {
+                  return "";
+                },
+              ),
+              LoginProvider(
+                icon: Icons.facebook,
+                label: 'Facebook',
+                callback: () async {
+                  return "";
+                },
+              ),
+            ],
+          ),
         ),
-        builder: (context, child) {
-          return Scaffold(
-            body: SingleChildScrollView(child: child),
-            floatingActionButton: IconButton.filled(
-              onPressed: () => isDark.value = !isDark.value,
-              icon: value
-                  ? const Icon(Icons.dark_mode)
-                  : const Icon(Icons.light_mode),
-            ),
-          );
-        },
       ),
     );
   }

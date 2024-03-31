@@ -4,12 +4,12 @@ import 'package:flutter_intl_phone_field/flutter_intl_phone_field.dart';
 import '../utils/extension.dart';
 import '../utils/login_config.dart';
 
-class TextFieldWidget extends StatelessWidget {
+class EmailPhoneTextField extends StatelessWidget {
   final TextEditingController controller;
   final ValueNotifier<bool> isPhoneNotifier;
   final ValueNotifier<bool> isFormValidNotifier;
   final TextFiledConfig config;
-  const TextFieldWidget({
+  const EmailPhoneTextField({
     super.key,
     required this.controller,
     required this.isPhoneNotifier,

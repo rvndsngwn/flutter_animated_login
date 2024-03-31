@@ -6,9 +6,10 @@ import 'utils/login_data.dart';
 import 'utils/login_provider.dart';
 import 'utils/signup_data.dart';
 import 'widget/button.dart';
+import 'widget/email_phone_field.dart';
 import 'widget/oauth.dart';
 import 'widget/page.dart';
-import 'widget/text_field.dart';
+import 'widget/password_field.dart';
 import 'widget/title.dart';
 
 /// The callback triggered after login
@@ -22,25 +23,43 @@ typedef SignupCallback = Future<String?>? Function(SignupData);
 /// If the callback returns true, the additional data card is shown
 typedef ProviderNeedsSignUpCallback = Future<bool> Function();
 
+/// The callback triggered after the user has oauth with the provider
 typedef ProviderAuthCallback = Future<String?>? Function();
 
 class FlutterAnimatedLogin extends StatefulWidget {
+  /// The callback triggered after login
   final LoginCallback? onLogin;
+
+  /// The callback triggered after signup
   final SignupCallback? onSignup;
-  final TextEditingController? controller;
+
+  /// The text controller for the text field
+  final TextEditingController? textController;
+
+  /// The configuration for the login text field
   final LoginConfig config;
+
+  /// The header widget for the login page
   final Widget? headerWidget;
+
+  /// The footer widget for the login page
   final Widget? footerWidget;
+
+  /// The list of login providers for the oauth
   final List<LoginProvider>? providers;
+
+  /// The login type, default is [LoginType.loginWithOTP]
+  final LoginType loginType;
   const FlutterAnimatedLogin({
     super.key,
     this.onLogin,
     this.onSignup,
-    this.controller,
+    this.textController,
     this.config = const LoginConfig(),
     this.headerWidget,
     this.footerWidget,
     this.providers,
+    this.loginType = LoginType.loginWithOTP,
   });
 
   @override
@@ -48,13 +67,18 @@ class FlutterAnimatedLogin extends StatefulWidget {
 }
 
 class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
+  /// The text controller for the text field if not provided by the user
   late TextEditingController _textController;
+
+  /// The notifier for the notifying if the text is a phone number
   final ValueNotifier<bool> _isPhoneNotifier = ValueNotifier(false);
+
+  /// The notifier for the notifying if the form is valid
   final ValueNotifier<bool> _isFormValidNotifier = ValueNotifier(false);
 
   @override
   void initState() {
-    _textController = widget.controller ?? TextEditingController();
+    _textController = widget.textController ?? TextEditingController();
     final text = _textController.text;
     _isPhoneNotifier.value = text.isPhoneNumber || text.isIntlPhoneNumber;
     _isFormValidNotifier.value = text.isEmail || _isPhoneNotifier.value;
@@ -77,7 +101,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
     _textController.dispose();
     _isPhoneNotifier.dispose();
     _isFormValidNotifier.dispose();
-    widget.controller?.dispose();
+    widget.textController?.dispose();
     super.dispose();
   }
 
@@ -93,12 +117,19 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
                 title: widget.config.title,
                 subtitle: widget.config.subtitle,
               ),
-          TextFieldWidget(
+          EmailPhoneTextField(
             config: config,
             controller: _textController,
             isFormValidNotifier: _isFormValidNotifier,
             isPhoneNotifier: _isPhoneNotifier,
           ),
+          if (widget.loginType == LoginType.loginWithPassword) ...[
+            const SizedBox(height: 20),
+            PasswordTextField(
+              config: config,
+              isFormValidNotifier: _isFormValidNotifier,
+            ),
+          ],
           const SizedBox(height: 40),
           SignInButton(
             formNotifier: _isFormValidNotifier,
@@ -109,8 +140,10 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
                   password: null,
                 ));
                 debugPrint('Login result: $result');
-                if (result != null && context.mounted) {
-                  context.error("Error", description: result);
+                if (context.mounted) {
+                  if (result.isNotEmptyOrNull) {
+                    context.error("Error", description: result);
+                  }
                 }
               }
               return null;
@@ -123,4 +156,9 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
       ),
     );
   }
+}
+
+enum LoginType {
+  loginWithOTP,
+  loginWithPassword,
 }
