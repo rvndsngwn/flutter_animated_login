@@ -100,13 +100,11 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   void initState() {
     final controller = widget.loginConfig.textFiledConfig.controller;
     _textController = controller ?? TextEditingController();
-    debugPrint('Controller: ${_textController.text}');
     final text = _textController.text;
     _isPhoneNotifier.value = text.isPhoneNumber || text.isIntlPhoneNumber;
     _isFormValidNotifier.value = text.isEmail || _isPhoneNotifier.value;
     _textController.addListener(() {
       final text = _textController.text;
-      debugPrint('Text: $text');
       if (text.isNotEmpty) {
         /// Check if the text is a international phone number
         _isPhoneNotifier.value = text.isIntlPhoneNumber;
@@ -116,8 +114,6 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
       }
       _isFormValidNotifier.value = text.isEmail || _isPhoneNotifier.value;
     });
-    debugPrint('Phone: ${_isPhoneNotifier.value}');
-    debugPrint('Listener: ${_textController.hasListeners}');
     super.initState();
   }
 
