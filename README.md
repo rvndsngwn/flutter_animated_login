@@ -1,39 +1,79 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Flutter Animated Login
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+[![Pub Version](https://img.shields.io/pub/v/flutter_animated_login?color=blue&style=plastic)](https://pub.dev/packages/flutter_animated_login)
+[![GitHub Repo stars](https://img.shields.io/github/stars/rvndsngwn/flutter_animated_login?color=gold&style=plastic)](https://github.com/rvndsngwn/flutter_animated_login/stargazers)
+[![GitHub Repo forks](https://img.shields.io/github/forks/rvndsngwn/flutter_animated_login?color=slateblue&style=plastic)](https://github.com/rvndsngwn/flutter_animated_login/fork)
+[![GitHub Repo issues](https://img.shields.io/github/issues/rvndsngwn/flutter_animated_login?color=coral&style=plastic)](https://github.com/rvndsngwn/flutter_animated_login/issues)
+[![GitHub Repo contributors](https://img.shields.io/github/contributors/rvndsngwn/flutter_animated_login?color=green&style=plastic)](https://github.com/rvndsngwn/flutter_animated_login/graphs/contributors)
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+A Flutter package to create a beautiful animated login screen with phone/email otp, password, and social login options. It also includes a phone number picker and country picker.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+## Screenshots
 
-## Features
+### Email OTP
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+<table>
+<td><img src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/image-1.png" width=270 height=520 alt=""></td>
+<td><img src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/image-2.png" width=270 height=520 alt=""></td>
+</tr>
+</table>
+### Phone OTP
+<table>
+<td><img src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/image-3.png" width=270 height=520 alt=""></td>
+<td><img src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/image-4.png" width=270 height=520 alt=""></td>
+</tr>
+</table>
+### Dark Theme
+<table>
+<td><img src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/image-5.png" width=270 height=520 alt=""></td>
+<td><img src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/image-6.png" width=270 height=520 alt=""></td>
+</tr>
+</table>
 
-## Getting started
+## Installing
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+To use this package run this command:
 
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-const like = 'sample';
+```yaml
+flutter pub add flutter_animated_login
 ```
 
-## Additional information
+Or, add the following to your `pubspec.yaml` file:
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+```yaml
+dependencies:
+  flutter_animated_login: ^<latest_version>
+```
+
+Sometimes you may want to use the latest version of the package, instead of a published version. To do that, use the `git` syntax:
+
+```yaml
+dependencies:
+  flutter_animated_login:
+    git:
+      url: git://github.com/rvndsngwn/flutter_animated_login.git
+      ref: main
+```
+
+## How to Use
+
+Simply create a `FlutterAnimatedLogin` widget, and pass the required params:
+
+```dart
+FlutterAnimatedLogin(
+    loginType: LoginType.loginWithOTP,
+    onLogin: (loginData) async {
+        print(loginData);
+    },
+)
+```
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## LICENSE
+
+This project is licensed under the MIT license. See [LICENSE](LICENSE) for more information.
