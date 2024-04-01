@@ -73,19 +73,71 @@ Simply create a `FlutterAnimatedLogin` widget, and pass the required params:
 
 ```dart
 FlutterAnimatedLogin(
-    loginType: LoginType.loginWithOTP,
     onLogin: (loginData) async {
         print(loginData);
+        return "";
     },
 )
 ```
 
-## Contributing
+See the `example` directory for a complete sample app.
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+### Parameters of the MapLocationPicker
 
-Please make sure to update tests as appropriate.
+```dart
+  /// The callback triggered after login
+  final LoginCallback? onLogin;
+
+  /// The callback triggered after signup
+  final SignupCallback? onSignup;
+
+  /// [VerifyCallback] triggered after the user has verified the OTP
+  /// The result is an error message, callback successes if message is null
+  final VerifyCallback? onVerify;
+
+  /// [ResendOtpCallback] triggered after the user has resent the OTP
+  final ResendOtpCallback? onResendOtp;
+
+  /// The configuration for the login text field
+  final LoginConfig loginConfig;
+
+  /// The header widget for the login page
+  final Widget? headerWidget;
+
+  /// The footer widget for the login page
+  final Widget? footerWidget;
+
+  /// The list of login providers for the oauth
+  final List<LoginProvider>? providers;
+
+  /// The login type, default is [LoginType.loginWithOTP]
+  final LoginType loginType;
+
+  /// The configuration for the verify page
+  final VerifyConfig verifyConfig;
+
+  /// The terms and conditions for the login/signup page
+  final TextSpan? termsAndConditions;
+```
 
 ## LICENSE
 
 This project is licensed under the MIT license. See [LICENSE](LICENSE) for more information.
+
+## You can help me by Donating
+
+[![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/rvndsngwn) [![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/rvndsngwn?country.x=IN&locale.x=en_GB) [![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/rvndsngwn)
+
+## 👨🏻‍💻 Contribute to the project
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+[![GitHub](https://img.shields.io/badge/GitHub-0f0f0f?style=for-the-badge&logo=github&logoColor=white)](https://github.com/rvndsngwn/flutter_animated_login)
+
+## 👨🏻‍💻Contributors
+
+<a href="https://github.com/rvndsngwn/flutter_animated_login/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=rvndsngwn/flutter_animated_login" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
