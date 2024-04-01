@@ -27,11 +27,11 @@ jobs:
 
       - name: Fix PWA
         run: sed -i'.js' -e 's+"/"+""+g' flutter_service_worker.js #https://github.com/flutter/flutter/issues/68449
-        working-directory: ./example/build/web/
+        working-directory: ./example/build/web
 
       - name: Deploy web To GH-Page
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.PERSONAL_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./example/build/web/
+          publish_dir: ./example/build/web
