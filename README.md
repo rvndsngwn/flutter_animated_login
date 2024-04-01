@@ -34,7 +34,7 @@ A Flutter package to create a beautiful animated login screen with phone/email o
 </tr>
 </table>
 
-### Video Demo
+### Video [Demo](https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/video-1.mov)
 
 <table>
 <td><video width="270" height="520" controls>

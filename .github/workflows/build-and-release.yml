@@ -13,6 +13,9 @@ jobs:
   build:
     name: Build & Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # To push a branch
+      pull-requests: write # To create a PR from that branch
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
