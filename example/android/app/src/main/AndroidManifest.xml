@@ -31,7 +31,7 @@
         </intent>
     </queries>
    <application
-        android:label="Mohesu Clouds"
+        android:label="Flutter Animated Login"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
