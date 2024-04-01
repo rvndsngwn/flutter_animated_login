@@ -9,13 +9,13 @@ on:
       - master
       - develop
 name: "Build & Release"
+permissions:
+  contents: read
+  pages: write
 jobs:
   build:
     name: Build & Release
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
