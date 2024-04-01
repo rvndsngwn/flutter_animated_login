@@ -91,6 +91,8 @@ class FlutterAnimatedLogin extends StatefulWidget {
 class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   /// The text controller for the text field if not provided by the user
   late TextEditingController _textController;
+
+  /// The text controller for the password field if not provided by the user
   late TextEditingController _passwordController;
 
   /// The notifier for the notifying if the text is a phone number
@@ -99,6 +101,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   /// The notifier for the notifying if the form is valid
   final ValueNotifier<bool> _isFormValidNotifier = ValueNotifier(false);
 
+  /// The notifier for the next page
   final ValueNotifier<int> _nextPageNotifier = ValueNotifier(0);
 
   @override
@@ -175,7 +178,9 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
               termsAndConditions: widget.termsAndConditions,
             );
           default:
-            return const SizedBox.shrink();
+            return const Center(
+              child: FlutterLogo(size: 100),
+            );
         }
       },
     );

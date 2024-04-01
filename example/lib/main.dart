@@ -27,47 +27,44 @@ class MyApp extends StatelessWidget {
                 ? const Icon(Icons.dark_mode)
                 : const Icon(Icons.light_mode),
           ),
-          body: SingleChildScrollView(
-            child: FlutterAnimatedLogin(
-              loginType:
-                  value ? LoginType.loginWithOTP : LoginType.loginWithPassword,
-              onLogin: (loginData) async {
-                final result = await Future.delayed(
-                  const Duration(seconds: 2),
-                  () => '',
-                );
-                SystemChannels.textInput.invokeMethod('TextInput.hide');
-                TextInput.finishAutofillContext();
-                return result;
-              },
-              loginConfig: const LoginConfig(
-                title: 'Mohesu Enterprise',
-                subtitle: 'Let\'s Sign In',
-              ),
-              providers: [
-                LoginProvider(
-                  icon: Icons.reddit,
-                  label: 'Reddit',
-                  callback: () async {
-                    return "";
-                  },
-                ),
-                LoginProvider(
-                  icon: Icons.apple,
-                  label: 'Apple',
-                  callback: () async {
-                    return "";
-                  },
-                ),
-                LoginProvider(
-                  icon: Icons.facebook,
-                  label: 'Facebook',
-                  callback: () async {
-                    return "";
-                  },
-                ),
-              ],
+          body: FlutterAnimatedLogin(
+            loginType: LoginType.loginWithOTP,
+            onLogin: (loginData) async {
+              final result = await Future.delayed(
+                const Duration(seconds: 2),
+                () => '',
+              );
+              SystemChannels.textInput.invokeMethod('TextInput.hide');
+              TextInput.finishAutofillContext();
+              return result;
+            },
+            loginConfig: const LoginConfig(
+              title: 'Mohesu Enterprise',
+              subtitle: 'Let\'s Sign In',
             ),
+            providers: [
+              LoginProvider(
+                icon: Icons.reddit,
+                label: 'Reddit',
+                callback: () async {
+                  return "";
+                },
+              ),
+              LoginProvider(
+                icon: Icons.apple,
+                label: 'Apple',
+                callback: () async {
+                  return "";
+                },
+              ),
+              LoginProvider(
+                icon: Icons.facebook,
+                label: 'Facebook',
+                callback: () async {
+                  return "";
+                },
+              ),
+            ],
           ),
         ),
       ),

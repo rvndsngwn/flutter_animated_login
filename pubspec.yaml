@@ -1,7 +1,22 @@
 name: flutter_animated_login
-description: "A new Flutter package project."
+description: "A Flutter package to create a beautiful animated login screen with phone/email otp, password, and social login options. It also includes a phone number picker and country picker."
 version: 0.0.1
-homepage: https://example.com
+homepage: https://github.com/rvndsngwn/flutter_animated_login
+repository: https://github.com/rvndsngwn/flutter_animated_login
+issue_tracker: https://github.com/rvndsngwn/flutter_animated_login/issues
+documentation: https://github.com/rvndsngwn/flutter_animated_login/blob/master/README.md
+screenshots:
+  - description: "Login Screen"
+    path: image-1.png
+  - description: "OTP Screen"
+    path: image-2.png
+
+topics:
+  - flutter-login
+  - flutter-animated-login
+  - flutter-login-screen
+  - flutter-login-ui
+  - animated-login
 
 environment:
   sdk: ">=3.3.1 <4.0.0"
@@ -14,7 +29,6 @@ dependencies:
   material_loading_buttons: ^1.2.1
   pinput: ^4.0.0
   toastification: ^1.2.1
-  universal_io: ^2.2.2
 
 dev_dependencies:
   flutter_lints: ^3.0.0
