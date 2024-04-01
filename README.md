@@ -6,7 +6,7 @@
 [![GitHub Repo issues](https://img.shields.io/github/issues/rvndsngwn/flutter_animated_login?color=coral&style=plastic)](https://github.com/rvndsngwn/flutter_animated_login/issues)
 [![GitHub Repo contributors](https://img.shields.io/github/contributors/rvndsngwn/flutter_animated_login?color=green&style=plastic)](https://github.com/rvndsngwn/flutter_animated_login/graphs/contributors)
 
-A Flutter package to create a beautiful animated login screen with phone/email otp, password, and social login options. It also includes a phone number picker and country picker.
+A Flutter package to create a beautiful animated login screen with phone/email otp, password, and social login options. It also includes a phone number with country code picker.
 
 ## Screenshots
 
@@ -17,17 +17,29 @@ A Flutter package to create a beautiful animated login screen with phone/email o
 <td><img src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/image-2.png" width=270 height=520 alt=""></td>
 </tr>
 </table>
+
 ### Phone OTP
+
 <table>
 <td><img src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/image-3.png" width=270 height=520 alt=""></td>
 <td><img src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/image-4.png" width=270 height=520 alt=""></td>
 </tr>
 </table>
+
 ### Dark Theme
+
 <table>
 <td><img src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/image-5.png" width=270 height=520 alt=""></td>
 <td><img src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/image-6.png" width=270 height=520 alt=""></td>
 </tr>
+</table>
+
+### Video Demo
+
+<table>
+<td><video width="270" height="520" controls>
+  <source src="https://raw.githubusercontent.com/rvndsngwn/flutter_animated_login/master/video-1.mov" type="video/mp4">
+</video></td>
 </table>
 
 ## Installing
