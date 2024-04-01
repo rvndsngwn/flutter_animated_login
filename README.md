@@ -82,7 +82,7 @@ FlutterAnimatedLogin(
 
 See the `example` directory for a complete sample app.
 
-### Parameters of the MapLocationPicker
+### Parameters of the FlutterAnimatedLogin
 
 ```dart
   /// The callback triggered after login
