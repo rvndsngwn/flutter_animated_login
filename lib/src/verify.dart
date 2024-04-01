@@ -16,6 +16,8 @@ class FlutterAnimatedVerify extends StatefulWidget {
   final String name;
   final ValueNotifier<int> nextPageNotifier;
   final VerifyConfig config;
+  final Widget? footerWidget;
+  final TextSpan? termsAndConditions;
 
   /// [ResendOtpCallback] triggered after the user has resent the OTP
   final ResendOtpCallback? onResendOtp;
@@ -26,6 +28,8 @@ class FlutterAnimatedVerify extends StatefulWidget {
     required this.nextPageNotifier,
     required this.config,
     this.onResendOtp,
+    this.footerWidget,
+    this.termsAndConditions,
   });
 
   @override
@@ -246,10 +250,14 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                     }
                   }
                 },
-                child: config.buttonText ?? const Text("Resend OTP"),
+                child: config.resendButton ?? const Text("Resend OTP"),
               ),
             ),
-          config.footer ?? const OAuthWidget(),
+          config.footer ??
+              OAuthWidget(
+                footerWidget: widget.footerWidget,
+                termsAndConditions: widget.termsAndConditions,
+              ),
         ],
       ),
     );

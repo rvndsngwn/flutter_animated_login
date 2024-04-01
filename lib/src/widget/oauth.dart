@@ -7,10 +7,19 @@ import '../utils/login_provider.dart';
 import 'divider.dart';
 
 class OAuthWidget extends StatelessWidget {
+  /// The list of login providers for the oauth
   final List<LoginProvider>? providers;
+
+  /// The terms and conditions for the login/signup page
+  final TextSpan? termsAndConditions;
+
+  /// The footer widget for the login/signup page
+  final Widget? footerWidget;
   const OAuthWidget({
     super.key,
     this.providers,
+    this.termsAndConditions,
+    this.footerWidget,
   });
 
   @override
@@ -56,27 +65,29 @@ class OAuthWidget extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         Text.rich(
-          TextSpan(
-            text: 'By signing in, you agree to the ',
-            children: [
+          termsAndConditions ??
               TextSpan(
-                text: 'Terms and policy',
-                style: TextStyle(
-                  color: theme.colorScheme.secondary,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
-                ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => print('Terms and policy'),
+                text: 'By signing in, you agree to the ',
+                children: [
+                  TextSpan(
+                    text: 'Terms and conditions',
+                    style: TextStyle(
+                      color: theme.colorScheme.secondary,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => print('Terms and conditions'),
+                  ),
+                ],
               ),
-            ],
-          ),
         ),
         const SizedBox(height: 20),
-        TextButton(
-          onPressed: () => print('Powered by MOHESU'),
-          child: const Text('Powered by MOHESU'),
-        ),
+        footerWidget ??
+            TextButton(
+              onPressed: () => debugPrint('Created by MOHESU'),
+              child: const Text('Created by MOHESU'),
+            ),
       ],
     );
   }

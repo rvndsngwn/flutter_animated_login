@@ -29,12 +29,14 @@ class MyApp extends StatelessWidget {
           ),
           body: SingleChildScrollView(
             child: FlutterAnimatedLogin(
+              loginType:
+                  value ? LoginType.loginWithOTP : LoginType.loginWithPassword,
               onLogin: (loginData) async {
                 final result = await Future.delayed(
                   const Duration(seconds: 2),
                   () => '',
                 );
-                print('Login result: $result');
+                SystemChannels.textInput.invokeMethod('TextInput.hide');
                 TextInput.finishAutofillContext();
                 return result;
               },

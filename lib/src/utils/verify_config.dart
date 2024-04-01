@@ -8,7 +8,7 @@ class VerifyConfig {
   final Widget? footer;
   final String? title;
   final String? subtitle;
-  final Widget? buttonText;
+  final Widget? resendButton;
   final TextStyle? buttonTextStyle;
   final OtpTextFiledConfig textFiledConfig;
 
@@ -18,7 +18,7 @@ class VerifyConfig {
     this.footer,
     this.title,
     this.subtitle,
-    this.buttonText,
+    this.resendButton,
     this.buttonTextStyle,
     this.textFiledConfig = const OtpTextFiledConfig(),
   });
