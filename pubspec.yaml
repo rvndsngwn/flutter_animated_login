@@ -6,9 +6,9 @@ repository: https://github.com/rvndsngwn/flutter_animated_login
 issue_tracker: https://github.com/rvndsngwn/flutter_animated_login/issues
 documentation: https://github.com/rvndsngwn/flutter_animated_login/blob/master/README.md
 screenshots:
-  - description: "Login Screen"
+  - description: "Login Screen with Phone/Email"
     path: image-1.png
-  - description: "OTP Screen"
+  - description: "OTP Verification Screen"
     path: image-2.png
 
 topics:
