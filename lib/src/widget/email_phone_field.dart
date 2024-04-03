@@ -24,7 +24,6 @@ class EmailPhoneTextField extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: isPhoneNotifier,
       builder: (context, isPhone, child) {
-        print('isPhone: $isPhone');
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           child: IntlPhoneField(

@@ -1,3 +1,8 @@
+## 0.0.3
+
+- add PageConfig for customizing page layout and style
+- pinput and flutter_intl_phone_field exports
+
 ## 0.0.2
 
 - add new exports

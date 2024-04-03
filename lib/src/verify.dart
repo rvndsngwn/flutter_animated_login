@@ -6,6 +6,7 @@ import 'package:pinput/pinput.dart';
 
 import 'login.dart';
 import 'utils/extension.dart';
+import 'utils/page_config.dart';
 import 'utils/verify_config.dart';
 import 'widget/oauth.dart';
 import 'widget/page.dart';
@@ -21,6 +22,10 @@ class FlutterAnimatedVerify extends StatefulWidget {
 
   /// [ResendOtpCallback] triggered after the user has resent the OTP
   final ResendOtpCallback? onResendOtp;
+
+  /// [PageConfig] for the page widget to customize the page.
+  final PageConfig pageConfig;
+
   const FlutterAnimatedVerify({
     super.key,
     this.onVerify,
@@ -30,6 +35,7 @@ class FlutterAnimatedVerify extends StatefulWidget {
     this.onResendOtp,
     this.footerWidget,
     this.termsAndConditions,
+    this.pageConfig = const PageConfig(),
   });
 
   @override
@@ -104,6 +110,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
     final textConfig = widget.config.textFiledConfig;
     final config = widget.config;
     return PageWidget(
+      config: widget.pageConfig,
       builder: (context, constraints) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [

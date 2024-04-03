@@ -4,6 +4,7 @@ import 'utils/extension.dart';
 import 'utils/login_config.dart';
 import 'utils/login_data.dart';
 import 'utils/login_provider.dart';
+import 'utils/page_config.dart';
 import 'utils/signup_data.dart';
 import 'utils/verify_config.dart';
 import 'verify.dart';
@@ -69,6 +70,9 @@ class FlutterAnimatedLogin extends StatefulWidget {
   /// The terms and conditions for the login/signup page
   final TextSpan? termsAndConditions;
 
+  /// [PageConfig] for the page widget to customize the page.
+  final PageConfig config;
+
   const FlutterAnimatedLogin({
     super.key,
     this.onLogin,
@@ -82,6 +86,7 @@ class FlutterAnimatedLogin extends StatefulWidget {
     this.loginType = LoginType.loginWithOTP,
     this.verifyConfig = const VerifyConfig(),
     this.termsAndConditions,
+    this.config = const PageConfig(),
   });
 
   @override
@@ -166,6 +171,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
               textController: _textController,
               termsAndConditions: widget.termsAndConditions,
               passwordController: _passwordController,
+              pageConfig: widget.config,
             );
           case 1:
             return FlutterAnimatedVerify(
@@ -176,6 +182,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
               onResendOtp: widget.onResendOtp,
               footerWidget: widget.footerWidget,
               termsAndConditions: widget.termsAndConditions,
+              pageConfig: widget.config,
             );
           default:
             return const Center(
@@ -208,6 +215,9 @@ class _LoginPage extends StatelessWidget {
   final ValueNotifier<bool> isFormValidNotifier;
   final ValueNotifier<int> nextPageNotifier;
 
+  /// [PageConfig] for the page widget to customize the page.
+  final PageConfig pageConfig;
+
   const _LoginPage({
     this.headerWidget,
     this.footerWidget,
@@ -222,6 +232,7 @@ class _LoginPage extends StatelessWidget {
     required this.textController,
     required this.passwordController,
     this.termsAndConditions,
+    this.pageConfig = const PageConfig(),
   });
 
   @override
@@ -230,6 +241,7 @@ class _LoginPage extends StatelessWidget {
     final passConfig = config.passwordConfig;
     final isLoginWithOTP = loginType == LoginType.loginWithOTP;
     return PageWidget(
+      config: pageConfig,
       builder: (context, constraints) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
