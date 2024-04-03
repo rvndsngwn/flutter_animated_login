@@ -149,12 +149,27 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                   ),
                 ),
             defaultPinTheme: textConfig.defaultPinTheme ?? defaultPinTheme,
-            onCompleted: (value) => textConfig.onCompleted
-                ?.call(LoginData(name: widget.name, password: value)),
-            onChanged: (value) => textConfig.onChanged
-                ?.call(LoginData(name: widget.name, password: value)),
-            onSubmitted: (value) => textConfig.onSubmitted
-                ?.call(LoginData(name: widget.name, password: value)),
+            onCompleted: (value) {
+              textConfig.onCompleted?.call(
+                LoginData(name: widget.name, secret: value),
+              );
+              widget.onVerify?.call(
+                LoginData(name: widget.name, secret: value),
+              );
+            },
+            onChanged: (value) {
+              textConfig.onChanged?.call(
+                LoginData(name: widget.name, secret: value),
+              );
+            },
+            onSubmitted: (value) {
+              textConfig.onSubmitted?.call(
+                LoginData(name: widget.name, secret: value),
+              );
+              widget.onVerify?.call(
+                LoginData(name: widget.name, secret: value),
+              );
+            },
             onAppPrivateCommand: textConfig.onAppPrivateCommand,
             onClipboardFound: textConfig.onClipboardFound,
             onLongPress: textConfig.onLongPress,
@@ -236,7 +251,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                 ),
                 onPressed: () async {
                   final response = await widget.onResendOtp
-                      ?.call(LoginData(name: widget.name, password: null));
+                      ?.call(LoginData(name: widget.name, secret: null));
                   if (context.mounted) {
                     if (response.isNotEmptyOrNull) {
                       context.error('Error', description: response);

@@ -15,38 +15,38 @@ import 'widget/page.dart';
 import 'widget/password_field.dart';
 import 'widget/title.dart';
 
-/// The callback triggered after login
+/// The callback triggered your login logic
 /// The result is an error message, callback successes if message is null
 typedef LoginCallback = Future<String?>? Function(LoginData);
 
-/// The callback triggered after signup
+/// The callback triggered your signup logic
 /// The result is an error message, callback successes if message is null
 typedef SignupCallback = Future<String?>? Function(SignupData);
 
 /// If the callback returns true, the additional data card is shown
 typedef ProviderNeedsSignUpCallback = Future<bool> Function();
 
-/// The callback triggered after the user has oauth with the provider
+/// The callback triggered your auth logic for the provider
 typedef ProviderAuthCallback = Future<String?>? Function();
 
-/// The callback triggered after the user has verified the OTP
+/// The callback triggered your OTP verification logic
 typedef VerifyCallback = Future<String?>? Function(LoginData);
 
-/// The callback triggered after the user has resent the OTP
+/// The callback triggered your OTP resend logic
 typedef ResendOtpCallback = Future<String?>? Function(LoginData);
 
 class FlutterAnimatedLogin extends StatefulWidget {
-  /// The callback triggered after login
+  /// The callback triggered your login logic
   final LoginCallback? onLogin;
 
-  /// The callback triggered after signup
+  /// The callback triggered your signup logic
   final SignupCallback? onSignup;
 
-  /// [VerifyCallback] triggered after the user has verified the OTP
+  /// [VerifyCallback] triggered your OTP verification logic
   /// The result is an error message, callback successes if message is null
   final VerifyCallback? onVerify;
 
-  /// [ResendOtpCallback] triggered after the user has resent the OTP
+  /// [ResendOtpCallback] triggered your OTP resend logic
   final ResendOtpCallback? onResendOtp;
 
   /// The configuration for the login text field
@@ -258,7 +258,7 @@ class _LoginPage extends StatelessWidget {
               if (onLogin != null) {
                 final result = await onLogin?.call(LoginData(
                   name: textController.text,
-                  password: passwordController.text,
+                  secret: passwordController.text,
                 ));
                 if (context.mounted) {
                   if (result.isNotEmptyOrNull) {

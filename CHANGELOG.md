@@ -1,3 +1,7 @@
+## 0.0.6
+
+- OTP verification handling added
+
 ## 0.0.5
 
 - LoginData class added for handling otp functionality

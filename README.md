@@ -85,17 +85,17 @@ See the `example` directory for a complete sample app.
 ### Parameters of the FlutterAnimatedLogin
 
 ```dart
-  /// The callback triggered after login
+  /// The callback triggered your login logic
   final LoginCallback? onLogin;
 
-  /// The callback triggered after signup
+  /// The callback triggered your signup logic
   final SignupCallback? onSignup;
 
-  /// [VerifyCallback] triggered after the user has verified the OTP
+  /// [VerifyCallback] triggered your OTP verification logic
   /// The result is an error message, callback successes if message is null
   final VerifyCallback? onVerify;
 
-  /// [ResendOtpCallback] triggered after the user has resent the OTP
+  /// [ResendOtpCallback] triggered your OTP resend logic
   final ResendOtpCallback? onResendOtp;
 
   /// The configuration for the login text field
