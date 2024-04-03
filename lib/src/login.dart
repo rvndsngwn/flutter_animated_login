@@ -30,10 +30,10 @@ typedef ProviderNeedsSignUpCallback = Future<bool> Function();
 typedef ProviderAuthCallback = Future<String?>? Function();
 
 /// The callback triggered after the user has verified the OTP
-typedef VerifyCallback = Future<String?>? Function(String);
+typedef VerifyCallback = Future<String?>? Function(LoginData);
 
 /// The callback triggered after the user has resent the OTP
-typedef ResendOtpCallback = Future<String?>? Function();
+typedef ResendOtpCallback = Future<String?>? Function(LoginData);
 
 class FlutterAnimatedLogin extends StatefulWidget {
   /// The callback triggered after login

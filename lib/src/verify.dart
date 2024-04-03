@@ -1,16 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_login/flutter_animated_login.dart';
 import 'package:material_loading_buttons/material_loading_buttons.dart';
-import 'package:pinput/pinput.dart';
 
-import 'login.dart';
 import 'utils/extension.dart';
-import 'utils/page_config.dart';
-import 'utils/verify_config.dart';
 import 'widget/oauth.dart';
-import 'widget/page.dart';
-import 'widget/title.dart';
 
 class FlutterAnimatedVerify extends StatefulWidget {
   final VerifyCallback? onVerify;
@@ -154,9 +149,17 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                   ),
                 ),
             defaultPinTheme: textConfig.defaultPinTheme ?? defaultPinTheme,
-            onCompleted: textConfig.onCompleted,
-            onChanged: textConfig.onChanged,
-            onSubmitted: textConfig.onSubmitted,
+            onCompleted: (value) => textConfig.onCompleted
+                ?.call(LoginData(name: widget.name, password: value)),
+            onChanged: (value) => textConfig.onChanged
+                ?.call(LoginData(name: widget.name, password: value)),
+            onSubmitted: (value) => textConfig.onSubmitted
+                ?.call(LoginData(name: widget.name, password: value)),
+            onAppPrivateCommand: textConfig.onAppPrivateCommand,
+            onClipboardFound: textConfig.onClipboardFound,
+            onLongPress: textConfig.onLongPress,
+            onTap: textConfig.onTap,
+            onTapOutside: textConfig.onTapOutside,
             animationCurve: textConfig.animationCurve,
             animationDuration: textConfig.animationDuration ??
                 const Duration(milliseconds: 180),
@@ -188,11 +191,6 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
             obscureText: textConfig.obscureText,
             obscuringCharacter: textConfig.obscuringCharacter,
             obscuringWidget: textConfig.obscuringWidget,
-            onAppPrivateCommand: textConfig.onAppPrivateCommand,
-            onClipboardFound: textConfig.onClipboardFound,
-            onLongPress: textConfig.onLongPress,
-            onTap: textConfig.onTap,
-            onTapOutside: textConfig.onTapOutside,
             pinContentAlignment: textConfig.pinContentAlignment,
             pinputAutovalidateMode: textConfig.pinputAutovalidateMode,
             preFilledWidget: textConfig.preFilledWidget,
@@ -237,7 +235,8 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                   textStyle: config.buttonTextStyle ?? textTheme.titleLarge,
                 ),
                 onPressed: () async {
-                  final response = await widget.onResendOtp?.call();
+                  final response = await widget.onResendOtp
+                      ?.call(LoginData(name: widget.name, password: null));
                   if (context.mounted) {
                     if (response.isNotEmptyOrNull) {
                       context.error('Error', description: response);

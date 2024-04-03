@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pinput/pinput.dart';
 
-import '../widget/title.dart';
+import '../../flutter_animated_login.dart';
 
 class VerifyConfig {
   final Widget? logo;
@@ -72,13 +71,13 @@ class OtpTextFiledConfig {
   final String smsCodeMatcher;
 
   /// Fires when user completes pin input
-  final ValueChanged<String>? onCompleted;
+  final ValueChanged<LoginData>? onCompleted;
 
   /// Called every time input value changes.
-  final ValueChanged<String>? onChanged;
+  final ValueChanged<LoginData>? onChanged;
 
   /// See [EditableText.onSubmitted]
-  final ValueChanged<String>? onSubmitted;
+  final ValueChanged<LoginData>? onSubmitted;
 
   /// Called when user clicks on PinPut
   final VoidCallback? onTap;

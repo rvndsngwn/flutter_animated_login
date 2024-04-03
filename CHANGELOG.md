@@ -1,3 +1,7 @@
+## 0.0.5
+
+- LoginData class added for handling otp functionality
+
 ## 0.0.4
 
 - title widget added with custom style
