@@ -115,6 +115,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
         mainAxisSize: MainAxisSize.min,
         children: [
           config.header ??
+              config.titleWidget ??
               TitleWidget(
                 title: config.title ??
                     'Enter OTP sent to your ${isEmail ? 'email' : 'phone'}',

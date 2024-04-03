@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
 
+import '../widget/title.dart';
+
 class VerifyConfig {
   final Widget? logo;
   final Widget? header;
   final Widget? footer;
   final String? title;
   final String? subtitle;
+  final TitleWidget? titleWidget;
   final Widget? resendButton;
   final TextStyle? buttonTextStyle;
   final OtpTextFiledConfig textFiledConfig;
@@ -18,6 +21,7 @@ class VerifyConfig {
     this.footer,
     this.title,
     this.subtitle,
+    this.titleWidget,
     this.resendButton,
     this.buttonTextStyle,
     this.textFiledConfig = const OtpTextFiledConfig(),

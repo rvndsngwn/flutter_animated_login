@@ -1,3 +1,7 @@
+## 0.0.4
+
+- title widget added with custom style
+
 ## 0.0.3
 
 - add PageConfig for customizing page layout and style

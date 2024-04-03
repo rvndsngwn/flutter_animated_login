@@ -101,12 +101,6 @@ See the `example` directory for a complete sample app.
   /// The configuration for the login text field
   final LoginConfig loginConfig;
 
-  /// The header widget for the login page
-  final Widget? headerWidget;
-
-  /// The footer widget for the login page
-  final Widget? footerWidget;
-
   /// The list of login providers for the oauth
   final List<LoginProvider>? providers;
 
@@ -118,6 +112,9 @@ See the `example` directory for a complete sample app.
 
   /// The terms and conditions for the login/signup page
   final TextSpan? termsAndConditions;
+
+  /// [PageConfig] for the page widget to customize the page.
+  final PageConfig config;
 ```
 
 ## LICENSE

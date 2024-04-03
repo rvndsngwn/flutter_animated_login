@@ -5,29 +5,34 @@ import 'package:flutter_intl_phone_field/country_picker_dialog.dart';
 import 'package:flutter_intl_phone_field/flutter_intl_phone_field.dart';
 import 'package:flutter_intl_phone_field/phone_number.dart';
 
+import '../widget/title.dart';
 import 'password_config.dart';
 
 class LoginConfig {
   final Widget? logo;
+  final Widget? header;
+  final Widget? footer;
   final String? title;
   final String? subtitle;
+  final TitleWidget? titleWidget;
   final Widget? buttonText;
   final TextStyle? buttonTextStyle;
   final String? termsAndConditions;
   final String? privacyPolicy;
-  final String? footerText;
   final EmailPhoneTextFiledConfig textFiledConfig;
   final PasswordTextFiledConfig passwordConfig;
 
   const LoginConfig({
     this.logo,
+    this.header,
+    this.footer,
     this.title,
     this.subtitle,
+    this.titleWidget,
     this.buttonText,
     this.buttonTextStyle,
     this.termsAndConditions,
     this.privacyPolicy,
-    this.footerText,
     this.textFiledConfig = const EmailPhoneTextFiledConfig(),
     this.passwordConfig = const PasswordTextFiledConfig(),
   });

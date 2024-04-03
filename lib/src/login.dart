@@ -52,12 +52,6 @@ class FlutterAnimatedLogin extends StatefulWidget {
   /// The configuration for the login text field
   final LoginConfig loginConfig;
 
-  /// The header widget for the login page
-  final Widget? headerWidget;
-
-  /// The footer widget for the login page
-  final Widget? footerWidget;
-
   /// The list of login providers for the oauth
   final List<LoginProvider>? providers;
 
@@ -80,8 +74,6 @@ class FlutterAnimatedLogin extends StatefulWidget {
     this.onVerify,
     this.onResendOtp,
     this.loginConfig = const LoginConfig(),
-    this.headerWidget,
-    this.footerWidget,
     this.providers,
     this.loginType = LoginType.loginWithOTP,
     this.verifyConfig = const VerifyConfig(),
@@ -159,8 +151,6 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
           case 0:
             return _LoginPage(
               config: widget.loginConfig,
-              headerWidget: widget.headerWidget,
-              footerWidget: widget.footerWidget,
               loginType: widget.loginType,
               onLogin: widget.onLogin,
               onVerify: widget.onVerify,
@@ -180,7 +170,6 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
               nextPageNotifier: _nextPageNotifier,
               config: widget.verifyConfig,
               onResendOtp: widget.onResendOtp,
-              footerWidget: widget.footerWidget,
               termsAndConditions: widget.termsAndConditions,
               pageConfig: widget.config,
             );
@@ -201,8 +190,6 @@ enum LoginType {
 
 class _LoginPage extends StatelessWidget {
   final LoginConfig config;
-  final Widget? headerWidget;
-  final Widget? footerWidget;
   final TextSpan? termsAndConditions;
   final LoginType loginType;
   final LoginCallback? onLogin;
@@ -219,8 +206,6 @@ class _LoginPage extends StatelessWidget {
   final PageConfig pageConfig;
 
   const _LoginPage({
-    this.headerWidget,
-    this.footerWidget,
     this.onLogin,
     this.onVerify,
     this.providers,
@@ -245,10 +230,12 @@ class _LoginPage extends StatelessWidget {
       builder: (context, constraints) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          headerWidget ??
+          config.header ??
+              config.titleWidget ??
               TitleWidget(
                 title: config.title,
                 subtitle: config.subtitle,
+                child: config.logo,
               ),
           EmailPhoneTextField(
             controller: textController,
@@ -289,7 +276,7 @@ class _LoginPage extends StatelessWidget {
           OAuthWidget(
             providers: providers,
             termsAndConditions: termsAndConditions,
-            footerWidget: footerWidget,
+            footerWidget: config.footer,
           ),
         ],
       ),
