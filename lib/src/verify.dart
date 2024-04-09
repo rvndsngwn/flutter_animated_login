@@ -149,26 +149,32 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                   ),
                 ),
             defaultPinTheme: textConfig.defaultPinTheme ?? defaultPinTheme,
-            onCompleted: (value) {
+            onCompleted: (value) async {
               textConfig.onCompleted?.call(
                 LoginData(name: widget.name, secret: value),
               );
-              widget.onVerify?.call(
+              final result = await widget.onVerify?.call(
                 LoginData(name: widget.name, secret: value),
               );
+              if (result.isNotEmptyOrNull && context.mounted) {
+                context.error('Error', description: result);
+              }
             },
             onChanged: (value) {
               textConfig.onChanged?.call(
                 LoginData(name: widget.name, secret: value),
               );
             },
-            onSubmitted: (value) {
+            onSubmitted: (value) async {
               textConfig.onSubmitted?.call(
                 LoginData(name: widget.name, secret: value),
               );
-              widget.onVerify?.call(
+              final result = await widget.onVerify?.call(
                 LoginData(name: widget.name, secret: value),
               );
+              if (result.isNotEmptyOrNull && context.mounted) {
+                context.error('Error', description: result);
+              }
             },
             onAppPrivateCommand: textConfig.onAppPrivateCommand,
             onClipboardFound: textConfig.onClipboardFound,
