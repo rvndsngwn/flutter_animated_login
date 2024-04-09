@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pinput/pinput.dart';
 
-import '../../flutter_animated_login.dart';
+import '../widget/title.dart';
+import 'login_data.dart';
 
 class VerifyConfig {
   final Widget? logo;
