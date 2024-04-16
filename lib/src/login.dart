@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_login/src/forgot.dart';
 
 import 'utils/extension.dart';
 import 'utils/login_config.dart';
@@ -34,6 +35,12 @@ typedef VerifyCallback = Future<String?>? Function(LoginData);
 
 /// The callback triggered your OTP resend logic
 typedef ResendOtpCallback = Future<String?>? Function(LoginData);
+
+/// Signature of callbacks that have no arguments and return no data.
+typedef VoidCallback = void Function();
+
+///Signature of callbacks that have no arguments and return no data.
+typedef Recovercallback = void Function();
 
 class FlutterAnimatedLogin extends StatefulWidget {
   /// The callback triggered your login logic
@@ -110,6 +117,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
     final text = _textController.text;
     _isPhoneNotifier.value = text.isPhoneNumber || text.isIntlPhoneNumber;
     _isFormValidNotifier.value = text.isEmail || _isPhoneNotifier.value;
+    // Sync the login field text with the forgot password field
     _textController.addListener(() {
       final text = _textController.text;
       if (text.isNotEmpty) {
@@ -173,6 +181,17 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
               termsAndConditions: widget.termsAndConditions,
               pageConfig: widget.config,
             );
+          case 2: // for forgot password
+            return ForgotPassword(
+              onRecover: () {},
+              nextPageNotifier: _nextPageNotifier,
+              textController: _textController,
+              //
+              isFormValidNotifier: _isFormValidNotifier,
+              config: widget.loginConfig, pageConfig: widget.config,
+
+              // onRecover: onRecover
+            );
           default:
             return const Center(
               child: FlutterLogo(size: 100),
@@ -183,10 +202,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   }
 }
 
-enum LoginType {
-  loginWithOTP,
-  loginWithPassword,
-}
+enum LoginType { loginWithOTP, loginWithPassword }
 
 class _LoginPage extends StatelessWidget {
   final LoginConfig config;
@@ -224,7 +240,8 @@ class _LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final textConfig = config.textFiledConfig;
     final passConfig = config.passwordConfig;
-    final isLoginWithOTP = loginType == LoginType.loginWithOTP;
+
+    final isLoginWithOTP = loginType == LoginType.loginWithPassword;
     return PageWidget(
       config: pageConfig,
       builder: (context, constraints) => Column(
@@ -244,12 +261,33 @@ class _LoginPage extends StatelessWidget {
             isPhoneNotifier: isPhoneNotifier,
           ),
           if (!isLoginWithOTP) ...[
+            // if (!isPhoneNotifier.value) ...[
             const SizedBox(height: 20),
             PasswordTextField(
               config: passConfig,
               isFormValidNotifier: isFormValidNotifier,
               controller: passwordController,
             ),
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              alignment: Alignment.centerRight,
+              child: MaterialButton(
+                onPressed: () {
+                  String? writtenEmail = textController.text;
+                  if (writtenEmail.isEmail) {
+                    nextPageNotifier.value = 2;
+                  } else {
+                    context.error("emptyemail",
+                        description: "Please enter a email");
+                  }
+                },
+                child: const Text(
+                  'Forgot Password?',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            )
           ],
           const SizedBox(height: 40),
           SignInButton(
@@ -272,6 +310,16 @@ class _LoginPage extends StatelessWidget {
             },
             config: config,
             constraints: constraints,
+            buttonText: 'Sign In',
+          ),
+          const SizedBox(height: 7),
+          MaterialButton(
+            onPressed: () {},
+            child: const Text(
+              'SIGNUP',
+              style: TextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
           ),
           OAuthWidget(
             providers: providers,

@@ -14,3 +14,4 @@ export 'src/utils/verify_config.dart';
 export 'src/verify.dart';
 export 'src/widget/page.dart';
 export 'src/widget/title.dart';
+export 'src/forgot.dart';

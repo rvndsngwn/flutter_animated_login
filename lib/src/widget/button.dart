@@ -5,15 +5,17 @@ import 'package:material_loading_buttons/material_loading_buttons.dart';
 class SignInButton extends StatelessWidget {
   final ValueNotifier<bool> formNotifier;
   final Future<String?> Function()? onPressed;
-  final LoginConfig config;
+  final LoginConfig? config;
   final BoxConstraints constraints;
+  final String buttonText;
 
   const SignInButton({
     super.key,
     required this.formNotifier,
     required this.onPressed,
-    required this.config,
+    this.config,
     required this.constraints,
+    required this.buttonText,
   });
 
   @override
@@ -32,10 +34,10 @@ class SignInButton extends StatelessWidget {
                 constraints.maxWidth >= 600 ? 200 : constraints.maxWidth * 0.5,
                 55,
               ),
-              textStyle: config.buttonTextStyle ?? textTheme.titleLarge,
+              textStyle: config?.buttonTextStyle ?? textTheme.titleLarge,
             ),
             onPressed: isFormValid ? onPressed : null,
-            child: config.buttonText ?? const Text("Continue"),
+            child: config?.buttonText ?? Text(buttonText),
           ),
         );
       },

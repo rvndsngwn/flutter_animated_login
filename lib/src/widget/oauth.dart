@@ -15,6 +15,7 @@ class OAuthWidget extends StatelessWidget {
 
   /// The footer widget for the login/signup page
   final Widget? footerWidget;
+
   const OAuthWidget({
     super.key,
     this.providers,

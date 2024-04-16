@@ -71,7 +71,7 @@ extension Toastification on BuildContext {
         title: Text(title),
         description: description != null ? Text(description) : null,
         alignment: Alignment.topRight,
-        autoCloseDuration: const Duration(seconds: 4),
+        autoCloseDuration: const Duration(seconds: 2),
         applyBlurEffect: true,
         showProgressBar: false,
       );
