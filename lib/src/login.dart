@@ -9,6 +9,7 @@ import 'utils/login_data.dart';
 import 'utils/login_provider.dart';
 import 'utils/page_config.dart';
 import 'utils/reset_config.dart';
+import 'utils/signup_config.dart';
 import 'utils/signup_data.dart';
 import 'utils/verify_config.dart';
 import 'verify.dart';
@@ -73,6 +74,8 @@ class FlutterAnimatedLogin extends StatefulWidget {
 
   final ResetConfig resetConfig;
 
+  final SignupConfig signupConfig;
+
   const FlutterAnimatedLogin({
     super.key,
     this.onLogin,
@@ -86,6 +89,7 @@ class FlutterAnimatedLogin extends StatefulWidget {
     this.termsAndConditions,
     this.config = const PageConfig(),
     this.resetConfig = const ResetConfig(),
+    this.signupConfig = const SignupConfig(),
   });
 
   @override
@@ -164,13 +168,25 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
           termsAndConditions: widget.termsAndConditions,
           pageConfig: widget.config,
         ),
-      2 => const FlutterAnimatedSignup(),
-      3 => FlutterAnimatedReset(
-          config: widget.resetConfig,
+      2 => FlutterAnimatedSignup(
+          config: widget.signupConfig.copyWith(
+            textFiledConfig: widget.loginConfig.textFiledConfig,
+            passwordTextFiledConfig: widget.loginConfig.passwordConfig,
+          ),
           loginConfig: widget.loginConfig,
           loginType: widget.loginType,
           controller: _textController,
-          textConfig: widget.loginConfig.textFiledConfig,
+          pageConfig: widget.config,
+          passwordController: _passwordController,
+        ),
+      3 => FlutterAnimatedReset(
+          config: widget.resetConfig.copyWith(
+            textFiledConfig: widget.loginConfig.textFiledConfig,
+          ),
+          loginConfig: widget.loginConfig,
+          loginType: widget.loginType,
+          controller: _textController,
+          pageConfig: widget.config,
         ),
       _ => const Center(
           child: FlutterLogo(size: 100),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'utils/extension.dart';
 import 'utils/login_config.dart';
+import 'utils/page_config.dart';
 import 'utils/reset_config.dart';
 import 'widget/button.dart';
 import 'widget/email_phone_field.dart';
@@ -14,14 +15,14 @@ class FlutterAnimatedReset extends StatelessWidget {
   final LoginConfig loginConfig;
   final LoginType loginType;
   final TextEditingController controller;
-  final EmailPhoneTextFiledConfig textConfig;
+  final PageConfig pageConfig;
   const FlutterAnimatedReset({
     super.key,
     required this.config,
     required this.loginConfig,
     required this.loginType,
     required this.controller,
-    required this.textConfig,
+    required this.pageConfig,
   });
 
   @override
@@ -29,6 +30,7 @@ class FlutterAnimatedReset extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     return PageWidget(
+      config: pageConfig,
       builder: (context, constraints) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -50,7 +52,7 @@ class FlutterAnimatedReset extends StatelessWidget {
               ),
           EmailPhoneTextField(
             controller: controller,
-            config: textConfig,
+            config: config.textFiledConfig,
           ),
           const SizedBox(height: 40),
           SignInButton(
@@ -71,6 +73,7 @@ class FlutterAnimatedReset extends StatelessWidget {
             ),
             child: const Text('Sign In'),
           ),
+          config.footer.orShrink,
         ],
       ),
     );

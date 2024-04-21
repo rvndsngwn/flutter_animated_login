@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 class PasswordTextFiledConfig {
   final TextEditingController? controller;
   final FocusNode? focusNode;
-  final InputDecoration? decoration;
+  final InputDecoration? Function(ValueNotifier<bool> isObscure)? decoration;
   final TextInputType? keyboardType;
   final TextCapitalization textCapitalization;
   final TextInputAction? textInputAction;
@@ -149,7 +149,7 @@ class PasswordTextFiledConfig {
   PasswordTextFiledConfig copyWith({
     TextEditingController? controller,
     FocusNode? focusNode,
-    InputDecoration? decoration,
+    InputDecoration? Function(ValueNotifier<bool> isObscure)? decoration,
     TextInputType? keyboardType,
     TextCapitalization? textCapitalization,
     TextInputAction? textInputAction,

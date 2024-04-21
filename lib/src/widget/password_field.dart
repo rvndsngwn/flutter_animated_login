@@ -53,7 +53,7 @@ class PasswordTextField extends StatelessWidget {
           scrollController: config.scrollController,
           restorationId: config.restorationId,
           focusNode: config.focusNode,
-          decoration: config.decoration ??
+          decoration: config.decoration?.call(isObscure) ??
               InputDecoration(
                 hintText: 'Enter your password',
                 suffixIcon: IconButton(

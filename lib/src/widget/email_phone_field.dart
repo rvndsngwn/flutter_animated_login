@@ -15,8 +15,6 @@ class EmailPhoneTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
     return Watch.builder(
       builder: (context) {
         final isPhone = isPhoneNotifier.value;
@@ -40,15 +38,8 @@ class EmailPhoneTextField extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                   ),
                 ),
-            style: config.style ??
-                textTheme.titleLarge?.copyWith(
-                  color: theme.colorScheme.secondary,
-                  fontSize: 20,
-                ),
-            dropdownTextStyle: config.dropdownTextStyle ??
-                textTheme.titleLarge?.copyWith(
-                  fontSize: 20,
-                ),
+            style: config.style,
+            dropdownTextStyle: config.dropdownTextStyle,
             onChanged: (phone) {
               isFormValidNotifier.value =
                   isPhone ? phone.isValidNumber() : phone.number.isEmail;
