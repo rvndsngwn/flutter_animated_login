@@ -4,12 +4,10 @@ import 'package:flutter_animated_login/src/utils/extension.dart';
 import '../utils/password_config.dart';
 
 class PasswordTextField extends StatelessWidget {
-  final ValueNotifier<bool> isFormValidNotifier;
   final PasswordTextFiledConfig config;
   final TextEditingController controller;
   const PasswordTextField({
     super.key,
-    required this.isFormValidNotifier,
     required this.config,
     required this.controller,
   });

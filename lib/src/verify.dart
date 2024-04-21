@@ -10,7 +10,6 @@ import 'widget/oauth.dart';
 class FlutterAnimatedVerify extends StatefulWidget {
   final VerifyCallback? onVerify;
   final String name;
-  final ValueNotifier<int> nextPageNotifier;
   final VerifyConfig config;
   final Widget? footerWidget;
   final TextSpan? termsAndConditions;
@@ -25,7 +24,6 @@ class FlutterAnimatedVerify extends StatefulWidget {
     super.key,
     this.onVerify,
     required this.name,
-    required this.nextPageNotifier,
     required this.config,
     this.onResendOtp,
     this.footerWidget,
@@ -115,10 +113,10 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                 title: config.title ??
                     'Enter OTP sent to your ${isEmail ? 'email' : 'phone'}',
                 titleStyle: textTheme.titleLarge,
-                subtitle: config.subtitle ?? '#${widget.name}',
+                subtitle: config.subtitle ?? widget.name,
                 subtitleStyle: textTheme.titleMedium,
                 titleGap: const SizedBox(height: 6),
-                onTap: () => widget.nextPageNotifier.value = 0,
+                onTap: () => nextPageNotifier.value = 0,
                 child: config.logo ??
                     Icon(
                       isEmail ? Icons.email : Icons.sms,

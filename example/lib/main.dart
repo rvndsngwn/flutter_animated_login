@@ -18,17 +18,17 @@ class MyApp extends StatelessWidget {
       builder: (context, value, child) => MaterialApp(
         title: 'Flutter Animated Login',
         themeMode: value ? ThemeMode.dark : ThemeMode.light,
-        theme: value ? ThemeData.dark() : ThemeData.light(),
+        theme: value ? ThemeData.dark() : ThemeData.dark(),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           floatingActionButton: IconButton.filled(
             onPressed: () => isDark.value = !isDark.value,
             icon: value
-                ? const Icon(Icons.dark_mode)
-                : const Icon(Icons.light_mode),
+                ? const Icon(Icons.password)
+                : const Icon(Icons.expand_less),
           ),
           body: FlutterAnimatedLogin(
-            loginType: LoginType.loginWithOTP,
+            loginType: value ? LoginType.password : LoginType.otp,
             onLogin: (loginData) async {
               final result = await Future.delayed(
                 const Duration(seconds: 2),
@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
               return result;
             },
             loginConfig: const LoginConfig(
+              logo: FlutterLogo(size: 100),
               title: 'Mohesu Enterprise',
               subtitle: 'Let\'s Sign In',
             ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_intl_phone_field/phone_number.dart';
+import 'package:signals/signals.dart';
 import 'package:toastification/toastification.dart';
 
 extension IntExtinction on int {
@@ -115,3 +117,19 @@ extension Toastification on BuildContext {
         showProgressBar: false,
       );
 }
+
+@protected
+final isPhoneNotifier = false.toSignal();
+
+@protected
+final isFormValidNotifier = false.toSignal();
+
+@protected
+final nextPageNotifier = 0.toSignal();
+
+@protected
+final phoneNumber = PhoneNumber(
+  countryISOCode: "",
+  countryCode: "",
+  number: "",
+).toSignal();

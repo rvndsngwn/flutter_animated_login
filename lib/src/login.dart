@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:signals/signals_flutter.dart';
 
+import 'recover_password.dart';
+import 'signup.dart';
 import 'utils/extension.dart';
 import 'utils/login_config.dart';
 import 'utils/login_data.dart';
@@ -55,7 +58,7 @@ class FlutterAnimatedLogin extends StatefulWidget {
   /// The list of login providers for the oauth
   final List<LoginProvider>? providers;
 
-  /// The login type, default is [LoginType.loginWithOTP]
+  /// The login type, default is [LoginType.otp]
   final LoginType loginType;
 
   /// The configuration for the verify page
@@ -75,7 +78,7 @@ class FlutterAnimatedLogin extends StatefulWidget {
     this.onResendOtp,
     this.loginConfig = const LoginConfig(),
     this.providers,
-    this.loginType = LoginType.loginWithOTP,
+    this.loginType = LoginType.otp,
     this.verifyConfig = const VerifyConfig(),
     this.termsAndConditions,
     this.config = const PageConfig(),
@@ -92,15 +95,6 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   /// The text controller for the password field if not provided by the user
   late TextEditingController _passwordController;
 
-  /// The notifier for the notifying if the text is a phone number
-  final ValueNotifier<bool> _isPhoneNotifier = ValueNotifier(false);
-
-  /// The notifier for the notifying if the form is valid
-  final ValueNotifier<bool> _isFormValidNotifier = ValueNotifier(false);
-
-  /// The notifier for the next page
-  final ValueNotifier<int> _nextPageNotifier = ValueNotifier(0);
-
   @override
   void initState() {
     final controller = widget.loginConfig.textFiledConfig.controller;
@@ -108,25 +102,25 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
     _passwordController = passwordController ?? TextEditingController();
     _textController = controller ?? TextEditingController();
     final text = _textController.text;
-    _isPhoneNotifier.value = text.isPhoneNumber || text.isIntlPhoneNumber;
-    _isFormValidNotifier.value = text.isEmail || _isPhoneNotifier.value;
+    isPhoneNotifier.value = text.isPhoneNumber || text.isIntlPhoneNumber;
+    isFormValidNotifier.value = text.isEmail || isPhoneNotifier.value;
     _textController.addListener(() {
       final text = _textController.text;
       if (text.isNotEmpty) {
         /// Check if the text is a international phone number
-        _isPhoneNotifier.value = text.isIntlPhoneNumber;
+        isPhoneNotifier.value = text.isIntlPhoneNumber;
       } else if (text.isEmptyOrNull ||
           text.contains(RegExp(r'^[a-zA-Z0-9]+$'))) {
-        _isPhoneNotifier.value = false;
+        isPhoneNotifier.value = false;
       }
-      _isFormValidNotifier.value = text.isEmail || _isPhoneNotifier.value;
+      isFormValidNotifier.value = text.isEmail || isPhoneNotifier.value;
     });
-    if (widget.loginType == LoginType.loginWithPassword) {
+    if (widget.loginType == LoginType.password) {
       _passwordController.addListener(() {
         final password = _passwordController.text;
         final text = _textController.text;
-        _isFormValidNotifier.value = password.isNotEmptyOrNull &&
-            (text.isNotEmptyOrNull && (text.isEmail || _isPhoneNotifier.value));
+        isFormValidNotifier.value = password.isNotEmptyOrNull &&
+            (text.isNotEmptyOrNull && (text.isEmail || isPhoneNotifier.value));
       });
     }
     super.initState();
@@ -135,57 +129,50 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   @override
   void dispose() {
     _textController.dispose();
-    _isPhoneNotifier.dispose();
-    _isFormValidNotifier.dispose();
-    _nextPageNotifier.dispose();
+    isPhoneNotifier.dispose();
+    isFormValidNotifier.dispose();
+    nextPageNotifier.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: _nextPageNotifier,
-      builder: (context, nextPage, child) {
-        switch (nextPage) {
-          case 0:
-            return _LoginPage(
-              config: widget.loginConfig,
-              loginType: widget.loginType,
-              onLogin: widget.onLogin,
-              onVerify: widget.onVerify,
-              providers: widget.providers,
-              isPhoneNotifier: _isPhoneNotifier,
-              isFormValidNotifier: _isFormValidNotifier,
-              nextPageNotifier: _nextPageNotifier,
-              textController: _textController,
-              termsAndConditions: widget.termsAndConditions,
-              passwordController: _passwordController,
-              pageConfig: widget.config,
-            );
-          case 1:
-            return FlutterAnimatedVerify(
-              onVerify: widget.onVerify,
-              name: _textController.text,
-              nextPageNotifier: _nextPageNotifier,
-              config: widget.verifyConfig,
-              onResendOtp: widget.onResendOtp,
-              termsAndConditions: widget.termsAndConditions,
-              pageConfig: widget.config,
-            );
-          default:
-            return const Center(
-              child: FlutterLogo(size: 100),
-            );
-        }
-      },
-    );
+    return switch (nextPageNotifier.watch(context)) {
+      0 => _LoginPage(
+          config: widget.loginConfig,
+          loginType: widget.loginType,
+          onLogin: widget.onLogin,
+          onVerify: widget.onVerify,
+          providers: widget.providers,
+          textController: _textController,
+          termsAndConditions: widget.termsAndConditions,
+          passwordController: _passwordController,
+          pageConfig: widget.config,
+        ),
+      1 => FlutterAnimatedVerify(
+          onVerify: widget.onVerify,
+          name: _textController.text.isEmail
+              ? _textController.text
+              : phoneNumber.value.completeNumber,
+          config: widget.verifyConfig,
+          onResendOtp: widget.onResendOtp,
+          termsAndConditions: widget.termsAndConditions,
+          pageConfig: widget.config,
+        ),
+      2 => const FlutterAnimatedSignup(),
+      3 => const FlutterAnimatedRecover(),
+      _ => const Center(
+          child: FlutterLogo(size: 100),
+        ),
+    };
   }
 }
 
 enum LoginType {
-  loginWithOTP,
-  loginWithPassword,
+  otp,
+  password,
+  otpAndPassword,
 }
 
 class _LoginPage extends StatelessWidget {
@@ -198,10 +185,6 @@ class _LoginPage extends StatelessWidget {
   final TextEditingController textController;
   final TextEditingController passwordController;
 
-  final ValueNotifier<bool> isPhoneNotifier;
-  final ValueNotifier<bool> isFormValidNotifier;
-  final ValueNotifier<int> nextPageNotifier;
-
   /// [PageConfig] for the page widget to customize the page.
   final PageConfig pageConfig;
 
@@ -211,9 +194,6 @@ class _LoginPage extends StatelessWidget {
     this.providers,
     required this.config,
     required this.loginType,
-    required this.isPhoneNotifier,
-    required this.isFormValidNotifier,
-    required this.nextPageNotifier,
     required this.textController,
     required this.passwordController,
     this.termsAndConditions,
@@ -224,7 +204,8 @@ class _LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final textConfig = config.textFiledConfig;
     final passConfig = config.passwordConfig;
-    final isLoginWithOTP = loginType == LoginType.loginWithOTP;
+    final isLoginWithOTP =
+        loginType == LoginType.otp || loginType == LoginType.otpAndPassword;
     return PageWidget(
       config: pageConfig,
       builder: (context, constraints) => Column(
@@ -240,24 +221,24 @@ class _LoginPage extends StatelessWidget {
           EmailPhoneTextField(
             controller: textController,
             config: textConfig,
-            isFormValidNotifier: isFormValidNotifier,
-            isPhoneNotifier: isPhoneNotifier,
           ),
           if (!isLoginWithOTP) ...[
             const SizedBox(height: 20),
             PasswordTextField(
               config: passConfig,
-              isFormValidNotifier: isFormValidNotifier,
               controller: passwordController,
             ),
+            const SizedBox(height: 8),
+            const SignUpAndForgetButton(),
           ],
           const SizedBox(height: 40),
           SignInButton(
-            formNotifier: isFormValidNotifier,
             onPressed: () async {
               if (onLogin != null) {
                 final result = await onLogin?.call(LoginData(
-                  name: textController.text,
+                  name: textController.text.isEmail
+                      ? textController.text
+                      : phoneNumber.value.completeNumber,
                   secret: passwordController.text,
                 ));
                 if (context.mounted) {
@@ -272,6 +253,7 @@ class _LoginPage extends StatelessWidget {
             },
             config: config,
             constraints: constraints,
+            loginType: loginType,
           ),
           OAuthWidget(
             providers: providers,

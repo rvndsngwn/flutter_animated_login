@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_intl_phone_field/flutter_intl_phone_field.dart';
+import 'package:signals/signals_flutter.dart';
 
+import '../../flutter_animated_login.dart';
 import '../utils/extension.dart';
-import '../utils/login_config.dart';
 
 class EmailPhoneTextField extends StatelessWidget {
-  final ValueNotifier<bool> isPhoneNotifier;
-  final ValueNotifier<bool> isFormValidNotifier;
   final EmailPhoneTextFiledConfig config;
   final TextEditingController controller;
   const EmailPhoneTextField({
     super.key,
-    required this.isPhoneNotifier,
-    required this.isFormValidNotifier,
     required this.config,
     required this.controller,
   });
@@ -21,9 +17,9 @@ class EmailPhoneTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    return ValueListenableBuilder(
-      valueListenable: isPhoneNotifier,
-      builder: (context, isPhone, child) {
+    return Watch.builder(
+      builder: (context) {
+        final isPhone = isPhoneNotifier.value;
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           child: IntlPhoneField(
@@ -60,6 +56,7 @@ class EmailPhoneTextField extends StatelessWidget {
                 number: phone,
                 value: phone.number,
               ));
+              phoneNumber.value = phone;
             },
             onCountryChanged: config.onCountryChanged,
             onEditingComplete: config.onEditingComplete,

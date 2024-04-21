@@ -92,7 +92,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.6"
   flutter_intl_phone_field:
     dependency: transitive
     description:
@@ -231,6 +231,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  signals:
+    dependency: transitive
+    description:
+      name: signals
+      sha256: "8e1f2033c45e19d8aaed98e8e18e5a51d82663bb46ddc6b9a41475aff79a92bb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0"
+  signals_core:
+    dependency: transitive
+    description:
+      name: signals_core
+      sha256: "7d5bf579b1e6768942bff0806e955b5a3f2289768f390188820d990c243134e3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.1"
+  signals_flutter:
+    dependency: transitive
+    description:
+      name: signals_flutter
+      sha256: "8f8739c232043de87b8f169ec39ff800baa2b81a9ebe19a34773c536d02a6cf8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0"
   sky_engine:
     dependency: transitive
     description: flutter
