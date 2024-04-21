@@ -110,7 +110,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
           TextButton(
             onPressed: () => nextPageNotifier.value = 0,
             style: TextButton.styleFrom(
-              textStyle: config.buttonTextStyle ?? textTheme.titleLarge,
+              textStyle: config.buttonTextStyle ?? textTheme.titleMedium,
             ),
             child: const Text('Sign In'),
           ),

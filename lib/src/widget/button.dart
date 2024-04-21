@@ -29,14 +29,14 @@ class SignInButton extends StatelessWidget {
         final isFormValid = isFormValidNotifier.value;
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          width: constraints.maxWidth >= 600 ? 200 : constraints.maxWidth * 0.5,
+          width: constraints.maxWidth >= 600 ? 300 : constraints.maxWidth * 0.5,
           child: FilledAutoLoadingButton(
             style: ElevatedButton.styleFrom(
               minimumSize: Size(
-                constraints.maxWidth >= 600 ? 200 : constraints.maxWidth * 0.5,
+                constraints.maxWidth >= 600 ? 300 : constraints.maxWidth * 0.5,
                 55,
               ),
-              textStyle: config.buttonTextStyle ?? textTheme.titleLarge,
+              textStyle: config.buttonTextStyle ?? textTheme.titleMedium,
             ),
             onPressed: isFormValid ? onPressed : null,
             child: config.buttonText ??

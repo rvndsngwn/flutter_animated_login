@@ -251,7 +251,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                         : constraints.maxWidth * 0.5,
                     55,
                   ),
-                  textStyle: config.buttonTextStyle ?? textTheme.titleLarge,
+                  textStyle: config.buttonTextStyle ?? textTheme.titleMedium,
                 ),
                 onPressed: () async {
                   final response = await widget.onResendOtp
