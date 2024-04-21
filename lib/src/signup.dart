@@ -72,7 +72,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
                           labelText: 'Confirm Password',
                         ) ??
                     InputDecoration(
-                      labelText: 'Confirm Password',
+                      hintText: 'Confirm Password',
                       suffixIcon: IconButton(
                         icon: Icon(
                           isObscure.value
@@ -101,7 +101,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
               return null;
             },
             config: loginConfig.copyWith(
-              buttonText: const Text('Sign Up'),
+              buttonText: const Text('Create Account'),
             ),
             constraints: constraints,
             loginType: loginType,
