@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 
-import 'recover_password.dart';
+import 'reset_password.dart';
 import 'signup.dart';
 import 'utils/extension.dart';
 import 'utils/login_config.dart';
 import 'utils/login_data.dart';
 import 'utils/login_provider.dart';
 import 'utils/page_config.dart';
+import 'utils/reset_config.dart';
 import 'utils/signup_data.dart';
 import 'utils/verify_config.dart';
 import 'verify.dart';
@@ -70,6 +71,8 @@ class FlutterAnimatedLogin extends StatefulWidget {
   /// [PageConfig] for the page widget to customize the page.
   final PageConfig config;
 
+  final ResetConfig resetConfig;
+
   const FlutterAnimatedLogin({
     super.key,
     this.onLogin,
@@ -82,6 +85,7 @@ class FlutterAnimatedLogin extends StatefulWidget {
     this.verifyConfig = const VerifyConfig(),
     this.termsAndConditions,
     this.config = const PageConfig(),
+    this.resetConfig = const ResetConfig(),
   });
 
   @override
@@ -161,7 +165,13 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
           pageConfig: widget.config,
         ),
       2 => const FlutterAnimatedSignup(),
-      3 => const FlutterAnimatedRecover(),
+      3 => FlutterAnimatedReset(
+          config: widget.resetConfig,
+          loginConfig: widget.loginConfig,
+          loginType: widget.loginType,
+          controller: _textController,
+          textConfig: widget.loginConfig.textFiledConfig,
+        ),
       _ => const Center(
           child: FlutterLogo(size: 100),
         ),

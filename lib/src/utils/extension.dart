@@ -125,7 +125,7 @@ final isPhoneNotifier = false.toSignal();
 final isFormValidNotifier = false.toSignal();
 
 @protected
-final nextPageNotifier = 0.toSignal();
+final nextPageNotifier = 3.toSignal();
 
 @protected
 final phoneNumber = PhoneNumber(
