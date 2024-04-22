@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_login/flutter_animated_login.dart';
+import 'package:flutter_intl_phone_field/phone_number.dart';
 import 'package:material_loading_buttons/material_loading_buttons.dart';
 
 import 'utils/extension.dart';
@@ -156,6 +157,16 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
               );
               if (result.isNotEmptyOrNull && context.mounted) {
                 context.error('Error', description: result);
+              } else {
+                nextPageNotifier.value = 0;
+                isFormValidNotifier.value = false;
+                isPhoneNotifier.value = false;
+                _textController.clear();
+                usernameNotifier.value = PhoneNumber(
+                  countryISOCode: "",
+                  countryCode: "",
+                  number: "",
+                );
               }
             },
             onChanged: (value) {
@@ -172,6 +183,16 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
               );
               if (result.isNotEmptyOrNull && context.mounted) {
                 context.error('Error', description: result);
+              } else {
+                nextPageNotifier.value = 0;
+                isFormValidNotifier.value = false;
+                isPhoneNotifier.value = false;
+                _textController.clear();
+                usernameNotifier.value = PhoneNumber(
+                  countryISOCode: "",
+                  countryCode: "",
+                  number: "",
+                );
               }
             },
             onAppPrivateCommand: textConfig.onAppPrivateCommand,

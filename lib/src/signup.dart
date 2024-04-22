@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_intl_phone_field/phone_number.dart';
 
 import 'login.dart';
 import 'utils/extension.dart';
@@ -128,6 +129,19 @@ class FlutterAnimatedSignup extends StatelessWidget {
                     context.error("Error", description: result);
                   } else if (config.loginAfterSignUp) {
                     nextPageNotifier.value = 0;
+                  } else {
+                    nextPageNotifier.value = 0;
+                    formKey.currentState?.reset();
+                    isFormValidNotifier.value = false;
+                    controller.clear();
+                    passwordController.clear();
+                    confirmPasswordController.clear();
+                    isPhoneNotifier.value = false;
+                    usernameNotifier.value = PhoneNumber(
+                      countryISOCode: "",
+                      countryCode: "",
+                      number: "",
+                    );
                   }
                 }
               }

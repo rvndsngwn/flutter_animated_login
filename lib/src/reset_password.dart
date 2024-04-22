@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_intl_phone_field/phone_number.dart';
 
 import 'login.dart';
 import 'utils/extension.dart';
@@ -81,6 +82,15 @@ class FlutterAnimatedReset extends StatelessWidget {
                       description: "Password reset link sent successfully",
                     );
                     nextPageNotifier.value = 0;
+                    formKey.currentState?.reset();
+                    isFormValidNotifier.value = false;
+                    controller.clear();
+                    isPhoneNotifier.value = false;
+                    usernameNotifier.value = PhoneNumber(
+                      countryISOCode: "",
+                      countryCode: "",
+                      number: "",
+                    );
                   }
                 }
               }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_intl_phone_field/phone_number.dart';
 import 'package:signals/signals_flutter.dart';
 
 import 'reset_password.dart';
@@ -312,6 +313,18 @@ class _LoginPage extends StatelessWidget {
                     context.error("Error", description: result);
                   } else if (loginType == LoginType.otp) {
                     nextPageNotifier.value = 1;
+                  } else {
+                    nextPageNotifier.value = 0;
+                    formKey.currentState?.reset();
+                    isFormValidNotifier.value = false;
+                    passwordController.clear();
+                    textController.clear();
+                    isPhoneNotifier.value = false;
+                    usernameNotifier.value = PhoneNumber(
+                      countryISOCode: "",
+                      countryCode: "",
+                      number: "",
+                    );
                   }
                 }
               }

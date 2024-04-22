@@ -1,3 +1,7 @@
+## 0.0.10
+
+- state reset added for login and signup
+
 ## 0.0.9
 
 - signals disposed error fixed
