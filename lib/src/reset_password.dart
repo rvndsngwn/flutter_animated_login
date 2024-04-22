@@ -59,15 +59,16 @@ class FlutterAnimatedReset extends StatelessWidget {
           const SizedBox(height: 40),
           SignInButton(
             onPressed: () async {
+              final isValid = formKey.currentState?.validate() ?? false;
+              if (!isValid) {
+                context.error(
+                  "Error",
+                  description: "Invalid form data, fill all required fields",
+                );
+                return null;
+              }
+              formKey.currentState?.save();
               if (onResetPassword != null) {
-                final isValid = formKey.currentState?.validate() ?? false;
-                if (!isValid) {
-                  context.error(
-                    "Error",
-                    description: "Invalid form data, fill all required fields",
-                  );
-                  return null;
-                }
                 final result = await onResetPassword?.call(controller.text);
                 if (context.mounted) {
                   if (result.isNotEmptyOrNull) {

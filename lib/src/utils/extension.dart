@@ -132,4 +132,6 @@ final phoneNumber = PhoneNumber(
   countryISOCode: "",
   countryCode: "",
   number: "",
-).toSignal();
+).toSignal(
+  debugLabel: 'Phone or Email',
+);

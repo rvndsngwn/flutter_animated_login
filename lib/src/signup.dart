@@ -102,15 +102,16 @@ class FlutterAnimatedSignup extends StatelessWidget {
           const SizedBox(height: 40),
           SignInButton(
             onPressed: () async {
+              final isValid = formKey.currentState?.validate() ?? false;
+              if (!isValid) {
+                context.error(
+                  "Error",
+                  description: "Invalid form data, fill all required fields",
+                );
+                return null;
+              }
+              formKey.currentState?.save();
               if (onSignup != null) {
-                final isValid = formKey.currentState?.validate() ?? false;
-                if (!isValid) {
-                  context.error(
-                    "Error",
-                    description: "Invalid form data, fill all required fields",
-                  );
-                  return null;
-                }
                 final result = await onSignup?.call(SignupData(
                   name: controller.text.isEmail
                       ? controller.text

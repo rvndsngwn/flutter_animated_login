@@ -289,15 +289,16 @@ class _LoginPage extends StatelessWidget {
           const SizedBox(height: 40),
           SignInButton(
             onPressed: () async {
+              final isValid = formKey.currentState?.validate() ?? false;
+              if (!isValid) {
+                context.error(
+                  "Error",
+                  description: "Invalid form data, fill all required fields",
+                );
+                return null;
+              }
+              formKey.currentState?.save();
               if (onLogin != null) {
-                final isValid = formKey.currentState?.validate() ?? false;
-                if (!isValid) {
-                  context.error(
-                    "Error",
-                    description: "Invalid form data, fill all required fields",
-                  );
-                  return null;
-                }
                 final result = await onLogin?.call(LoginData(
                   name: textController.text.isEmail
                       ? textController.text
