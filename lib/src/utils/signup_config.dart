@@ -13,6 +13,7 @@ class SignupConfig {
   final TextStyle? buttonTextStyle;
   final EmailPhoneTextFiledConfig textFiledConfig;
   final PasswordTextFiledConfig passwordTextFiledConfig;
+  final bool loginAfterSignUp;
 
   const SignupConfig({
     this.logo,
@@ -25,6 +26,7 @@ class SignupConfig {
     this.buttonTextStyle,
     this.textFiledConfig = const EmailPhoneTextFiledConfig(),
     this.passwordTextFiledConfig = const PasswordTextFiledConfig(),
+    this.loginAfterSignUp = false,
   });
 
   SignupConfig copyWith({
@@ -38,6 +40,7 @@ class SignupConfig {
     TextStyle? buttonTextStyle,
     EmailPhoneTextFiledConfig? textFiledConfig,
     PasswordTextFiledConfig? passwordTextFiledConfig,
+    bool? loginAfterSignUp,
   }) {
     return SignupConfig(
       logo: logo ?? this.logo,
@@ -51,6 +54,7 @@ class SignupConfig {
       textFiledConfig: textFiledConfig ?? this.textFiledConfig,
       passwordTextFiledConfig:
           passwordTextFiledConfig ?? this.passwordTextFiledConfig,
+      loginAfterSignUp: loginAfterSignUp ?? this.loginAfterSignUp,
     );
   }
 }

@@ -43,38 +43,43 @@ class PageWidget extends StatelessWidget {
                       end: config.end,
                     ),
                   ),
-              Center(
-                child: SingleChildScrollView(
-                  keyboardDismissBehavior: config.keyboardDismissBehavior,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    constraints: config.cardConstraints ??
-                        const BoxConstraints(maxWidth: 600),
-                    margin: config.cardMargin ?? const EdgeInsets.all(40),
-                    decoration: config.cardDecoration ??
-                        BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: theme.colorScheme.surface,
-                          boxShadow: isMobile
-                              ? null
-                              : const [
-                                  BoxShadow(
-                                    blurRadius: 100,
-                                    spreadRadius: 1,
-                                  ),
-                                ],
+              CustomScrollView(
+                keyboardDismissBehavior: config.keyboardDismissBehavior,
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        constraints: config.cardConstraints ??
+                            const BoxConstraints(maxWidth: 600),
+                        margin: config.cardMargin ?? const EdgeInsets.all(40),
+                        decoration: config.cardDecoration ??
+                            BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: theme.colorScheme.surface,
+                              boxShadow: isMobile
+                                  ? null
+                                  : const [
+                                      BoxShadow(
+                                        blurRadius: 100,
+                                        spreadRadius: 1,
+                                      ),
+                                    ],
+                            ),
+                        child: AnimatedPadding(
+                          duration: const Duration(milliseconds: 300),
+                          padding: config.cardPadding ??
+                              EdgeInsets.symmetric(
+                                vertical: 40,
+                                horizontal: isMobile ? 0 : 40,
+                              ),
+                          child: builder?.call(context, constraints),
                         ),
-                    child: AnimatedPadding(
-                      duration: const Duration(milliseconds: 300),
-                      padding: config.cardPadding ??
-                          EdgeInsets.symmetric(
-                            vertical: 40,
-                            horizontal: isMobile ? 0 : 40,
-                          ),
-                      child: builder?.call(context, constraints),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ],
           ),

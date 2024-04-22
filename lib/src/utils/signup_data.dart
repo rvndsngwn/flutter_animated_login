@@ -3,6 +3,12 @@ class SignupData {
   final String? password;
   final Map<String, String>? additionalSignupData;
 
+  SignupData({
+    this.name,
+    this.password,
+    this.additionalSignupData,
+  });
+
   SignupData.fromSignupForm({
     required this.name,
     required this.password,

@@ -16,6 +16,7 @@ class FlutterAnimatedReset extends StatelessWidget {
   final LoginType loginType;
   final TextEditingController controller;
   final PageConfig pageConfig;
+  final ResetPasswordCallback? onResetPassword;
   const FlutterAnimatedReset({
     super.key,
     required this.config,
@@ -23,6 +24,7 @@ class FlutterAnimatedReset extends StatelessWidget {
     required this.loginType,
     required this.controller,
     required this.pageConfig,
+    this.onResetPassword,
   });
 
   @override
@@ -57,10 +59,32 @@ class FlutterAnimatedReset extends StatelessWidget {
           const SizedBox(height: 40),
           SignInButton(
             onPressed: () async {
+              if (onResetPassword != null) {
+                final isValid = formKey.currentState?.validate() ?? false;
+                if (!isValid) {
+                  context.error(
+                    "Error",
+                    description: "Invalid form data, fill all required fields",
+                  );
+                  return null;
+                }
+                final result = await onResetPassword?.call(controller.text);
+                if (context.mounted) {
+                  if (result.isNotEmptyOrNull) {
+                    context.error("Error", description: result);
+                  } else {
+                    context.success(
+                      "Success",
+                      description: "Password reset link sent successfully",
+                    );
+                    nextPageNotifier.value = 0;
+                  }
+                }
+              }
               return null;
             },
             config: loginConfig.copyWith(
-              buttonText: const Text('Reset'),
+              buttonText: const Text('Reset Password'),
             ),
             constraints: constraints,
             loginType: loginType,

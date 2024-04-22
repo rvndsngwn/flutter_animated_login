@@ -21,11 +21,11 @@ class MyApp extends StatelessWidget {
         theme: value ? ThemeData.dark() : ThemeData.dark(),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          floatingActionButton: IconButton.filled(
+          floatingActionButton: FilledButton(
             onPressed: () => isDark.value = !isDark.value,
-            icon: value
-                ? const Icon(Icons.password)
-                : const Icon(Icons.expand_less),
+            child: value
+                ? const Text("Login with OTP")
+                : const Text("Login with Password"),
           ),
           body: FlutterAnimatedLogin(
             loginType: value ? LoginType.password : LoginType.otp,

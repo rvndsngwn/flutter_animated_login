@@ -56,6 +56,7 @@ class PasswordTextField extends StatelessWidget {
           decoration: config.decoration?.call(isObscure) ??
               InputDecoration(
                 hintText: 'Enter your password',
+                labelText: 'Password*',
                 suffixIcon: IconButton(
                   icon: Icon(obscure ? Icons.visibility : Icons.visibility_off),
                   onPressed: () => isObscure.value = !obscure,

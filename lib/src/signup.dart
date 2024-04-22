@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_login/src/login.dart';
 
+import 'login.dart';
 import 'utils/extension.dart';
 import 'utils/login_config.dart';
 import 'utils/page_config.dart';
 import 'utils/signup_config.dart';
+import 'utils/signup_data.dart';
 import 'widget/button.dart';
 import 'widget/email_phone_field.dart';
 import 'widget/page.dart';
@@ -18,6 +19,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
   final TextEditingController passwordController;
   final PageConfig pageConfig;
   final SignupConfig config;
+  final SignupCallback? onSignup;
   FlutterAnimatedSignup({
     super.key,
     required this.loginConfig,
@@ -26,6 +28,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
     required this.passwordController,
     required this.pageConfig,
     required this.config,
+    this.onSignup,
   });
   final TextEditingController confirmPasswordController =
       TextEditingController();
@@ -72,7 +75,8 @@ class FlutterAnimatedSignup extends StatelessWidget {
                           labelText: 'Confirm Password',
                         ) ??
                     InputDecoration(
-                      hintText: 'Confirm Password',
+                      hintText: 'Re-enter your password',
+                      labelText: 'Confirm Password*',
                       suffixIcon: IconButton(
                         icon: Icon(
                           isObscure.value
@@ -98,6 +102,32 @@ class FlutterAnimatedSignup extends StatelessWidget {
           const SizedBox(height: 40),
           SignInButton(
             onPressed: () async {
+              if (onSignup != null) {
+                final isValid = formKey.currentState?.validate() ?? false;
+                if (!isValid) {
+                  context.error(
+                    "Error",
+                    description: "Invalid form data, fill all required fields",
+                  );
+                  return null;
+                }
+                final result = await onSignup?.call(SignupData(
+                  name: controller.text.isEmail
+                      ? controller.text
+                      : phoneNumber.value.completeNumber,
+                  password: passwordController.text,
+                  additionalSignupData: {
+                    'confirmPassword': confirmPasswordController.text,
+                  },
+                ));
+                if (context.mounted) {
+                  if (result.isNotEmptyOrNull) {
+                    context.error("Error", description: result);
+                  } else if (config.loginAfterSignUp) {
+                    nextPageNotifier.value = 0;
+                  }
+                }
+              }
               return null;
             },
             config: loginConfig.copyWith(

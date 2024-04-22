@@ -40,6 +40,12 @@ typedef VerifyCallback = Future<String?>? Function(LoginData);
 /// The callback triggered your OTP resend logic
 typedef ResendOtpCallback = Future<String?>? Function(LoginData);
 
+/// The callback triggered your reset password logic
+typedef ResetPasswordCallback = Future<String?>? Function(String);
+
+/// Form key for the login form
+final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
 class FlutterAnimatedLogin extends StatefulWidget {
   /// The callback triggered your login logic
   final LoginCallback? onLogin;
@@ -72,9 +78,14 @@ class FlutterAnimatedLogin extends StatefulWidget {
   /// [PageConfig] for the page widget to customize the page.
   final PageConfig config;
 
+  /// The configuration for the reset password page
   final ResetConfig resetConfig;
 
+  /// The configuration for the signup page
   final SignupConfig signupConfig;
+
+  /// The callback triggered your reset password logic
+  final ResetPasswordCallback? onResetPassword;
 
   const FlutterAnimatedLogin({
     super.key,
@@ -90,6 +101,7 @@ class FlutterAnimatedLogin extends StatefulWidget {
     this.config = const PageConfig(),
     this.resetConfig = const ResetConfig(),
     this.signupConfig = const SignupConfig(),
+    this.onResetPassword,
   });
 
   @override
@@ -146,58 +158,75 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return switch (nextPageNotifier.watch(context)) {
-      0 => _LoginPage(
-          config: widget.loginConfig,
-          loginType: widget.loginType,
-          onLogin: widget.onLogin,
-          onVerify: widget.onVerify,
-          providers: widget.providers,
-          textController: _textController,
-          termsAndConditions: widget.termsAndConditions,
-          passwordController: _passwordController,
-          pageConfig: widget.config,
-        ),
-      1 => FlutterAnimatedVerify(
-          onVerify: widget.onVerify,
-          name: _textController.text.isEmail
-              ? _textController.text
-              : phoneNumber.value.completeNumber,
-          config: widget.verifyConfig,
-          onResendOtp: widget.onResendOtp,
-          termsAndConditions: widget.termsAndConditions,
-          pageConfig: widget.config,
-        ),
-      2 => FlutterAnimatedSignup(
-          config: widget.signupConfig.copyWith(
-            textFiledConfig: widget.loginConfig.textFiledConfig,
-            passwordTextFiledConfig: widget.loginConfig.passwordConfig,
+    return Form(
+      key: formKey,
+      child: switch (nextPageNotifier.watch(context)) {
+        0 => _LoginPage(
+            config: widget.loginConfig,
+            loginType: widget.loginType,
+            onLogin: widget.onLogin,
+            onVerify: widget.onVerify,
+            providers: widget.providers,
+            textController: _textController,
+            termsAndConditions: widget.termsAndConditions,
+            passwordController: _passwordController,
+            pageConfig: widget.config,
           ),
-          loginConfig: widget.loginConfig,
-          loginType: widget.loginType,
-          controller: _textController,
-          pageConfig: widget.config,
-          passwordController: _passwordController,
-        ),
-      3 => FlutterAnimatedReset(
-          config: widget.resetConfig.copyWith(
-            textFiledConfig: widget.loginConfig.textFiledConfig,
+        1 => FlutterAnimatedVerify(
+            onVerify: widget.onVerify,
+            name: _textController.text.isEmail
+                ? _textController.text
+                : phoneNumber.value.completeNumber,
+            config: widget.verifyConfig,
+            onResendOtp: widget.onResendOtp,
+            termsAndConditions: widget.termsAndConditions,
+            pageConfig: widget.config,
           ),
-          loginConfig: widget.loginConfig,
-          loginType: widget.loginType,
-          controller: _textController,
-          pageConfig: widget.config,
-        ),
-      _ => const Center(
-          child: FlutterLogo(size: 100),
-        ),
-    };
+        2 => FlutterAnimatedSignup(
+            config: widget.signupConfig.copyWith(
+              textFiledConfig: widget.loginConfig.textFiledConfig,
+              passwordTextFiledConfig: widget.loginConfig.passwordConfig,
+            ),
+            onSignup: widget.onSignup,
+            loginConfig: widget.loginConfig,
+            loginType: widget.loginType,
+            controller: _textController,
+            pageConfig: widget.config,
+            passwordController: _passwordController,
+          ),
+        3 => FlutterAnimatedReset(
+            config: widget.resetConfig.copyWith(
+              textFiledConfig: widget.loginConfig.textFiledConfig,
+            ),
+            onResetPassword: widget.onResetPassword,
+            loginConfig: widget.loginConfig,
+            loginType: widget.loginType,
+            controller: _textController,
+            pageConfig: widget.config,
+          ),
+        _ => const Center(
+            child: FlutterLogo(size: 100),
+          ),
+      },
+    );
   }
 }
 
 enum LoginType {
+  /// Login with OTP [LoginType.otp]
+  /// This option provides the option to login with OTP only
   otp,
+
+  /// Login with Password [LoginType.password]
+  /// This option provides the option to login with password only
+  /// Forget password and signup options are available
   password,
+
+  /// Login with OTP and Password [LoginType.otpAndPassword]
+  /// This option provides the option to login with OTP or Password
+  /// If the user selects OTP, the user will be redirected to the OTP verification page
+  /// If the user selects Password, the user will be logged in with the password
+  /// ! This option does not provide the option to login with OTP and Password at the same time
   otpAndPassword,
 }
 
@@ -261,6 +290,14 @@ class _LoginPage extends StatelessWidget {
           SignInButton(
             onPressed: () async {
               if (onLogin != null) {
+                final isValid = formKey.currentState?.validate() ?? false;
+                if (!isValid) {
+                  context.error(
+                    "Error",
+                    description: "Invalid form data, fill all required fields",
+                  );
+                  return null;
+                }
                 final result = await onLogin?.call(LoginData(
                   name: textController.text.isEmail
                       ? textController.text
@@ -270,7 +307,7 @@ class _LoginPage extends StatelessWidget {
                 if (context.mounted) {
                   if (result.isNotEmptyOrNull) {
                     context.error("Error", description: result);
-                  } else {
+                  } else if (loginType == LoginType.otp) {
                     nextPageNotifier.value = 1;
                   }
                 }

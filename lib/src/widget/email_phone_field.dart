@@ -31,6 +31,7 @@ class EmailPhoneTextField extends StatelessWidget {
                   hintText: isPhone
                       ? 'Enter your phone'
                       : 'Enter your email or phone',
+                  labelText: isPhone ? 'Phone*' : 'Email or Phone*',
                   prefixIconConstraints: !isPhone
                       ? BoxConstraints.tight(const Size(10, 10))
                       : null,
