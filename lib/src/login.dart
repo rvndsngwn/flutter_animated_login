@@ -149,10 +149,6 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   @override
   void dispose() {
     _textController.dispose();
-    isPhoneNotifier.dispose();
-    isFormValidNotifier.dispose();
-    nextPageNotifier.dispose();
-    usernameNotifier.dispose();
     _passwordController.dispose();
     super.dispose();
   }

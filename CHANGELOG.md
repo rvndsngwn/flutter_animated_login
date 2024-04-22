@@ -1,3 +1,7 @@
+## 0.0.9
+
+- signals disposed error fixed
+
 ## 0.0.8
 
 - Multiple widgets used the same GlobalKey fixed
