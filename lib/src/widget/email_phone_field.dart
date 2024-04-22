@@ -48,7 +48,7 @@ class EmailPhoneTextField extends StatelessWidget {
                 number: phone,
                 value: phone.number,
               ));
-              phoneNumber.value = phone;
+              usernameNotifier.value = phone;
             },
             onCountryChanged: config.onCountryChanged,
             onEditingComplete: config.onEditingComplete,

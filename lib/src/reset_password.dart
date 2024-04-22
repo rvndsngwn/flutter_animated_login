@@ -17,6 +17,7 @@ class FlutterAnimatedReset extends StatelessWidget {
   final TextEditingController controller;
   final PageConfig pageConfig;
   final ResetPasswordCallback? onResetPassword;
+  final GlobalKey<FormState> formKey;
   const FlutterAnimatedReset({
     super.key,
     required this.config,
@@ -25,6 +26,7 @@ class FlutterAnimatedReset extends StatelessWidget {
     required this.controller,
     required this.pageConfig,
     this.onResetPassword,
+    required this.formKey,
   });
 
   @override

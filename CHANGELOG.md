@@ -1,3 +1,7 @@
+## 0.0.8
+
+- Multiple widgets used the same GlobalKey fixed
+
 ## 0.0.7
 
 - Login with password added

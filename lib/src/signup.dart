@@ -20,6 +20,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
   final PageConfig pageConfig;
   final SignupConfig config;
   final SignupCallback? onSignup;
+  final GlobalKey<FormState> formKey;
   FlutterAnimatedSignup({
     super.key,
     required this.loginConfig,
@@ -29,6 +30,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
     required this.pageConfig,
     required this.config,
     this.onSignup,
+    required this.formKey,
   });
   final TextEditingController confirmPasswordController =
       TextEditingController();
@@ -115,7 +117,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
                 final result = await onSignup?.call(SignupData(
                   name: controller.text.isEmail
                       ? controller.text
-                      : phoneNumber.value.completeNumber,
+                      : usernameNotifier.value.completeNumber,
                   password: passwordController.text,
                   additionalSignupData: {
                     'confirmPassword': confirmPasswordController.text,

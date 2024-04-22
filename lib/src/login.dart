@@ -43,9 +43,6 @@ typedef ResendOtpCallback = Future<String?>? Function(LoginData);
 /// The callback triggered your reset password logic
 typedef ResetPasswordCallback = Future<String?>? Function(String);
 
-/// Form key for the login form
-final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
 class FlutterAnimatedLogin extends StatefulWidget {
   /// The callback triggered your login logic
   final LoginCallback? onLogin;
@@ -115,6 +112,9 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   /// The text controller for the password field if not provided by the user
   late TextEditingController _passwordController;
 
+  /// Form key for the login form
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     final controller = widget.loginConfig.textFiledConfig.controller;
@@ -152,6 +152,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
     isPhoneNotifier.dispose();
     isFormValidNotifier.dispose();
     nextPageNotifier.dispose();
+    usernameNotifier.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -171,12 +172,13 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
             termsAndConditions: widget.termsAndConditions,
             passwordController: _passwordController,
             pageConfig: widget.config,
+            formKey: formKey,
           ),
         1 => FlutterAnimatedVerify(
             onVerify: widget.onVerify,
             name: _textController.text.isEmail
                 ? _textController.text
-                : phoneNumber.value.completeNumber,
+                : usernameNotifier.value.completeNumber,
             config: widget.verifyConfig,
             onResendOtp: widget.onResendOtp,
             termsAndConditions: widget.termsAndConditions,
@@ -193,6 +195,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
             controller: _textController,
             pageConfig: widget.config,
             passwordController: _passwordController,
+            formKey: formKey,
           ),
         3 => FlutterAnimatedReset(
             config: widget.resetConfig.copyWith(
@@ -203,6 +206,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
             loginType: widget.loginType,
             controller: _textController,
             pageConfig: widget.config,
+            formKey: formKey,
           ),
         _ => const Center(
             child: FlutterLogo(size: 100),
@@ -239,6 +243,7 @@ class _LoginPage extends StatelessWidget {
   final List<LoginProvider>? providers;
   final TextEditingController textController;
   final TextEditingController passwordController;
+  final GlobalKey<FormState> formKey;
 
   /// [PageConfig] for the page widget to customize the page.
   final PageConfig pageConfig;
@@ -253,6 +258,7 @@ class _LoginPage extends StatelessWidget {
     required this.passwordController,
     this.termsAndConditions,
     this.pageConfig = const PageConfig(),
+    required this.formKey,
   });
 
   @override
@@ -302,7 +308,7 @@ class _LoginPage extends StatelessWidget {
                 final result = await onLogin?.call(LoginData(
                   name: textController.text.isEmail
                       ? textController.text
-                      : phoneNumber.value.completeNumber,
+                      : usernameNotifier.value.completeNumber,
                   secret: passwordController.text,
                 ));
                 if (context.mounted) {

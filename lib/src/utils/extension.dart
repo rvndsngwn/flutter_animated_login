@@ -128,10 +128,10 @@ final isFormValidNotifier = false.toSignal();
 final nextPageNotifier = 0.toSignal();
 
 @protected
-final phoneNumber = PhoneNumber(
+final usernameNotifier = PhoneNumber(
   countryISOCode: "",
   countryCode: "",
   number: "",
 ).toSignal(
-  debugLabel: 'Phone or Email',
+  debugLabel: 'Username',
 );
