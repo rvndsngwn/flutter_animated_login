@@ -8,6 +8,8 @@
 
 A Flutter package to create a beautiful animated login screen with phone/email otp, password, and social login options. It also includes a phone number with country code picker.
 
+## [Demo Website 🔗](https://rvndsngwn.github.io/flutter_animated_login/)
+
 ## Screenshots
 
 ### Email OTP
@@ -104,7 +106,7 @@ See the `example` directory for a complete sample app.
   /// The list of login providers for the oauth
   final List<LoginProvider>? providers;
 
-  /// The login type, default is [LoginType.loginWithOTP]
+  /// The login type, default is [LoginType.otp]
   final LoginType loginType;
 
   /// The configuration for the verify page
@@ -115,6 +117,15 @@ See the `example` directory for a complete sample app.
 
   /// [PageConfig] for the page widget to customize the page.
   final PageConfig config;
+
+  /// The configuration for the reset password page
+  final ResetConfig resetConfig;
+
+  /// The configuration for the signup page
+  final SignupConfig signupConfig;
+
+  /// The callback triggered your reset password logic
+  final ResetPasswordCallback? onResetPassword;
 ```
 
 ## LICENSE
