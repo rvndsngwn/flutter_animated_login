@@ -22,7 +22,7 @@ jobs:
       - run: flutter pub get
 
       - name: Build Web Project
-        run: flutter build web
+        run: flutter build web --release --web-renderer html --base-href /flutter_animated_login/
         working-directory: ./example
 
       - name: Fix PWA
