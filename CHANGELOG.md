@@ -1,3 +1,9 @@
+## 0.0.7
+
+- Login with password added
+- Reset password screen added
+- Signup screen added
+
 ## 0.0.6
 
 - OTP verification handling added
