@@ -51,13 +51,16 @@ class EmailPhoneTextField extends StatelessWidget {
               usernameNotifier.value = phone;
             },
             onCountryChanged: config.onCountryChanged,
+            obscureText: config.obscureText,
+            onSubmitted: config.onSubmitted,
+            onTap: config.onTap,
             onEditingComplete: config.onEditingComplete,
             onSaved: (phone) => config.onSaved?.call((
               number: phone,
               value: phone?.number,
             )),
             keyboardType: config.keyboardType ?? TextInputType.emailAddress,
-            textInputAction: config.textInputAction ?? TextInputAction.done,
+            textInputAction: config.textInputAction ?? TextInputAction.next,
             autofillHints: config.autofillHints ??
                 [
                   AutofillHints.email,
@@ -91,9 +94,6 @@ class EmailPhoneTextField extends StatelessWidget {
             maxLengthEnforcement: config.maxLengthEnforcement,
             maxLines: config.maxLines,
             minLines: config.minLines,
-            obscureText: config.obscureText,
-            onSubmitted: config.onSubmitted,
-            onTap: config.onTap,
             pickerDialogStyle: config.pickerDialogStyle,
             readOnly: config.readOnly,
             showCountryFlag: config.showCountryFlag,

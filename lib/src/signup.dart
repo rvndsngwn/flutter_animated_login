@@ -39,6 +39,55 @@ class FlutterAnimatedSignup extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+
+    Future<String?> onLoginFunction() async {
+      try {
+        final isValid = formKey.currentState?.validate() ?? false;
+        if (!isValid) {
+          context.error(
+            "Error",
+            description: "Invalid form data, fill all required fields",
+          );
+          return null;
+        }
+        formKey.currentState?.save();
+        if (onSignup != null) {
+          final result = await onSignup?.call(SignupData(
+            name: controller.text.isEmail
+                ? controller.text
+                : usernameNotifier.value.completeNumber,
+            password: passwordController.text,
+            additionalSignupData: {
+              'confirmPassword': confirmPasswordController.text,
+            },
+          ));
+          if (context.mounted) {
+            if (result.isNotEmptyOrNull) {
+              context.error("Error", description: result);
+            } else if (config.loginAfterSignUp) {
+              nextPageNotifier.value = 0;
+            } else {
+              nextPageNotifier.value = 0;
+              formKey.currentState?.reset();
+              isFormValidNotifier.value = false;
+              controller.clear();
+              passwordController.clear();
+              confirmPasswordController.clear();
+              isPhoneNotifier.value = false;
+              usernameNotifier.value = PhoneNumber(
+                countryISOCode: "",
+                countryCode: "",
+                number: "",
+              );
+            }
+          }
+        }
+        return null;
+      } finally {
+        signInButtonIsLoading.value = false;
+      }
+    }
+
     return PageWidget(
       builder: (context, constraints) => Column(
         mainAxisSize: MainAxisSize.min,
@@ -99,54 +148,17 @@ class FlutterAnimatedSignup extends StatelessWidget {
                 }
                 return null;
               },
+              onFieldSubmitted: (value) {
+                config.passwordTextFiledConfig.onFieldSubmitted?.call(value);
+                onLoginFunction();
+              },
+              textInputAction: TextInputAction.done,
             ),
             controller: confirmPasswordController,
           ),
           const SizedBox(height: 40),
           SignInButton(
-            onPressed: () async {
-              final isValid = formKey.currentState?.validate() ?? false;
-              if (!isValid) {
-                context.error(
-                  "Error",
-                  description: "Invalid form data, fill all required fields",
-                );
-                return null;
-              }
-              formKey.currentState?.save();
-              if (onSignup != null) {
-                final result = await onSignup?.call(SignupData(
-                  name: controller.text.isEmail
-                      ? controller.text
-                      : usernameNotifier.value.completeNumber,
-                  password: passwordController.text,
-                  additionalSignupData: {
-                    'confirmPassword': confirmPasswordController.text,
-                  },
-                ));
-                if (context.mounted) {
-                  if (result.isNotEmptyOrNull) {
-                    context.error("Error", description: result);
-                  } else if (config.loginAfterSignUp) {
-                    nextPageNotifier.value = 0;
-                  } else {
-                    nextPageNotifier.value = 0;
-                    formKey.currentState?.reset();
-                    isFormValidNotifier.value = false;
-                    controller.clear();
-                    passwordController.clear();
-                    confirmPasswordController.clear();
-                    isPhoneNotifier.value = false;
-                    usernameNotifier.value = PhoneNumber(
-                      countryISOCode: "",
-                      countryCode: "",
-                      number: "",
-                    );
-                  }
-                }
-              }
-              return null;
-            },
+            onPressed: onLoginFunction,
             config: loginConfig.copyWith(
               buttonText: const Text('Create Account'),
             ),

@@ -1,3 +1,8 @@
+## 0.0.11
+
+- textInputAction added for all text fields
+- onSubmitted added for all text fields
+
 ## 0.0.10
 
 - state reset added for login and signup

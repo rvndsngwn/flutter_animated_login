@@ -6,6 +6,8 @@ import '../login.dart';
 import '../utils/extension.dart';
 import '../utils/login_config.dart';
 
+final signInButtonIsLoading = false.toSignal();
+
 class SignInButton extends StatelessWidget {
   final Future<String?> Function()? onPressed;
   final LoginConfig config;
@@ -30,7 +32,8 @@ class SignInButton extends StatelessWidget {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           width: constraints.maxWidth >= 600 ? 300 : constraints.maxWidth * 0.5,
-          child: FilledAutoLoadingButton(
+          child: FilledLoadingButton(
+            isLoading: signInButtonIsLoading(),
             style: ElevatedButton.styleFrom(
               minimumSize: Size(
                 constraints.maxWidth >= 600 ? 300 : constraints.maxWidth * 0.5,

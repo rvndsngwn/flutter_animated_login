@@ -48,7 +48,12 @@ class PasswordTextField extends StatelessWidget {
           selectionControls: config.selectionControls,
           buildCounter: config.buildCounter,
           scrollPhysics: config.scrollPhysics,
-          autofillHints: config.autofillHints,
+          autofillHints: config.autofillHints ??
+              [
+                AutofillHints.password,
+                AutofillHints.newPassword,
+                AutofillHints.oneTimeCode,
+              ],
           autovalidateMode: config.autovalidateMode,
           scrollController: config.scrollController,
           restorationId: config.restorationId,
@@ -67,7 +72,7 @@ class PasswordTextField extends StatelessWidget {
               ),
           keyboardType: config.keyboardType,
           textCapitalization: config.textCapitalization,
-          textInputAction: config.textInputAction,
+          textInputAction: config.textInputAction ?? TextInputAction.next,
           style: config.style,
           strutStyle: config.strutStyle,
           textDirection: config.textDirection,

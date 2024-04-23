@@ -264,6 +264,52 @@ class _LoginPage extends StatelessWidget {
     final passConfig = config.passwordConfig;
     final isLoginWithOTP =
         loginType == LoginType.otp || loginType == LoginType.otpAndPassword;
+
+    Future<String?> onLoginFunction() async {
+      try {
+        signInButtonIsLoading.value = true;
+        final isValid = formKey.currentState?.validate() ?? false;
+        if (!isValid) {
+          context.error(
+            "Error",
+            description: "Invalid form data, fill all required fields",
+          );
+          return null;
+        }
+        formKey.currentState?.save();
+        if (onLogin != null) {
+          final result = await onLogin?.call(LoginData(
+            name: textController.text.isEmail
+                ? textController.text
+                : usernameNotifier.value.completeNumber,
+            secret: passwordController.text,
+          ));
+          if (context.mounted) {
+            if (result.isNotEmptyOrNull) {
+              context.error("Error", description: result);
+            } else if (loginType == LoginType.otp) {
+              nextPageNotifier.value = 1;
+            } else {
+              nextPageNotifier.value = 0;
+              formKey.currentState?.reset();
+              isFormValidNotifier.value = false;
+              passwordController.clear();
+              textController.clear();
+              isPhoneNotifier.value = false;
+              usernameNotifier.value = PhoneNumber(
+                countryISOCode: "",
+                countryCode: "",
+                number: "",
+              );
+            }
+          }
+        }
+        return null;
+      } finally {
+        signInButtonIsLoading.value = false;
+      }
+    }
+
     return PageWidget(
       config: pageConfig,
       builder: (context, constraints) => Column(
@@ -278,12 +324,27 @@ class _LoginPage extends StatelessWidget {
               ),
           EmailPhoneTextField(
             controller: textController,
-            config: textConfig,
+            config: isLoginWithOTP
+                ? textConfig.copyWith(
+                    onSubmitted: (p0) {
+                      textConfig.onSubmitted?.call(p0);
+                      onLoginFunction();
+                    },
+                    textInputAction: TextInputAction.done,
+                  )
+                : textConfig,
           ),
           if (!isLoginWithOTP) ...[
             const SizedBox(height: 20),
             PasswordTextField(
-              config: passConfig,
+              config: !isLoginWithOTP
+                  ? passConfig.copyWith(
+                      onFieldSubmitted: (p0) {
+                        passConfig.onFieldSubmitted?.call(p0);
+                        onLoginFunction();
+                      },
+                    )
+                  : passConfig,
               controller: passwordController,
             ),
             const SizedBox(height: 8),
@@ -291,45 +352,7 @@ class _LoginPage extends StatelessWidget {
           ],
           const SizedBox(height: 40),
           SignInButton(
-            onPressed: () async {
-              final isValid = formKey.currentState?.validate() ?? false;
-              if (!isValid) {
-                context.error(
-                  "Error",
-                  description: "Invalid form data, fill all required fields",
-                );
-                return null;
-              }
-              formKey.currentState?.save();
-              if (onLogin != null) {
-                final result = await onLogin?.call(LoginData(
-                  name: textController.text.isEmail
-                      ? textController.text
-                      : usernameNotifier.value.completeNumber,
-                  secret: passwordController.text,
-                ));
-                if (context.mounted) {
-                  if (result.isNotEmptyOrNull) {
-                    context.error("Error", description: result);
-                  } else if (loginType == LoginType.otp) {
-                    nextPageNotifier.value = 1;
-                  } else {
-                    nextPageNotifier.value = 0;
-                    formKey.currentState?.reset();
-                    isFormValidNotifier.value = false;
-                    passwordController.clear();
-                    textController.clear();
-                    isPhoneNotifier.value = false;
-                    usernameNotifier.value = PhoneNumber(
-                      countryISOCode: "",
-                      countryCode: "",
-                      number: "",
-                    );
-                  }
-                }
-              }
-              return null;
-            },
+            onPressed: onLoginFunction,
             config: config,
             constraints: constraints,
             loginType: loginType,

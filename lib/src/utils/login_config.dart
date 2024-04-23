@@ -443,6 +443,7 @@ class EmailPhoneTextFiledConfig {
     MaxLengthEnforcement? maxLengthEnforcement,
     InputCounterWidgetBuilder? buildCounter,
     void Function()? onEditingComplete,
+    TextInputAction? textInputAction,
   }) {
     return EmailPhoneTextFiledConfig(
       formFieldKey: formFieldKey ?? this.formFieldKey,
@@ -497,6 +498,7 @@ class EmailPhoneTextFiledConfig {
       maxLengthEnforcement: maxLengthEnforcement ?? this.maxLengthEnforcement,
       buildCounter: buildCounter ?? this.buildCounter,
       onEditingComplete: onEditingComplete ?? this.onEditingComplete,
+      textInputAction: textInputAction ?? this.textInputAction,
     );
   }
 }

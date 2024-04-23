@@ -34,6 +34,47 @@ class FlutterAnimatedReset extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+    Future<String?> onLoginFunction() async {
+      try {
+        signInButtonIsLoading.value = true;
+        final isValid = formKey.currentState?.validate() ?? false;
+        if (!isValid) {
+          context.error(
+            "Error",
+            description: "Invalid form data, fill all required fields",
+          );
+          return null;
+        }
+        formKey.currentState?.save();
+        if (onResetPassword != null) {
+          final result = await onResetPassword?.call(controller.text);
+          if (context.mounted) {
+            if (result.isNotEmptyOrNull) {
+              context.error("Error", description: result);
+            } else {
+              context.success(
+                "Success",
+                description: "Password reset link sent successfully",
+              );
+              nextPageNotifier.value = 0;
+              formKey.currentState?.reset();
+              isFormValidNotifier.value = false;
+              controller.clear();
+              isPhoneNotifier.value = false;
+              usernameNotifier.value = PhoneNumber(
+                countryISOCode: "",
+                countryCode: "",
+                number: "",
+              );
+            }
+          }
+        }
+        return null;
+      } finally {
+        signInButtonIsLoading.value = false;
+      }
+    }
+
     return PageWidget(
       config: pageConfig,
       builder: (context, constraints) => Column(
@@ -57,45 +98,17 @@ class FlutterAnimatedReset extends StatelessWidget {
               ),
           EmailPhoneTextField(
             controller: controller,
-            config: config.textFiledConfig,
+            config: config.textFiledConfig.copyWith(
+              onSubmitted: (p0) {
+                config.textFiledConfig.onSubmitted?.call(p0);
+                onLoginFunction();
+              },
+              textInputAction: TextInputAction.done,
+            ),
           ),
           const SizedBox(height: 40),
           SignInButton(
-            onPressed: () async {
-              final isValid = formKey.currentState?.validate() ?? false;
-              if (!isValid) {
-                context.error(
-                  "Error",
-                  description: "Invalid form data, fill all required fields",
-                );
-                return null;
-              }
-              formKey.currentState?.save();
-              if (onResetPassword != null) {
-                final result = await onResetPassword?.call(controller.text);
-                if (context.mounted) {
-                  if (result.isNotEmptyOrNull) {
-                    context.error("Error", description: result);
-                  } else {
-                    context.success(
-                      "Success",
-                      description: "Password reset link sent successfully",
-                    );
-                    nextPageNotifier.value = 0;
-                    formKey.currentState?.reset();
-                    isFormValidNotifier.value = false;
-                    controller.clear();
-                    isPhoneNotifier.value = false;
-                    usernameNotifier.value = PhoneNumber(
-                      countryISOCode: "",
-                      countryCode: "",
-                      number: "",
-                    );
-                  }
-                }
-              }
-              return null;
-            },
+            onPressed: onLoginFunction,
             config: loginConfig.copyWith(
               buttonText: const Text('Reset Password'),
             ),
