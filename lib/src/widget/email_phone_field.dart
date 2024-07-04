@@ -3,14 +3,17 @@ import 'package:signals/signals_flutter.dart';
 
 import '../../flutter_animated_login.dart';
 import '../utils/extension.dart';
+import '../utils/messages.dart';
 
 class EmailPhoneTextField extends StatelessWidget {
   final EmailPhoneTextFiledConfig config;
   final TextEditingController controller;
+  final Messages messages;
   const EmailPhoneTextField({
     super.key,
     required this.config,
     required this.controller,
+    required this.messages,
   });
 
   @override
@@ -29,9 +32,11 @@ class EmailPhoneTextField extends StatelessWidget {
             decoration: config.decoration ??
                 InputDecoration(
                   hintText: isPhone
-                      ? 'Enter your phone'
-                      : 'Enter your email or phone',
-                  labelText: isPhone ? 'Phone*' : 'Email or Phone*',
+                      ? messages.loginFieldEnterPhone
+                      : messages.loginFieldEnterEmailOrPhone,
+                  labelText: isPhone
+                      ? '${messages.phone}*'
+                      : '${messages.emailOrPhone}*',
                   prefixIconConstraints: !isPhone
                       ? BoxConstraints.tight(const Size(10, 10))
                       : null,
@@ -106,10 +111,10 @@ class EmailPhoneTextField extends StatelessWidget {
                 : (value) {
                     final userInput = value?.number ?? "";
                     if (userInput.isEmptyOrNull && value != null) {
-                      return 'Please enter your email or phone number';
+                      return messages.loginFieldEnterPhoneValidatorYour;
                     } else if (!(userInput.isEmail) &&
                         !(userInput.isIntlPhoneNumber)) {
-                      return 'Please enter a valid email or phone number';
+                      return messages.loginFieldEnterPhoneValidatorA;
                     }
                     return null;
                   },

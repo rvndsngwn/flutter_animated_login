@@ -8,6 +8,7 @@ import 'utils/extension.dart';
 import 'utils/login_config.dart';
 import 'utils/login_data.dart';
 import 'utils/login_provider.dart';
+import 'utils/messages.dart';
 import 'utils/page_config.dart';
 import 'utils/reset_config.dart';
 import 'utils/signup_config.dart';
@@ -170,6 +171,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
             passwordController: _passwordController,
             pageConfig: widget.config,
             formKey: formKey,
+            messages: widget.loginConfig.messages,
           ),
         1 => FlutterAnimatedVerify(
             onVerify: widget.onVerify,
@@ -241,6 +243,7 @@ class _LoginPage extends StatelessWidget {
   final TextEditingController textController;
   final TextEditingController passwordController;
   final GlobalKey<FormState> formKey;
+  final Messages messages;
 
   /// [PageConfig] for the page widget to customize the page.
   final PageConfig pageConfig;
@@ -253,6 +256,7 @@ class _LoginPage extends StatelessWidget {
     required this.loginType,
     required this.textController,
     required this.passwordController,
+    required this.messages,
     this.termsAndConditions,
     this.pageConfig = const PageConfig(),
     required this.formKey,
@@ -346,6 +350,7 @@ class _LoginPage extends StatelessWidget {
                     )
                   : passConfig,
               controller: passwordController,
+              messages: messages,
             ),
             const SizedBox(height: 8),
             const SignUpAndForgetButton(),
