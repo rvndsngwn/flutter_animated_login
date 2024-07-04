@@ -8,18 +8,34 @@ class EmailPhoneTextField extends StatelessWidget {
   final EmailPhoneTextFiledConfig config;
   final TextEditingController controller;
   final FormMessages formMessages;
+  final LoginFieldInputType loginFieldInputType;
+
   const EmailPhoneTextField({
     super.key,
     required this.config,
     required this.controller,
     required this.formMessages,
+    required this.loginFieldInputType,
   });
 
   @override
   Widget build(BuildContext context) {
     return Watch.builder(
       builder: (context) {
-        final isPhone = isPhoneNotifier.value;
+        bool isPhone;
+
+        switch (loginFieldInputType) {
+          case LoginFieldInputType.phoneOrEmail:
+            isPhone = isPhoneNotifier.value;
+            break;
+          case LoginFieldInputType.email:
+            isPhone = false;
+            break;
+          case LoginFieldInputType.phone:
+            isPhone = true;
+            break;
+        }
+
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           child: IntlPhoneField(

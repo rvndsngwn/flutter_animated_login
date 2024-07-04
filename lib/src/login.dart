@@ -338,6 +338,7 @@ class _LoginPage extends StatelessWidget {
                   )
                 : textConfig,
             formMessages: formMessages,
+            loginFieldInputType: config.loginFieldInputType,
           ),
           if (!isLoginWithOTP) ...[
             const SizedBox(height: 20),

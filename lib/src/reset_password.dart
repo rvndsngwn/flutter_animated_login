@@ -106,6 +106,7 @@ class FlutterAnimatedReset extends StatelessWidget {
               textInputAction: TextInputAction.done,
             ),
             formMessages: loginConfig.messages,
+            loginFieldInputType: loginConfig.loginFieldInputType,
           ),
           const SizedBox(height: 40),
           SignInButton(

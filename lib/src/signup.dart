@@ -112,6 +112,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
             controller: controller,
             config: config.textFiledConfig,
             formMessages: loginConfig.messages,
+            loginFieldInputType: loginConfig.loginFieldInputType,
           ),
           const SizedBox(height: 20),
           PasswordTextField(

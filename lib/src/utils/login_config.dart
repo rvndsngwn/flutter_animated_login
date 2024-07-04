@@ -9,6 +9,12 @@ import '../widget/title.dart';
 import 'password_config.dart';
 import 'form_messages.dart';
 
+enum LoginFieldInputType {
+  phone,
+  email,
+  phoneOrEmail,
+}
+
 class LoginConfig {
   final Widget? logo;
   final Widget? header;
@@ -23,6 +29,7 @@ class LoginConfig {
   final EmailPhoneTextFiledConfig textFiledConfig;
   final PasswordTextFiledConfig passwordConfig;
   final FormMessages messages;
+  final LoginFieldInputType loginFieldInputType;
 
   const LoginConfig({
     this.logo,
@@ -38,6 +45,7 @@ class LoginConfig {
     this.textFiledConfig = const EmailPhoneTextFiledConfig(),
     this.passwordConfig = const PasswordTextFiledConfig(),
     this.messages = const FormMessages(),
+    this.loginFieldInputType = LoginFieldInputType.phoneOrEmail,
   });
 
   LoginConfig copyWith({
