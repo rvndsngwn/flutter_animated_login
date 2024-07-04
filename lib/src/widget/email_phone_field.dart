@@ -112,7 +112,7 @@ class EmailPhoneTextField extends StatelessWidget {
                       return formMessages.loginFieldEnterPhoneValidatorEmpty;
                     } else if (!(userInput.isEmail) &&
                         !(userInput.isIntlPhoneNumber)) {
-                      return formMessages.loginFieldEnterPhoneValidatorA;
+                      return formMessages.loginFieldEnterPhoneValidatorInvalid;
                     }
                     return null;
                   },
