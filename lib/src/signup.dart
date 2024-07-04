@@ -130,7 +130,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
                         ) ??
                     InputDecoration(
                       hintText: loginConfig.messages.reEnterPassword,
-                      labelText: '${loginConfig.messages.confirmPassword}*',
+                      labelText: loginConfig.messages.confirmPassword,
                       suffixIcon: IconButton(
                         icon: Icon(
                           isObscure.value

@@ -3,7 +3,6 @@ import 'package:signals/signals_flutter.dart';
 
 import '../../flutter_animated_login.dart';
 import '../utils/extension.dart';
-import '../utils/form_messages.dart';
 
 class EmailPhoneTextField extends StatelessWidget {
   final EmailPhoneTextFiledConfig config;
@@ -34,9 +33,8 @@ class EmailPhoneTextField extends StatelessWidget {
                   hintText: isPhone
                       ? formMessages.loginFieldEnterPhone
                       : formMessages.loginFieldEnterEmailOrPhone,
-                  labelText: isPhone
-                      ? '${formMessages.phone}*'
-                      : '${formMessages.emailOrPhone}*',
+                  labelText:
+                      isPhone ? formMessages.phone : formMessages.emailOrPhone,
                   prefixIconConstraints: !isPhone
                       ? BoxConstraints.tight(const Size(10, 10))
                       : null,
