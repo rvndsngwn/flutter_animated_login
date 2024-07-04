@@ -111,6 +111,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
           EmailPhoneTextField(
             controller: controller,
             config: config.textFiledConfig,
+            messages: loginConfig.messages,
           ),
           const SizedBox(height: 20),
           PasswordTextField(
