@@ -8,7 +8,7 @@ import 'utils/extension.dart';
 import 'utils/login_config.dart';
 import 'utils/login_data.dart';
 import 'utils/login_provider.dart';
-import 'utils/messages.dart';
+import 'utils/form_messages.dart';
 import 'utils/page_config.dart';
 import 'utils/reset_config.dart';
 import 'utils/signup_config.dart';
@@ -171,7 +171,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
             passwordController: _passwordController,
             pageConfig: widget.config,
             formKey: formKey,
-            messages: widget.loginConfig.messages,
+            formMessages: widget.loginConfig.messages,
           ),
         1 => FlutterAnimatedVerify(
             onVerify: widget.onVerify,
@@ -243,7 +243,7 @@ class _LoginPage extends StatelessWidget {
   final TextEditingController textController;
   final TextEditingController passwordController;
   final GlobalKey<FormState> formKey;
-  final Messages messages;
+  final FormMessages formMessages;
 
   /// [PageConfig] for the page widget to customize the page.
   final PageConfig pageConfig;
@@ -256,7 +256,7 @@ class _LoginPage extends StatelessWidget {
     required this.loginType,
     required this.textController,
     required this.passwordController,
-    required this.messages,
+    required this.formMessages,
     this.termsAndConditions,
     this.pageConfig = const PageConfig(),
     required this.formKey,
@@ -337,7 +337,7 @@ class _LoginPage extends StatelessWidget {
                     textInputAction: TextInputAction.done,
                   )
                 : textConfig,
-            messages: messages,
+            formMessages: formMessages,
           ),
           if (!isLoginWithOTP) ...[
             const SizedBox(height: 20),
@@ -351,7 +351,7 @@ class _LoginPage extends StatelessWidget {
                     )
                   : passConfig,
               controller: passwordController,
-              messages: messages,
+              formMessages: formMessages,
             ),
             const SizedBox(height: 8),
             const SignUpAndForgetButton(),

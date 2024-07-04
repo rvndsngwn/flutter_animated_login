@@ -3,17 +3,17 @@ import 'package:signals/signals_flutter.dart';
 
 import '../../flutter_animated_login.dart';
 import '../utils/extension.dart';
-import '../utils/messages.dart';
+import '../utils/form_messages.dart';
 
 class EmailPhoneTextField extends StatelessWidget {
   final EmailPhoneTextFiledConfig config;
   final TextEditingController controller;
-  final Messages messages;
+  final FormMessages formMessages;
   const EmailPhoneTextField({
     super.key,
     required this.config,
     required this.controller,
-    required this.messages,
+    required this.formMessages,
   });
 
   @override
@@ -32,11 +32,11 @@ class EmailPhoneTextField extends StatelessWidget {
             decoration: config.decoration ??
                 InputDecoration(
                   hintText: isPhone
-                      ? messages.loginFieldEnterPhone
-                      : messages.loginFieldEnterEmailOrPhone,
+                      ? formMessages.loginFieldEnterPhone
+                      : formMessages.loginFieldEnterEmailOrPhone,
                   labelText: isPhone
-                      ? '${messages.phone}*'
-                      : '${messages.emailOrPhone}*',
+                      ? '${formMessages.phone}*'
+                      : '${formMessages.emailOrPhone}*',
                   prefixIconConstraints: !isPhone
                       ? BoxConstraints.tight(const Size(10, 10))
                       : null,
@@ -111,10 +111,10 @@ class EmailPhoneTextField extends StatelessWidget {
                 : (value) {
                     final userInput = value?.number ?? "";
                     if (userInput.isEmptyOrNull && value != null) {
-                      return messages.loginFieldEnterPhoneValidatorYour;
+                      return formMessages.loginFieldEnterPhoneValidatorYour;
                     } else if (!(userInput.isEmail) &&
                         !(userInput.isIntlPhoneNumber)) {
-                      return messages.loginFieldEnterPhoneValidatorA;
+                      return formMessages.loginFieldEnterPhoneValidatorA;
                     }
                     return null;
                   },
