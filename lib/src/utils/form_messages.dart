@@ -15,8 +15,8 @@ class FormMessages {
   final String loginFieldEnterEmailOrPhone;
   final String phone;
   final String emailOrPhone;
-  final String loginFieldEnterPhoneValidatorYour;
-  final String loginFieldEnterPhoneValidatorA;
+  final String loginFieldEnterPhoneValidatorEmpty;
+  final String loginFieldEnterPhoneValidatorInvalid;
 
   const FormMessages({
     this.signUp = 'Create Account',
@@ -33,9 +33,9 @@ class FormMessages {
     this.loginFieldEnterEmailOrPhone = 'Enter your email or phone',
     this.phone = 'Phone*',
     this.emailOrPhone = 'Email or Phone*',
-    this.loginFieldEnterPhoneValidatorYour =
+    this.loginFieldEnterPhoneValidatorEmpty =
         'Please enter your email or phone number',
-    this.loginFieldEnterPhoneValidatorA =
+    this.loginFieldEnterPhoneValidatorInvalid =
         'Please enter a valid email or phone number',
   });
 }
