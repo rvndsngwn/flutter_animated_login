@@ -17,6 +17,7 @@ class FormMessages {
   final String emailOrPhone;
   final String loginFieldEnterPhoneValidatorEmpty;
   final String loginFieldEnterPhoneValidatorInvalid;
+  final String resendOTP;
 
   const FormMessages({
     this.signUp = 'Create Account',
@@ -37,5 +38,6 @@ class FormMessages {
         'Please enter your email or phone number',
     this.loginFieldEnterPhoneValidatorInvalid =
         'Please enter a valid email or phone number',
+    this.resendOTP = 'Resend OTP',
   });
 }

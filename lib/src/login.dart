@@ -182,6 +182,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
             onResendOtp: widget.onResendOtp,
             termsAndConditions: widget.termsAndConditions,
             pageConfig: widget.config,
+            formMessages: widget.loginConfig.messages,
           ),
         2 => FlutterAnimatedSignup(
             config: widget.signupConfig.copyWith(
