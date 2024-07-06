@@ -77,6 +77,7 @@ class OAuthWidget extends StatelessWidget {
                       decoration: TextDecoration.underline,
                     ),
                     recognizer: TapGestureRecognizer()
+                      // ignore: avoid_print
                       ..onTap = () => print('Terms and conditions'),
                   ),
                 ],

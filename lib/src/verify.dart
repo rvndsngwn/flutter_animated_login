@@ -14,6 +14,7 @@ class FlutterAnimatedVerify extends StatefulWidget {
   final VerifyConfig config;
   final Widget? footerWidget;
   final TextSpan? termsAndConditions;
+  final FormMessages formMessages;
 
   /// [ResendOtpCallback] triggered after the user has resent the OTP
   final ResendOtpCallback? onResendOtp;
@@ -30,6 +31,7 @@ class FlutterAnimatedVerify extends StatefulWidget {
     this.footerWidget,
     this.termsAndConditions,
     this.pageConfig = const PageConfig(),
+    required this.formMessages,
   });
 
   @override
@@ -253,7 +255,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
           const SizedBox(height: 20),
           if (!isOtpExpired)
             Text(
-              'Resend OTP (${otpExpirationTimeLeft.inMinutes.toDigital}:${(otpExpirationTimeLeft.inSeconds % 60).toDigital})',
+              '${widget.formMessages.resendOTP} (${otpExpirationTimeLeft.inMinutes.toDigital}:${(otpExpirationTimeLeft.inSeconds % 60).toDigital})',
               style: textTheme.titleMedium?.copyWith(
                 color: theme.colorScheme.secondary,
               ),
@@ -297,7 +299,8 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                     }
                   }
                 },
-                child: config.resendButton ?? const Text("Resend OTP"),
+                child:
+                    config.resendButton ?? Text(widget.formMessages.resendOTP),
               ),
             ),
           config.footer ??

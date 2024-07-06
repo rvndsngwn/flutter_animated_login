@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_login/src/utils/extension.dart';
 
+import '../utils/form_messages.dart';
 import '../utils/password_config.dart';
 
 class PasswordTextField extends StatelessWidget {
   final PasswordTextFiledConfig config;
   final TextEditingController controller;
+  final FormMessages formMessages;
+
   const PasswordTextField({
     super.key,
+    required this.formMessages,
     required this.config,
     required this.controller,
   });
@@ -31,7 +35,7 @@ class PasswordTextField extends StatelessWidget {
           validator: config.validator ??
               (value) {
                 if (value.isEmptyOrNull) {
-                  return 'Password is required';
+                  return formMessages.passwordIsrequired;
                 }
                 return null;
               },
@@ -60,8 +64,8 @@ class PasswordTextField extends StatelessWidget {
           focusNode: config.focusNode,
           decoration: config.decoration?.call(isObscure) ??
               InputDecoration(
-                hintText: 'Enter your password',
-                labelText: 'Password*',
+                hintText: formMessages.enterYourPassword,
+                labelText: formMessages.password,
                 suffixIcon: IconButton(
                   icon: Icon(obscure ? Icons.visibility : Icons.visibility_off),
                   onPressed: () => isObscure.value = !obscure,

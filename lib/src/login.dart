@@ -8,6 +8,7 @@ import 'utils/extension.dart';
 import 'utils/login_config.dart';
 import 'utils/login_data.dart';
 import 'utils/login_provider.dart';
+import 'utils/form_messages.dart';
 import 'utils/page_config.dart';
 import 'utils/reset_config.dart';
 import 'utils/signup_config.dart';
@@ -170,6 +171,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
             passwordController: _passwordController,
             pageConfig: widget.config,
             formKey: formKey,
+            formMessages: widget.loginConfig.messages,
           ),
         1 => FlutterAnimatedVerify(
             onVerify: widget.onVerify,
@@ -180,6 +182,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
             onResendOtp: widget.onResendOtp,
             termsAndConditions: widget.termsAndConditions,
             pageConfig: widget.config,
+            formMessages: widget.loginConfig.messages,
           ),
         2 => FlutterAnimatedSignup(
             config: widget.signupConfig.copyWith(
@@ -241,6 +244,7 @@ class _LoginPage extends StatelessWidget {
   final TextEditingController textController;
   final TextEditingController passwordController;
   final GlobalKey<FormState> formKey;
+  final FormMessages formMessages;
 
   /// [PageConfig] for the page widget to customize the page.
   final PageConfig pageConfig;
@@ -253,6 +257,7 @@ class _LoginPage extends StatelessWidget {
     required this.loginType,
     required this.textController,
     required this.passwordController,
+    required this.formMessages,
     this.termsAndConditions,
     this.pageConfig = const PageConfig(),
     required this.formKey,
@@ -333,6 +338,8 @@ class _LoginPage extends StatelessWidget {
                     textInputAction: TextInputAction.done,
                   )
                 : textConfig,
+            formMessages: formMessages,
+            loginFieldInputType: config.loginFieldInputType,
           ),
           if (!isLoginWithOTP) ...[
             const SizedBox(height: 20),
@@ -346,6 +353,7 @@ class _LoginPage extends StatelessWidget {
                     )
                   : passConfig,
               controller: passwordController,
+              formMessages: formMessages,
             ),
             const SizedBox(height: 8),
             const SignUpAndForgetButton(),

@@ -46,7 +46,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
         if (!isValid) {
           context.error(
             "Error",
-            description: "Invalid form data, fill all required fields",
+            description: loginConfig.messages.invalidFormData,
           );
           return null;
         }
@@ -95,10 +95,10 @@ class FlutterAnimatedSignup extends StatelessWidget {
           config.header ??
               config.titleWidget ??
               TitleWidget(
-                title: config.title ?? 'Create Account',
+                title: config.title ?? loginConfig.messages.signUp,
                 titleStyle: textTheme.titleLarge,
-                subtitle: config.subtitle ??
-                    "Create an account to get started with our app.",
+                subtitle:
+                    config.subtitle ?? loginConfig.messages.createAccountLong,
                 subtitleStyle: textTheme.titleMedium,
                 titleGap: const SizedBox(height: 6),
                 child: config.logo ??
@@ -111,11 +111,14 @@ class FlutterAnimatedSignup extends StatelessWidget {
           EmailPhoneTextField(
             controller: controller,
             config: config.textFiledConfig,
+            formMessages: loginConfig.messages,
+            loginFieldInputType: loginConfig.loginFieldInputType,
           ),
           const SizedBox(height: 20),
           PasswordTextField(
             config: config.passwordTextFiledConfig,
             controller: passwordController,
+            formMessages: loginConfig.messages,
           ),
           const SizedBox(height: 20),
           PasswordTextField(
@@ -124,11 +127,11 @@ class FlutterAnimatedSignup extends StatelessWidget {
                 return config.passwordTextFiledConfig.decoration
                         ?.call(isObscure)
                         ?.copyWith(
-                          labelText: 'Confirm Password',
+                          labelText: loginConfig.messages.confirmPassword,
                         ) ??
                     InputDecoration(
-                      hintText: 'Re-enter your password',
-                      labelText: 'Confirm Password*',
+                      hintText: loginConfig.messages.reEnterPassword,
+                      labelText: loginConfig.messages.confirmPassword,
                       suffixIcon: IconButton(
                         icon: Icon(
                           isObscure.value
@@ -144,7 +147,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
               },
               validator: (value) {
                 if (value != passwordController.text) {
-                  return 'Password does not match';
+                  return loginConfig.messages.passwordsUnmatched;
                 }
                 return null;
               },
@@ -155,12 +158,13 @@ class FlutterAnimatedSignup extends StatelessWidget {
               textInputAction: TextInputAction.done,
             ),
             controller: confirmPasswordController,
+            formMessages: loginConfig.messages,
           ),
           const SizedBox(height: 40),
           SignInButton(
             onPressed: onLoginFunction,
             config: loginConfig.copyWith(
-              buttonText: const Text('Create Account'),
+              buttonText: Text(loginConfig.messages.signUp),
             ),
             constraints: constraints,
             loginType: loginType,
@@ -171,7 +175,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
             style: TextButton.styleFrom(
               textStyle: config.buttonTextStyle ?? textTheme.titleMedium,
             ),
-            child: const Text('Sign In'),
+            child: Text(loginConfig.messages.signIn),
           ),
           config.footer.orShrink,
         ],
