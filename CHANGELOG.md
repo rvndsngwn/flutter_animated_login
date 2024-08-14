@@ -1,3 +1,8 @@
+## 0.0.12
+- dependencies updated
+- If you need SMS autofill on Android, you need to add the smart_auth (or similar) package directly to your project.
+- https://github.com/Tkko/Flutter_PinPut/blob/master/MIGRATION.md
+
 ## 0.0.11
 
 - textInputAction added for all text fields
