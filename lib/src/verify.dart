@@ -131,7 +131,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
             length: textConfig.length ?? 6,
             pinAnimationType: textConfig.pinAnimationType,
             controller: _textController,
-            androidSmsAutofillMethod: textConfig.androidSmsAutofillMethod,
+            smsRetriever: textConfig.smsRetriever,
             autofillHints:
                 textConfig.autofillHints ?? const [AutofillHints.oneTimeCode],
             focusedPinTheme: textConfig.focusedPinTheme ??
@@ -226,8 +226,6 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
             inputFormatters: textConfig.inputFormatters,
             isCursorAnimationEnabled: textConfig.isCursorAnimationEnabled,
             keyboardAppearance: textConfig.keyboardAppearance,
-            listenForMultipleSmsOnAndroid:
-                textConfig.listenForMultipleSmsOnAndroid,
             mainAxisAlignment: textConfig.mainAxisAlignment,
             mouseCursor: textConfig.mouseCursor,
             obscureText: textConfig.obscureText,
@@ -240,11 +238,9 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
             restorationId: textConfig.restorationId,
             scrollPadding: textConfig.scrollPadding,
             selectionControls: textConfig.selectionControls,
-            senderPhoneNumber: textConfig.senderPhoneNumber,
             separatorBuilder: textConfig.separatorBuilder,
             showCursor: textConfig.showCursor,
             slideTransitionBeginOffset: textConfig.slideTransitionBeginOffset,
-            smsCodeMatcher: textConfig.smsCodeMatcher,
             submittedPinTheme: textConfig.submittedPinTheme,
             textCapitalization: textConfig.textCapitalization,
             textInputAction: textConfig.textInputAction,

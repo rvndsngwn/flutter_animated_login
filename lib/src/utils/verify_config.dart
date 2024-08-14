@@ -78,24 +78,6 @@ class OtpTextFiledConfig {
   /// Displayed fields count. PIN code length.
   final int? length;
 
-  /// By default Android autofill is Disabled, you cane enable it by using any of options listed below
-  ///
-  /// First option is [AndroidSmsAutofillMethod.smsRetrieverApi] it automatically reads sms without user interaction
-  /// More about Sms Retriever API https://developers.google.com/identity/sms-retriever/overview?hl=en
-  ///
-  /// Second option requires user interaction to confirm reading a SMS, See readme for more details
-  /// [AndroidSmsAutofillMethod.smsUserConsentApi]
-  /// More about SMS User Consent API https://developers.google.com/identity/sms-retriever/user-consent/overview
-  final AndroidSmsAutofillMethod androidSmsAutofillMethod;
-
-  /// If true [androidSmsAutofillMethod] is not [AndroidSmsAutofillMethod.none]
-  /// Pinput will listen multiple sms codes, helpful if user request another sms code
-  final bool listenForMultipleSmsOnAndroid;
-
-  /// Used to extract code from SMS for Android Autofill if [androidSmsAutofillMethod] is enabled
-  /// By default it is [PinputConstants.defaultSmsCodeMatcher]
-  final String smsCodeMatcher;
-
   /// Fires when user completes pin input
   final ValueChanged<LoginData>? onCompleted;
 
@@ -279,9 +261,6 @@ class OtpTextFiledConfig {
   /// This value controls how far from the edges of a [Scrollable] the TextField will be positioned after the scroll.
   final EdgeInsets scrollPadding;
 
-  /// Optional parameter for Android SMS User Consent API.
-  final String? senderPhoneNumber;
-
   /// {@macro flutter.widgets.EditableText.contextMenuBuilder}
   ///
   /// If not provided, will build a default menu based on the platform.
@@ -298,6 +277,8 @@ class OtpTextFiledConfig {
   /// although it will be within the region of one of the group members.
   /// This is useful if you want to unfocus the [Pinput] when user taps outside of it
   final TapRegionCallback? onTapOutside;
+
+  final SmsRetriever? smsRetriever;
 
   const OtpTextFiledConfig({
     this.length,
@@ -316,10 +297,6 @@ class OtpTextFiledConfig {
     this.focusNode,
     this.preFilledWidget,
     this.separatorBuilder,
-    this.smsCodeMatcher = PinputConstants.defaultSmsCodeMatcher,
-    this.senderPhoneNumber,
-    this.androidSmsAutofillMethod = AndroidSmsAutofillMethod.none,
-    this.listenForMultipleSmsOnAndroid = false,
     this.mainAxisAlignment = MainAxisAlignment.center,
     this.crossAxisAlignment = CrossAxisAlignment.start,
     this.pinContentAlignment = Alignment.center,
@@ -362,6 +339,7 @@ class OtpTextFiledConfig {
     this.scrollPadding = const EdgeInsets.all(20),
     this.contextMenuBuilder,
     this.onTapOutside,
+    this.smsRetriever,
   });
 
   OtpTextFiledConfig copyWith({
@@ -373,9 +351,6 @@ class OtpTextFiledConfig {
     PinTheme? errorPinTheme,
     bool? closeKeyboardWhenCompleted,
     int? length,
-    AndroidSmsAutofillMethod? androidSmsAutofillMethod,
-    bool? listenForMultipleSmsOnAndroid,
-    String? smsCodeMatcher,
     ValueChanged<LoginData>? onCompleted,
     ValueChanged<LoginData>? onChanged,
     ValueChanged<LoginData>? onSubmitted,
@@ -424,9 +399,9 @@ class OtpTextFiledConfig {
     FormFieldValidator<String>? validator,
     PinputAutovalidateMode? pinputAutovalidateMode,
     EdgeInsets? scrollPadding,
-    String? senderPhoneNumber,
     EditableTextContextMenuBuilder? contextMenuBuilder,
     TapRegionCallback? onTapOutside,
+    SmsRetriever? smsRetriever,
   }) {
     return OtpTextFiledConfig(
       defaultPinTheme: defaultPinTheme ?? this.defaultPinTheme,
@@ -438,11 +413,6 @@ class OtpTextFiledConfig {
       closeKeyboardWhenCompleted:
           closeKeyboardWhenCompleted ?? this.closeKeyboardWhenCompleted,
       length: length ?? this.length,
-      androidSmsAutofillMethod:
-          androidSmsAutofillMethod ?? this.androidSmsAutofillMethod,
-      listenForMultipleSmsOnAndroid:
-          listenForMultipleSmsOnAndroid ?? this.listenForMultipleSmsOnAndroid,
-      smsCodeMatcher: smsCodeMatcher ?? this.smsCodeMatcher,
       onCompleted: onCompleted ?? this.onCompleted,
       onChanged: onChanged ?? this.onChanged,
       onSubmitted: onSubmitted ?? this.onSubmitted,
@@ -495,9 +465,9 @@ class OtpTextFiledConfig {
       pinputAutovalidateMode:
           pinputAutovalidateMode ?? this.pinputAutovalidateMode,
       scrollPadding: scrollPadding ?? this.scrollPadding,
-      senderPhoneNumber: senderPhoneNumber ?? this.senderPhoneNumber,
       contextMenuBuilder: contextMenuBuilder ?? this.contextMenuBuilder,
       onTapOutside: onTapOutside ?? this.onTapOutside,
+      smsRetriever: smsRetriever ?? this.smsRetriever,
     );
   }
 }
