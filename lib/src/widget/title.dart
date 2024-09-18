@@ -46,6 +46,7 @@ class TitleWidget extends StatelessWidget {
                     text: ' Edit',
                     style: TextStyle(
                       color: theme.colorScheme.secondary,
+                      fontSize: subtitleStyle?.fontSize,
                       fontWeight: FontWeight.bold,
                     ),
                     recognizer: TapGestureRecognizer()..onTap = onTap,
