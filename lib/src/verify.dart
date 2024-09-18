@@ -117,7 +117,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                     'Enter OTP sent to your ${isEmail ? 'email' : 'phone'}',
                 titleStyle: textTheme.titleLarge,
                 subtitle: config.subtitle ?? widget.name,
-                subtitleStyle: textTheme.titleMedium,
+                subtitleStyle: config.subtitleStyle ?? textTheme.titleMedium,
                 titleGap: const SizedBox(height: 6),
                 onTap: () => nextPageNotifier.value = 0,
                 child: config.logo ??
