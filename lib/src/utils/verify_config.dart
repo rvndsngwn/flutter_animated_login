@@ -14,6 +14,7 @@ class VerifyConfig {
   final TitleWidget? titleWidget;
   final Widget? resendButton;
   final TextStyle? buttonTextStyle;
+  final TextStyle? subtitleStyle;
   final OtpTextFiledConfig textFiledConfig;
 
   const VerifyConfig({
@@ -25,6 +26,7 @@ class VerifyConfig {
     this.titleWidget,
     this.resendButton,
     this.buttonTextStyle,
+    this.subtitleStyle,
     this.textFiledConfig = const OtpTextFiledConfig(),
   });
 
@@ -37,6 +39,7 @@ class VerifyConfig {
     TitleWidget? titleWidget,
     Widget? resendButton,
     TextStyle? buttonTextStyle,
+    TextStyle? subtitleStyle,
     OtpTextFiledConfig? textFiledConfig,
   }) {
     return VerifyConfig(
@@ -48,6 +51,7 @@ class VerifyConfig {
       titleWidget: titleWidget ?? this.titleWidget,
       resendButton: resendButton ?? this.resendButton,
       buttonTextStyle: buttonTextStyle ?? this.buttonTextStyle,
+      subtitleStyle: subtitleStyle ?? this.subtitleStyle,
       textFiledConfig: textFiledConfig ?? this.textFiledConfig,
     );
   }
