@@ -6,7 +6,7 @@ import '../login.dart';
 import '../utils/extension.dart';
 import '../utils/login_config.dart';
 
-final signInButtonIsLoading = false.toSignal();
+final signInButtonIsLoading = signal(false);
 
 class SignInButton extends StatelessWidget {
   final Future<String?> Function()? onPressed;

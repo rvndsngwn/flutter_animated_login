@@ -119,19 +119,20 @@ extension Toastification on BuildContext {
 }
 
 @protected
-final isPhoneNotifier = false.toSignal();
+final isPhoneNotifier = signal(false);
 
 @protected
-final isFormValidNotifier = false.toSignal();
+final isFormValidNotifier = signal(false);
 
 @protected
-final nextPageNotifier = 0.toSignal();
+final nextPageNotifier = signal(0);
 
 @protected
-final usernameNotifier = PhoneNumber(
-  countryISOCode: "",
-  countryCode: "",
-  number: "",
-).toSignal(
+final usernameNotifier = signal(
+  PhoneNumber(
+    countryISOCode: "",
+    countryCode: "",
+    number: "",
+  ),
   debugLabel: 'Username',
 );
