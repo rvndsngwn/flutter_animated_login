@@ -10,7 +10,7 @@ A Flutter package to create a beautiful animated login screen with phone/email o
 
 ## [Demo Website 🔗](https://rvndsngwn.github.io/flutter_animated_login/)
 
-## Screenshots
+## Screenshots:
 
 ### Email OTP
 
