@@ -37,7 +37,7 @@ class SignInButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               minimumSize: Size(
                 constraints.maxWidth >= 600 ? 300 : constraints.maxWidth * 0.5,
-                55,
+                50,
               ),
               textStyle: config.buttonTextStyle ?? textTheme.titleMedium,
             ),

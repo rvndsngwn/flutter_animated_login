@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
             },
             loginConfig: const LoginConfig(
               logo: FlutterLogo(size: 100),
-              title: 'Mohesu Enterprise',
+              title: 'Mohesu Enterprises',
               subtitle: 'Let\'s Sign In',
             ),
             providers: [
