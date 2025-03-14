@@ -1,3 +1,7 @@
+## 0.0.15
+
+- dependencies updated
+
 ## 0.0.14
 
 - rename stylusHandwritingEnabled to scribbleEnabled for legacy support

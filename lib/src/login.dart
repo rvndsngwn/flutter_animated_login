@@ -153,7 +153,7 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
     _confirmPasswordController.isDisposed
         ? null
         : _confirmPasswordController.dispose();
-    
+
     super.dispose();
   }
 
