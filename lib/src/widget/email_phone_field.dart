@@ -6,7 +6,7 @@ import '../utils/extension.dart';
 
 class EmailPhoneTextField extends StatelessWidget {
   final EmailPhoneTextFiledConfig config;
-  final TextEditingController controller;
+  final TextFieldController controller;
   final FormMessages formMessages;
   final LoginFieldInputType loginFieldInputType;
 
@@ -57,9 +57,10 @@ class EmailPhoneTextField extends StatelessWidget {
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                   ),
+                  counter: const SizedBox.shrink(),
                 ),
             style: config.style,
-            dropdownTextStyle: config.dropdownTextStyle,
+            dropdownTextStyle: config.dropdownTextStyle ?? config.style,
             onChanged: (phone) {
               isFormValidNotifier.value =
                   isPhone ? phone.isValidNumber() : phone.number.isEmail;
@@ -74,10 +75,16 @@ class EmailPhoneTextField extends StatelessWidget {
             onSubmitted: config.onSubmitted,
             onTap: config.onTap,
             onEditingComplete: config.onEditingComplete,
-            onSaved: (phone) => config.onSaved?.call((
-              number: phone,
-              value: phone?.number,
-            )),
+            onSaved: (phone) {
+              if (phone == null) return;
+              isFormValidNotifier.value =
+                  isPhone ? phone.isValidNumber() : phone.number.isEmail;
+              config.onSaved?.call((
+                number: phone,
+                value: phone.number,
+              ));
+              usernameNotifier.value = phone;
+            },
             keyboardType: config.keyboardType ?? TextInputType.emailAddress,
             textInputAction: config.textInputAction ?? TextInputAction.next,
             autofillHints: config.autofillHints ??

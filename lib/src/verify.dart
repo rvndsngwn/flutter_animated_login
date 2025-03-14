@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_login/flutter_animated_login.dart';
 import 'package:flutter_intl_phone_field/phone_number.dart';
-import 'package:material_loading_buttons/material_loading_buttons.dart';
 
 import 'utils/extension.dart';
+import 'utils/loading_state.dart';
 import 'widget/oauth.dart';
 
 class FlutterAnimatedVerify extends StatefulWidget {
@@ -13,7 +13,7 @@ class FlutterAnimatedVerify extends StatefulWidget {
   final String name;
   final VerifyConfig config;
   final Widget? footerWidget;
-  final TextSpan? termsAndConditions;
+  final Widget? termsAndConditions;
   final FormMessages formMessages;
 
   /// [ResendOtpCallback] triggered after the user has resent the OTP
@@ -39,7 +39,7 @@ class FlutterAnimatedVerify extends StatefulWidget {
 }
 
 class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
-  late TextEditingController _textController;
+  late TextFieldController _textController;
 
   /// Timer object for OTP expiration.
   Timer? _otpExpirationTimer;
@@ -57,28 +57,70 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
 
   bool isEmail = false;
 
+  OtpTextFiledConfig get textConfig => widget.config.textFiledConfig;
+  VerifyConfig get config => widget.config;
+
+  void onCompleted(String value) async {
+    textConfig.onCompleted?.call(
+      LoginData(name: widget.name, secret: value),
+    );
+    final result = await widget.onVerify?.call(
+      LoginData(name: widget.name, secret: value),
+    );
+    if (result.isNotEmptyOrNull) {
+      if (context.mounted) {
+        // ignore: use_build_context_synchronously
+        context.error('Error', description: result);
+      }
+    } else {
+      nextPageNotifier.value = 0;
+      isFormValidNotifier.value = false;
+      isPhoneNotifier.value = false;
+      _textController.clear();
+      usernameNotifier.value = PhoneNumber(
+        countryISOCode: "",
+        countryCode: "",
+        number: "",
+      );
+    }
+  }
+
   @override
   void initState() {
     _textController =
-        widget.config.textFiledConfig.controller ?? TextEditingController();
-    _otpExpirationTimer = Timer.periodic(
-      const Duration(seconds: 1),
-      (timer) {
-        if (timer.tick == _otpExpirationDuration.inSeconds) {
-          _otpExpirationTimer?.cancel();
+        widget.config.textFiledConfig.controller ?? TextFieldController();
+    Future.microtask(
+      () {
+        _otpExpirationTimer = Timer.periodic(
+          const Duration(seconds: 1),
+          (timer) {
+            if (timer.tick == _otpExpirationDuration.inSeconds) {
+              _otpExpirationTimer?.cancel();
+            }
+            setState(() {});
+          },
+        );
+        setState(() {
+          isEmail = widget.name.isEmail;
+        });
+        if (_textController.text.isEmptyOrNull &&
+            _textController.text.length < 6) {
+          _textController.text = '';
         }
-        setState(() {});
+        if (_textController.text.length > 6) {
+          _textController.text = _textController.text.substring(0, 6);
+        }
+        if (_textController.text.length == 6) {
+          onCompleted(_textController.text);
+        }
       },
     );
-    setState(() {
-      isEmail = widget.name.isEmail;
-    });
     super.initState();
   }
 
   @override
   void dispose() {
-    _textController.dispose();
+    _textController.isDisposed ? null : _textController.dispose();
     _otpExpirationTimer?.cancel();
     super.dispose();
   }
@@ -89,7 +131,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
     final textTheme = theme.textTheme;
     final borderColor = theme.colorScheme.primary;
     final errorColor = theme.colorScheme.error;
-    final fillColor = theme.colorScheme.primary.withOpacity(0.1);
+    final fillColor = theme.colorScheme.primary.withValues(alpha: 0.1);
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 60,
@@ -103,8 +145,6 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
         border: Border.all(color: Colors.transparent),
       ),
     );
-    final textConfig = widget.config.textFiledConfig;
-    final config = widget.config;
     return PageWidget(
       config: widget.pageConfig,
       builder: (context, constraints) => Column(
@@ -120,12 +160,7 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                 subtitleStyle: textTheme.titleMedium,
                 titleGap: const SizedBox(height: 6),
                 onTap: () => nextPageNotifier.value = 0,
-                child: config.logo ??
-                    Icon(
-                      isEmail ? Icons.email : Icons.sms,
-                      size: 100,
-                      color: theme.colorScheme.secondary,
-                    ),
+                child: config.logo.orShrink,
               ),
           Pinput(
             length: textConfig.length ?? 6,
@@ -150,61 +185,21 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
                   ),
                 ),
             defaultPinTheme: textConfig.defaultPinTheme ?? defaultPinTheme,
-            onCompleted: (value) async {
-              textConfig.onCompleted?.call(
-                LoginData(name: widget.name, secret: value),
-              );
-              final result = await widget.onVerify?.call(
-                LoginData(name: widget.name, secret: value),
-              );
-              if (result.isNotEmptyOrNull && context.mounted) {
-                context.error('Error', description: result);
-              } else {
-                nextPageNotifier.value = 0;
-                isFormValidNotifier.value = false;
-                isPhoneNotifier.value = false;
-                _textController.clear();
-                usernameNotifier.value = PhoneNumber(
-                  countryISOCode: "",
-                  countryCode: "",
-                  number: "",
-                );
-              }
-            },
+            onCompleted: onCompleted,
             onChanged: (value) {
               textConfig.onChanged?.call(
                 LoginData(name: widget.name, secret: value),
               );
             },
-            onSubmitted: (value) async {
-              textConfig.onSubmitted?.call(
-                LoginData(name: widget.name, secret: value),
-              );
-              final result = await widget.onVerify?.call(
-                LoginData(name: widget.name, secret: value),
-              );
-              if (result.isNotEmptyOrNull && context.mounted) {
-                context.error('Error', description: result);
-              } else {
-                nextPageNotifier.value = 0;
-                isFormValidNotifier.value = false;
-                isPhoneNotifier.value = false;
-                _textController.clear();
-                usernameNotifier.value = PhoneNumber(
-                  countryISOCode: "",
-                  countryCode: "",
-                  number: "",
-                );
-              }
-            },
+            onSubmitted: onCompleted,
             onAppPrivateCommand: textConfig.onAppPrivateCommand,
             onClipboardFound: textConfig.onClipboardFound,
             onLongPress: textConfig.onLongPress,
             onTap: textConfig.onTap,
             onTapOutside: textConfig.onTapOutside,
             animationCurve: textConfig.animationCurve,
-            animationDuration: textConfig.animationDuration ??
-                const Duration(milliseconds: 180),
+            animationDuration:
+                textConfig.animationDuration ?? kThemeAnimationDuration,
             autofocus: textConfig.autofocus,
             closeKeyboardWhenCompleted: textConfig.closeKeyboardWhenCompleted,
             contextMenuBuilder: textConfig.contextMenuBuilder,
@@ -262,13 +257,13 @@ class _FlutterAnimatedVerifyState extends State<FlutterAnimatedVerify> {
               width: constraints.maxWidth >= 600
                   ? 200
                   : constraints.maxWidth * 0.5,
-              child: TextAutoLoadingButton(
+              child: AutoLoadingButton(
                 style: TextButton.styleFrom(
                   minimumSize: Size(
                     constraints.maxWidth >= 600
                         ? 200
                         : constraints.maxWidth * 0.5,
-                    55,
+                    48,
                   ),
                   textStyle: config.buttonTextStyle ?? textTheme.titleMedium,
                 ),

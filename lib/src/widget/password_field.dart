@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_login/src/utils/extension.dart';
 
-import '../utils/form_messages.dart';
-import '../utils/password_config.dart';
+import '../../flutter_animated_login.dart';
 
 class PasswordTextField extends StatelessWidget {
   final PasswordTextFiledConfig config;
-  final TextEditingController controller;
+  final TextFieldController controller;
   final FormMessages formMessages;
 
   const PasswordTextField({
@@ -35,7 +34,7 @@ class PasswordTextField extends StatelessWidget {
           validator: config.validator ??
               (value) {
                 if (value.isEmptyOrNull) {
-                  return formMessages.passwordIsrequired;
+                  return formMessages.passwordIsRequired;
                 }
                 return null;
               },
@@ -105,7 +104,7 @@ class PasswordTextField extends StatelessWidget {
           onAppPrivateCommand: config.onAppPrivateCommand,
           onTapAlwaysCalled: config.onTapAlwaysCalled,
           onTapOutside: config.onTapOutside,
-          scribbleEnabled: config.scribbleEnabled,
+          stylusHandwritingEnabled: config.stylusHandwritingEnabled,
           selectionHeightStyle: config.selectionHeightStyle,
           selectionWidthStyle: config.selectionWidthStyle,
           smartDashesType: config.smartDashesType,

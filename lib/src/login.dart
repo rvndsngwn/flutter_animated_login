@@ -2,25 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_intl_phone_field/phone_number.dart';
 import 'package:signals/signals_flutter.dart';
 
+import '../flutter_animated_login.dart';
 import 'reset_password.dart';
 import 'signup.dart';
 import 'utils/extension.dart';
-import 'utils/form_messages.dart';
-import 'utils/login_config.dart';
-import 'utils/login_data.dart';
-import 'utils/login_provider.dart';
-import 'utils/page_config.dart';
-import 'utils/reset_config.dart';
-import 'utils/signup_config.dart';
-import 'utils/signup_data.dart';
-import 'utils/verify_config.dart';
-import 'verify.dart';
 import 'widget/button.dart';
 import 'widget/email_phone_field.dart';
 import 'widget/oauth.dart';
-import 'widget/page.dart';
 import 'widget/password_field.dart';
-import 'widget/title.dart';
 
 /// The callback triggered your login logic
 /// The result is an error message, callback successes if message is null
@@ -72,7 +61,7 @@ class FlutterAnimatedLogin extends StatefulWidget {
   final VerifyConfig verifyConfig;
 
   /// The terms and conditions for the login/signup page
-  final TextSpan? termsAndConditions;
+  final Widget? termsAndConditions;
 
   /// [PageConfig] for the page widget to customize the page.
   final PageConfig config;
@@ -85,6 +74,9 @@ class FlutterAnimatedLogin extends StatefulWidget {
 
   /// The callback triggered your reset password logic
   final ResetPasswordCallback? onResetPassword;
+
+  /// If true, the debug mode is enabled for signals
+  final bool debug;
 
   const FlutterAnimatedLogin({
     super.key,
@@ -101,6 +93,7 @@ class FlutterAnimatedLogin extends StatefulWidget {
     this.resetConfig = const ResetConfig(),
     this.signupConfig = const SignupConfig(),
     this.onResetPassword,
+    this.debug = false,
   });
 
   @override
@@ -109,10 +102,13 @@ class FlutterAnimatedLogin extends StatefulWidget {
 
 class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   /// The text controller for the text field if not provided by the user
-  late TextEditingController _textController;
+  late TextFieldController _textController;
 
   /// The text controller for the password field if not provided by the user
-  late TextEditingController _passwordController;
+  late TextFieldController _passwordController;
+
+  /// The text controller for the password field if not provided by the user
+  late TextFieldController _confirmPasswordController;
 
   /// Form key for the login form
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -121,8 +117,9 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
   void initState() {
     final controller = widget.loginConfig.textFiledConfig.controller;
     final passwordController = widget.loginConfig.passwordConfig.controller;
-    _passwordController = passwordController ?? TextEditingController();
-    _textController = controller ?? TextEditingController();
+    _passwordController = passwordController ?? TextFieldController();
+    _textController = controller ?? TextFieldController();
+    _confirmPasswordController = TextFieldController();
     final text = _textController.text;
     isPhoneNotifier.value = text.isPhoneNumber || text.isIntlPhoneNumber;
     isFormValidNotifier.value = text.isEmail || isPhoneNotifier.value;
@@ -145,73 +142,81 @@ class _FlutterAnimatedLoginState extends State<FlutterAnimatedLogin> {
             (text.isNotEmptyOrNull && (text.isEmail || isPhoneNotifier.value));
       });
     }
+    if (!widget.debug) SignalsObserver.instance = null;
     super.initState();
   }
 
   @override
   void dispose() {
-    _textController.dispose();
-    _passwordController.dispose();
+    _textController.isDisposed ? null : _textController.dispose();
+    _passwordController.isDisposed ? null : _passwordController.dispose();
+    _confirmPasswordController.isDisposed
+        ? null
+        : _confirmPasswordController.dispose();
+    
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final children = <Widget>[
+      _LoginPage(
+        config: widget.loginConfig,
+        loginType: widget.loginType,
+        onLogin: widget.onLogin,
+        onVerify: widget.onVerify,
+        providers: widget.providers,
+        textController: _textController,
+        termsAndConditions: widget.termsAndConditions,
+        passwordController: _passwordController,
+        pageConfig: widget.config,
+        formKey: formKey,
+        formMessages: widget.loginConfig.messages,
+      ),
+      FlutterAnimatedVerify(
+        onVerify: widget.onVerify,
+        name: _textController.text.isEmail
+            ? _textController.text
+            : usernameNotifier.value.completeNumber,
+        config: widget.verifyConfig,
+        onResendOtp: widget.onResendOtp,
+        termsAndConditions: widget.termsAndConditions,
+        pageConfig: widget.config,
+        formMessages: widget.loginConfig.messages,
+      ),
+      FlutterAnimatedSignup(
+        config: widget.signupConfig.copyWith(
+          textFiledConfig: widget.loginConfig.textFiledConfig,
+          passwordTextFiledConfig: widget.loginConfig.passwordConfig,
+        ),
+        onSignup: widget.onSignup,
+        loginConfig: widget.loginConfig,
+        loginType: widget.loginType,
+        controller: _textController,
+        pageConfig: widget.config,
+        passwordController: _passwordController,
+        formKey: formKey,
+        confirmPasswordController: _confirmPasswordController,
+      ),
+      FlutterAnimatedReset(
+        config: widget.resetConfig.copyWith(
+          textFiledConfig: widget.loginConfig.textFiledConfig,
+        ),
+        onResetPassword: widget.onResetPassword,
+        loginConfig: widget.loginConfig,
+        loginType: widget.loginType,
+        controller: _textController,
+        pageConfig: widget.config,
+        formKey: formKey,
+      ),
+    ];
     return Form(
       key: formKey,
-      child: switch (nextPageNotifier.watch(context)) {
-        0 => _LoginPage(
-            config: widget.loginConfig,
-            loginType: widget.loginType,
-            onLogin: widget.onLogin,
-            onVerify: widget.onVerify,
-            providers: widget.providers,
-            textController: _textController,
-            termsAndConditions: widget.termsAndConditions,
-            passwordController: _passwordController,
-            pageConfig: widget.config,
-            formKey: formKey,
-            formMessages: widget.loginConfig.messages,
-          ),
-        1 => FlutterAnimatedVerify(
-            onVerify: widget.onVerify,
-            name: _textController.text.isEmail
-                ? _textController.text
-                : usernameNotifier.value.completeNumber,
-            config: widget.verifyConfig,
-            onResendOtp: widget.onResendOtp,
-            termsAndConditions: widget.termsAndConditions,
-            pageConfig: widget.config,
-            formMessages: widget.loginConfig.messages,
-          ),
-        2 => FlutterAnimatedSignup(
-            config: widget.signupConfig.copyWith(
-              textFiledConfig: widget.loginConfig.textFiledConfig,
-              passwordTextFiledConfig: widget.loginConfig.passwordConfig,
-            ),
-            onSignup: widget.onSignup,
-            loginConfig: widget.loginConfig,
-            loginType: widget.loginType,
-            controller: _textController,
-            pageConfig: widget.config,
-            passwordController: _passwordController,
-            formKey: formKey,
-          ),
-        3 => FlutterAnimatedReset(
-            config: widget.resetConfig.copyWith(
-              textFiledConfig: widget.loginConfig.textFiledConfig,
-            ),
-            onResetPassword: widget.onResetPassword,
-            loginConfig: widget.loginConfig,
-            loginType: widget.loginType,
-            controller: _textController,
-            pageConfig: widget.config,
-            formKey: formKey,
-          ),
-        _ => const Center(
-            child: FlutterLogo(size: 100),
-          ),
-      },
+      child: AnimatedStack<int>(
+        value: nextPageNotifier.watch(context),
+        values: children.map((e) => children.indexOf(e)).toList(),
+        builder: (context, value) => children[value],
+      ),
     );
   }
 }
@@ -236,13 +241,13 @@ enum LoginType {
 
 class _LoginPage extends StatelessWidget {
   final LoginConfig config;
-  final TextSpan? termsAndConditions;
+  final Widget? termsAndConditions;
   final LoginType loginType;
   final LoginCallback? onLogin;
   final VerifyCallback? onVerify;
   final List<LoginProvider>? providers;
-  final TextEditingController textController;
-  final TextEditingController passwordController;
+  final TextFieldController textController;
+  final TextFieldController passwordController;
   final GlobalKey<FormState> formKey;
   final FormMessages formMessages;
 
@@ -342,7 +347,7 @@ class _LoginPage extends StatelessWidget {
             loginFieldInputType: config.loginFieldInputType,
           ),
           if (!isLoginWithOTP) ...[
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
             PasswordTextField(
               config: !isLoginWithOTP
                   ? passConfig.copyWith(
@@ -358,7 +363,7 @@ class _LoginPage extends StatelessWidget {
             const SizedBox(height: 8),
             const SignUpAndForgetButton(),
           ],
-          const SizedBox(height: 40),
+          const SizedBox(height: 18),
           SignInButton(
             onPressed: onLoginFunction,
             config: config,

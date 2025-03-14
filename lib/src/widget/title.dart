@@ -37,6 +37,7 @@ class TitleWidget extends StatelessWidget {
         titleGap.orShrink,
         if (subtitle.isNotEmptyOrNull)
           Text.rich(
+            textAlign: TextAlign.center,
             TextSpan(
               text: subtitle ?? "",
               style: subtitleStyle ?? textTheme.headlineSmall,

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:material_loading_buttons/material_loading_buttons.dart';
 import 'package:signals/signals_flutter.dart';
 
-import '../login.dart';
+import '../../flutter_animated_login.dart';
 import '../utils/extension.dart';
-import '../utils/login_config.dart';
+import '../utils/loading_state.dart';
 
 final signInButtonIsLoading = signal(false);
 
@@ -32,12 +31,12 @@ class SignInButton extends StatelessWidget {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           width: constraints.maxWidth >= 600 ? 300 : constraints.maxWidth * 0.5,
-          child: FilledLoadingButton(
+          child: AutoLoadingButton(
             isLoading: signInButtonIsLoading(),
             style: ElevatedButton.styleFrom(
               minimumSize: Size(
                 constraints.maxWidth >= 600 ? 300 : constraints.maxWidth * 0.5,
-                50,
+                48,
               ),
               textStyle: config.buttonTextStyle ?? textTheme.titleMedium,
             ),

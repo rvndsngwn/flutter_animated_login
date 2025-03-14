@@ -7,7 +7,7 @@ class FormMessages {
   final String passwordsUnmatched;
   final String invalidFormData;
 
-  final String passwordIsrequired;
+  final String passwordIsRequired;
   final String enterYourPassword;
   final String password;
 
@@ -27,7 +27,7 @@ class FormMessages {
     this.reEnterPassword = 'Re-enter your password',
     this.passwordsUnmatched = 'Password does not match',
     this.invalidFormData = 'Invalid form data, fill all required fields',
-    this.passwordIsrequired = 'Password is required',
+    this.passwordIsRequired = 'Password is required',
     this.enterYourPassword = 'Enter your password',
     this.password = 'Password*',
     this.loginFieldEnterPhone = 'Enter your phone',

@@ -9,7 +9,7 @@ class LoginProvider {
   final IconData icon;
 
   /// The label shown under the provider
-  final String? label;
+  final Widget? label;
 
   /// A Function called when the provider button is pressed.
   /// It must return null on success, or a `String` describing the error on failure.
@@ -26,7 +26,7 @@ class LoginProvider {
   /// Enable or disable the animation of the button.
   ///
   /// Default: true
-  final bool animated;
+  final Duration? transitionDuration;
 
   /// Provide a list of errors to not display when a login has failed.
   /// For example, if the login is cancelled and you don't want to show a error
@@ -36,12 +36,24 @@ class LoginProvider {
   /// Default: null
   final List<String>? errorsToExcludeFromErrorMessage;
 
+  /// The style of the button
+  final ButtonStyle? style;
+
+  /// Loading widget to show when the provider is loading
+  final Widget? loading;
+
+  /// The color of the loading widget
+  final Color? loadingColor;
+
   const LoginProvider({
     required this.icon,
     required this.callback,
     this.errorsToExcludeFromErrorMessage,
-    this.label = '',
+    this.label,
     this.providerNeedsSignUpCallback,
-    this.animated = true,
+    this.transitionDuration = kThemeAnimationDuration,
+    this.style,
+    this.loading,
+    this.loadingColor,
   });
 }

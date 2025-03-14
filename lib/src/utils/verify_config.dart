@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pinput/pinput.dart';
 
-import '../widget/title.dart';
-import 'login_data.dart';
+import '../../flutter_animated_login.dart';
 
 class VerifyConfig {
   final Widget? logo;
@@ -103,7 +101,7 @@ class OtpTextFiledConfig {
   ///     super.dispose();
   ///   }
   /// ```
-  final TextEditingController? controller;
+  final TextFieldController? controller;
 
   /// Defines the keyboard focus for this
   /// To give the keyboard focus to this widget, provide a [focusNode] and then
@@ -159,7 +157,7 @@ class OtpTextFiledConfig {
 
   /// Whether to use Native keyboard or custom one
   /// when flag is set to false [Pinput] wont be focusable anymore
-  /// so you should set value of [Pinput]'s [TextEditingController] programmatically
+  /// so you should set value of [Pinput]'s [TextFieldController] programmatically
   final bool useNativeKeyboard;
 
   /// If true, paste button will appear on longPress event
@@ -356,7 +354,7 @@ class OtpTextFiledConfig {
     ValueChanged<LoginData>? onSubmitted,
     VoidCallback? onTap,
     VoidCallback? onLongPress,
-    TextEditingController? controller,
+    TextFieldController? controller,
     FocusNode? focusNode,
     Widget? preFilledWidget,
     JustIndexedWidgetBuilder? separatorBuilder,

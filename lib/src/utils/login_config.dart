@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_intl_phone_field/countries.dart';
 import 'package:flutter_intl_phone_field/country_picker_dialog.dart';
-import 'package:flutter_intl_phone_field/flutter_intl_phone_field.dart';
 import 'package:flutter_intl_phone_field/phone_number.dart';
 
-import '../widget/title.dart';
-import 'password_config.dart';
-import 'form_messages.dart';
+import '../../flutter_animated_login.dart';
 
 enum LoginFieldInputType {
   phone,
@@ -114,8 +111,8 @@ class EmailPhoneTextFiledConfig {
 
   /// Controls the text being edited.
   ///
-  /// If null, this widget will create its own [TextEditingController].
-  final TextEditingController? controller;
+  /// If null, this widget will create its own [TextFieldController].
+  final TextFieldController? controller;
 
   /// Defines the keyboard focus for this widget.
   ///
@@ -359,7 +356,7 @@ class EmailPhoneTextFiledConfig {
     this.controller,
     this.focusNode,
     this.decoration,
-    this.style,
+    this.style = const TextStyle(fontSize: 16),
     this.dropdownTextStyle,
     this.onSubmitted,
     this.onChanged,
@@ -413,10 +410,10 @@ class EmailPhoneTextFiledConfig {
     bool? readOnly,
     String? initialValue,
     TextInputType? keyboardType,
-    TextEditingController? controller,
+    TextFieldController? controller,
     FocusNode? focusNode,
     InputDecoration? decoration,
-    TextStyle? style,
+    TextStyle? style = const TextStyle(fontSize: 16),
     TextStyle? dropdownTextStyle,
     void Function(String)? onSubmitted,
     ValueChanged<({PhoneNumber? number, String? value})>? onChanged,

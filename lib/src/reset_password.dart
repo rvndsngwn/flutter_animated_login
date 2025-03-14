@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_intl_phone_field/phone_number.dart';
 
-import 'login.dart';
+import '../flutter_animated_login.dart';
 import 'utils/extension.dart';
-import 'utils/login_config.dart';
-import 'utils/page_config.dart';
-import 'utils/reset_config.dart';
 import 'widget/button.dart';
 import 'widget/email_phone_field.dart';
-import 'widget/page.dart';
-import 'widget/title.dart';
 
 class FlutterAnimatedReset extends StatelessWidget {
   final ResetConfig config;
   final LoginConfig loginConfig;
   final LoginType loginType;
-  final TextEditingController controller;
+  final TextFieldController controller;
   final PageConfig pageConfig;
   final ResetPasswordCallback? onResetPassword;
   final GlobalKey<FormState> formKey;
@@ -89,12 +84,7 @@ class FlutterAnimatedReset extends StatelessWidget {
                     "We'll send you a link to reset your account password.",
                 subtitleStyle: textTheme.titleMedium,
                 titleGap: const SizedBox(height: 6),
-                child: config.logo ??
-                    Icon(
-                      Icons.password,
-                      size: 100,
-                      color: theme.colorScheme.secondary,
-                    ),
+                child: config.logo.orShrink,
               ),
           EmailPhoneTextField(
             controller: controller,
@@ -108,7 +98,7 @@ class FlutterAnimatedReset extends StatelessWidget {
             formMessages: loginConfig.messages,
             loginFieldInputType: loginConfig.loginFieldInputType,
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 30),
           SignInButton(
             onPressed: onLoginFunction,
             config: loginConfig.copyWith(
@@ -122,6 +112,10 @@ class FlutterAnimatedReset extends StatelessWidget {
             onPressed: () => nextPageNotifier.value = 0,
             style: TextButton.styleFrom(
               textStyle: config.buttonTextStyle ?? textTheme.titleMedium,
+              minimumSize: Size(
+                constraints.maxWidth >= 600 ? 300 : constraints.maxWidth * 0.5,
+                48,
+              ),
             ),
             child: const Text('Sign In'),
           ),

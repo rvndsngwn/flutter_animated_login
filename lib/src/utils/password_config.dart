@@ -4,8 +4,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../flutter_animated_login.dart';
+
 class PasswordTextFiledConfig {
-  final TextEditingController? controller;
+  final TextFieldController? controller;
   final FocusNode? focusNode;
   final InputDecoration? Function(ValueNotifier<bool> isObscure)? decoration;
   final TextInputType? keyboardType;
@@ -72,9 +74,9 @@ class PasswordTextFiledConfig {
   final ui.BoxWidthStyle selectionWidthStyle;
   final DragStartBehavior dragStartBehavior;
   final ContentInsertionConfiguration? contentInsertionConfiguration;
-  final MaterialStatesController? statesController;
+  final WidgetStatesController? statesController;
   final Clip clipBehavior;
-  final bool scribbleEnabled;
+  final bool stylusHandwritingEnabled;
   final bool canRequestFocus;
 
   const PasswordTextFiledConfig({
@@ -142,12 +144,12 @@ class PasswordTextFiledConfig {
     this.contentInsertionConfiguration,
     this.statesController,
     this.clipBehavior = Clip.hardEdge,
-    this.scribbleEnabled = true,
+    this.stylusHandwritingEnabled = true,
     this.canRequestFocus = true,
   });
 
   PasswordTextFiledConfig copyWith({
-    TextEditingController? controller,
+    TextFieldController? controller,
     FocusNode? focusNode,
     InputDecoration? Function(ValueNotifier<bool> isObscure)? decoration,
     TextInputType? keyboardType,
@@ -214,7 +216,7 @@ class PasswordTextFiledConfig {
     ui.BoxWidthStyle? selectionWidthStyle,
     DragStartBehavior? dragStartBehavior,
     ContentInsertionConfiguration? contentInsertionConfiguration,
-    MaterialStatesController? statesController,
+    WidgetStatesController? statesController,
     Clip? clipBehavior,
     bool? scribbleEnabled,
     bool? canRequestFocus,
@@ -290,7 +292,7 @@ class PasswordTextFiledConfig {
           contentInsertionConfiguration ?? this.contentInsertionConfiguration,
       statesController: statesController ?? this.statesController,
       clipBehavior: clipBehavior ?? this.clipBehavior,
-      scribbleEnabled: scribbleEnabled ?? this.scribbleEnabled,
+      stylusHandwritingEnabled: scribbleEnabled ?? stylusHandwritingEnabled,
       canRequestFocus: canRequestFocus ?? this.canRequestFocus,
     );
   }

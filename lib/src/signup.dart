@@ -1,40 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_intl_phone_field/phone_number.dart';
 
-import 'login.dart';
+import '../flutter_animated_login.dart';
 import 'utils/extension.dart';
-import 'utils/login_config.dart';
-import 'utils/page_config.dart';
-import 'utils/signup_config.dart';
-import 'utils/signup_data.dart';
 import 'widget/button.dart';
 import 'widget/email_phone_field.dart';
-import 'widget/page.dart';
 import 'widget/password_field.dart';
-import 'widget/title.dart';
 
 class FlutterAnimatedSignup extends StatelessWidget {
   final LoginConfig loginConfig;
   final LoginType loginType;
-  final TextEditingController controller;
-  final TextEditingController passwordController;
+  final TextFieldController controller;
+  final TextFieldController passwordController;
+  final TextFieldController confirmPasswordController;
   final PageConfig pageConfig;
   final SignupConfig config;
   final SignupCallback? onSignup;
   final GlobalKey<FormState> formKey;
-  FlutterAnimatedSignup({
+
+  const FlutterAnimatedSignup({
     super.key,
     required this.loginConfig,
     required this.loginType,
     required this.controller,
     required this.passwordController,
+    required this.confirmPasswordController,
     required this.pageConfig,
     required this.config,
     this.onSignup,
     required this.formKey,
   });
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -101,12 +97,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
                     config.subtitle ?? loginConfig.messages.createAccountLong,
                 subtitleStyle: textTheme.titleMedium,
                 titleGap: const SizedBox(height: 6),
-                child: config.logo ??
-                    Icon(
-                      Icons.person_add_alt_1,
-                      size: 100,
-                      color: theme.colorScheme.secondary,
-                    ),
+                child: config.logo.orShrink,
               ),
           EmailPhoneTextField(
             controller: controller,
@@ -114,15 +105,16 @@ class FlutterAnimatedSignup extends StatelessWidget {
             formMessages: loginConfig.messages,
             loginFieldInputType: loginConfig.loginFieldInputType,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
           PasswordTextField(
             config: config.passwordTextFiledConfig,
             controller: passwordController,
             formMessages: loginConfig.messages,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
           PasswordTextField(
             config: config.passwordTextFiledConfig.copyWith(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: (isObscure) {
                 return config.passwordTextFiledConfig.decoration
                         ?.call(isObscure)
@@ -160,7 +152,7 @@ class FlutterAnimatedSignup extends StatelessWidget {
             controller: confirmPasswordController,
             formMessages: loginConfig.messages,
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 30),
           SignInButton(
             onPressed: onLoginFunction,
             config: loginConfig.copyWith(
@@ -174,6 +166,10 @@ class FlutterAnimatedSignup extends StatelessWidget {
             onPressed: () => nextPageNotifier.value = 0,
             style: TextButton.styleFrom(
               textStyle: config.buttonTextStyle ?? textTheme.titleMedium,
+              minimumSize: Size(
+                constraints.maxWidth >= 600 ? 300 : constraints.maxWidth * 0.5,
+                48,
+              ),
             ),
             child: Text(loginConfig.messages.signIn),
           ),

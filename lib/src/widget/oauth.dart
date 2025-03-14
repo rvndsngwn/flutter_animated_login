@@ -1,8 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_login/src/utils/extension.dart';
-import 'package:material_loading_buttons/material_loading_buttons.dart';
 
+import '../../flutter_animated_login.dart';
+import '../utils/loading_state.dart';
 import '../utils/login_provider.dart';
 import 'divider.dart';
 
@@ -11,7 +11,7 @@ class OAuthWidget extends StatelessWidget {
   final List<LoginProvider>? providers;
 
   /// The terms and conditions for the login/signup page
-  final TextSpan? termsAndConditions;
+  final Widget? termsAndConditions;
 
   /// The footer widget for the login/signup page
   final Widget? footerWidget;
@@ -24,13 +24,12 @@ class OAuthWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Column(
       children: [
         if (providers.isNotEmptyOrNull) ...[
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
           const DividerText(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
         ],
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +42,8 @@ class OAuthWidget extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconAutoLoadingButton.filled(
+                      AutoLoadingButton(
+                        transitionDuration: provider.transitionDuration,
                         onPressed: () async {
                           final result = await provider.callback.call();
                           if (context.mounted) {
@@ -52,43 +52,25 @@ class OAuthWidget extends StatelessWidget {
                             }
                           }
                         },
-                        key: Key(provider.label ?? index.toString()),
-                        icon: Icon(provider.icon),
+                        style: provider.style ??
+                            ElevatedButton.styleFrom(
+                              shape: CircleBorder(),
+                              iconSize: 24,
+                            ),
+                        loadingColor: provider.loadingColor,
+                        loading: provider.loading,
+                        key: ValueKey(provider.label),
+                        child: Icon(provider.icon),
                       ),
-                      if (provider.label.isNotEmptyOrNull)
-                        Text(provider.label ?? ""),
+                      if (provider.label != null) provider.label.orShrink,
                     ],
                   ),
                 );
               }).toList() ??
               [],
         ),
-        const SizedBox(height: 20),
-        Text.rich(
-          termsAndConditions ??
-              TextSpan(
-                text: 'By signing in, you agree to the ',
-                children: [
-                  TextSpan(
-                    text: 'Terms and conditions',
-                    style: TextStyle(
-                      color: theme.colorScheme.secondary,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      // ignore: avoid_print
-                      ..onTap = () => print('Terms and conditions'),
-                  ),
-                ],
-              ),
-        ),
-        const SizedBox(height: 20),
-        footerWidget ??
-            TextButton(
-              onPressed: () => debugPrint('Created by MOHESU'),
-              child: const Text('Created by MOHESU'),
-            ),
+        termsAndConditions.orShrink,
+        footerWidget.orShrink,
       ],
     );
   }
