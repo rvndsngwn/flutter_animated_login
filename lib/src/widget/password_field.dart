@@ -104,7 +104,7 @@ class PasswordTextField extends StatelessWidget {
           onAppPrivateCommand: config.onAppPrivateCommand,
           onTapAlwaysCalled: config.onTapAlwaysCalled,
           onTapOutside: config.onTapOutside,
-          stylusHandwritingEnabled: config.stylusHandwritingEnabled,
+          scribbleEnabled: config.scribbleEnabled,
           selectionHeightStyle: config.selectionHeightStyle,
           selectionWidthStyle: config.selectionWidthStyle,
           smartDashesType: config.smartDashesType,

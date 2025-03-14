@@ -76,7 +76,7 @@ class PasswordTextFiledConfig {
   final ContentInsertionConfiguration? contentInsertionConfiguration;
   final WidgetStatesController? statesController;
   final Clip clipBehavior;
-  final bool stylusHandwritingEnabled;
+  final bool scribbleEnabled;
   final bool canRequestFocus;
 
   const PasswordTextFiledConfig({
@@ -144,7 +144,7 @@ class PasswordTextFiledConfig {
     this.contentInsertionConfiguration,
     this.statesController,
     this.clipBehavior = Clip.hardEdge,
-    this.stylusHandwritingEnabled = true,
+    this.scribbleEnabled = true,
     this.canRequestFocus = true,
   });
 
@@ -292,7 +292,7 @@ class PasswordTextFiledConfig {
           contentInsertionConfiguration ?? this.contentInsertionConfiguration,
       statesController: statesController ?? this.statesController,
       clipBehavior: clipBehavior ?? this.clipBehavior,
-      stylusHandwritingEnabled: scribbleEnabled ?? stylusHandwritingEnabled,
+      scribbleEnabled: scribbleEnabled ?? this.scribbleEnabled,
       canRequestFocus: canRequestFocus ?? this.canRequestFocus,
     );
   }
